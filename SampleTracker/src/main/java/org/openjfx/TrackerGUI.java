@@ -357,6 +357,14 @@ public class TrackerGUI extends Application {
         Scene entryScene = new Scene(entryBox,450, 700);
         entryStage.setScene(entryScene);
 
+        try {
+            FileInputStream inputStream = new FileInputStream("TrackerIcon.png");
+            Image image = new Image(inputStream);
+            entryStage.getIcons().add(image);
+        } catch (Exception e) {
+            System.out.println("loading icon exception: " + e.getMessage());
+        }
+
 
         Label soldToLabel =             new Label(" *Sold To:                ");
         HBox soldTo = new HBox(10);
