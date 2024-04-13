@@ -165,7 +165,7 @@ public class TrackerGUI extends Application {
             entryStage.show();
         });
 
-        Button resetButton = new Button("Reset");
+        Button resetButton = new Button("Reset Search");
         resetButton.setOnAction(Event->{
             table.setItems(FXCollections.observableArrayList(sT.getClientList()));
             table.scrollTo(0);
@@ -249,27 +249,27 @@ public class TrackerGUI extends Application {
         indexCol.setCellValueFactory(new PropertyValueFactory<>("index"));
         indexCol.prefWidthProperty().bind(table.widthProperty().multiply(0.031));
 
-        TableColumn<Client, String> soldToCol = new TableColumn<>("Sold To");
+        TableColumn<Client, String> soldToCol = new TableColumn<>("*Sold To");
         soldToCol.setCellValueFactory(new PropertyValueFactory<>("soldTo"));
         soldToCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth-0.0042));
 
-        TableColumn<Client, String> soldPhoneCol = new TableColumn<>("Sold Phone");
+        TableColumn<Client, String> soldPhoneCol = new TableColumn<>("*Sold Phone");
         soldPhoneCol.setCellValueFactory(new PropertyValueFactory<>("soldPhone"));
         soldPhoneCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
 
-        TableColumn<Client, String> shipToCol = new TableColumn<>("Shipped To");
+        TableColumn<Client, String> shipToCol = new TableColumn<>("*Shipped To");
         shipToCol.setCellValueFactory(new PropertyValueFactory<>("shipTo"));
         shipToCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
 
-        TableColumn<Client, String> companyCol = new TableColumn<>("Company");
+        TableColumn<Client, String> companyCol = new TableColumn<>("*Company");
         companyCol.setCellValueFactory(new PropertyValueFactory<>("company"));
         companyCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
 
-        TableColumn<Client, String> address1Col = new TableColumn<>("Address1");
+        TableColumn<Client, String> address1Col = new TableColumn<>("*Address1");
         address1Col.setCellValueFactory(new PropertyValueFactory<>("address1"));
         address1Col.prefWidthProperty().bind(table.widthProperty().multiply(colWidth+0.025));
 
-        TableColumn<Client, String> address2Col = new TableColumn<>("Address2");
+        TableColumn<Client, String> address2Col = new TableColumn<>("*Address2");
         address2Col.setCellValueFactory(new PropertyValueFactory<>("address2"));
         address2Col.prefWidthProperty().bind(table.widthProperty().multiply(colWidth-0.025));
 
@@ -289,11 +289,11 @@ public class TrackerGUI extends Application {
         countryCol.setCellValueFactory(new PropertyValueFactory<>("country"));
         countryCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth-0.03));
 
-        TableColumn<Client, String> shipPhoneCol = new TableColumn<>("Ship Phone");
+        TableColumn<Client, String> shipPhoneCol = new TableColumn<>("*Shipped Phone");
         shipPhoneCol.setCellValueFactory(new PropertyValueFactory<>("shipPhone"));
         shipPhoneCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
 
-        TableColumn<Client, String> emailCol = new TableColumn<>("Email");
+        TableColumn<Client, String> emailCol = new TableColumn<>("*Email");
         emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
         emailCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth+0.04));
 
@@ -301,7 +301,7 @@ public class TrackerGUI extends Application {
         shippedDateCol.setCellValueFactory(new PropertyValueFactory<>("shippedDate"));
         shippedDateCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
 
-        TableColumn<Client, String> licenseNumCol = new TableColumn<>("License #");
+        TableColumn<Client, String> licenseNumCol = new TableColumn<>("*License #");
         licenseNumCol.setCellValueFactory(new PropertyValueFactory<>("licenseNum"));
         licenseNumCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
 
