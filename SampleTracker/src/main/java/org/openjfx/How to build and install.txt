@@ -1,0 +1,25 @@
+This guide will hopefully be informative enough to allow the continuing maintenance of this project.
+
+April 2024, this project was converted to a Maven project because it was otherwise broken.
+
+Also because our TrackerGUI class extends Application, that also breaks stuff. so a Launcher class is now the main class to allow us to
+still build properly.
+
+to build the jar file, Build -> Build artifacts... -> SampleTracker:jar -> rebuild
+
+the output will go to target -> artifacts -> SampleTracker_jar
+
+then we need to turn that SampleTracker.jar file into an msi installer
+
+we do that using jpackage. which is bundled into the java sdk these days.
+
+we can open powershell to this SampleTracker_jar folder and run this command:
+
+jpackage --type msi --app-version "1.0.2" --input . --dest . --main-jar .\SampleTracker.jar --main-class org.openjfx.TrackerGUI --win-shortcut --win-menu --icon "TrackerIcon.ico" --name "Tracker" --jlink-options --bind-services
+
+we do need to adjust the --app-version accordingly.
+
+then this installer can be double clicked to install. although we should likely uninstall any old versions before installing the new one
+
+Sometimes things will get screwed up and it won't compile. on the right side there should be a little button for the maven
+tools. SampleTracker -> lifecycle -> install should allow you to fix a lot of issues

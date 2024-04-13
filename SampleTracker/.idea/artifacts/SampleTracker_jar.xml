@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact name="SampleTracker:jar">
+    <output-path>$PROJECT_DIR$/target/artifacts/SampleTracker_jar</output-path>
+    <root id="root">
+      <element id="archive" name="SampleTracker.jar">
+        <element id="module-output" name="SampleTracker" />
+      </element>
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:win:13" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:win:13" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:win:13" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:13" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:13" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:13" />
+    </root>
+  </artifact>
+</component>
