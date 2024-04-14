@@ -90,7 +90,24 @@ public class SampleTracker {
     private void exportClients(String filename) throws IOException {
         StringBuilder builder = new StringBuilder();
         //add header line
-        builder.append("Sold To,Sold Phone,Shipped To,Company,Address 1,Address 2,City,Region,Postal Code,Country,Phone,Email,Shipped Date,License Number,Certification company,Comments,Certificate\n");
+        Client tempClient = new Client();
+        builder.append(tempClient.getsoldToDispString()).append(",");
+        builder.append(tempClient.getsoldPhoneDispString()).append(",");
+        builder.append(tempClient.getshipToDispString()).append(",");
+        builder.append(tempClient.getcompanyDispString()).append(",");
+        builder.append(tempClient.getaddress1DispString()).append(",");
+        builder.append(tempClient.getaddress2DispString()).append(",");
+        builder.append(tempClient.getcityDispString()).append(",");
+        builder.append(tempClient.getregionDispString()).append(",");
+        builder.append(tempClient.getpostCodeDispString()).append(",");
+        builder.append(tempClient.getcountryDispString()).append(",");
+        builder.append(tempClient.getshipPhoneDispString()).append(",");
+        builder.append(tempClient.getemailDispString()).append(",");
+        builder.append(tempClient.getshippedDateDispString()).append(",");
+        builder.append(tempClient.getlicenseNumDispString()).append(",");
+        builder.append(tempClient.getcertificateCompanyDispString()).append(",");
+        builder.append(tempClient.getcommentsDispString()).append(",");
+        builder.append(tempClient.getcertificateDispString()).append("\n");
         for (Client client : clientList) {
             builder.append(client.toString());
         }
@@ -604,6 +621,7 @@ public class SampleTracker {
         //Do the undo
         //change the value of dIndex
         Operation tempOp = deletedClients.get(dIndex).getOperation();
+        // Change to switch case
         if(tempOp == Operation.ADD){
             //need to delete the client
         }else if(tempOp == Operation.DELETE){
@@ -630,6 +648,7 @@ public class SampleTracker {
         //Do the redo
         //change the value of dIndex
         Operation tempOp = deletedClients.get(dIndex).getOperation();
+        // Change to switch case
         if(tempOp == Operation.ADD){
             //need to add the client back in at it's appropriate spot
         }else if(tempOp == Operation.DELETE){

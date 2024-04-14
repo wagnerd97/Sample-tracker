@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -14,6 +15,8 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -89,12 +92,15 @@ public class TrackerGUI extends Application {
 
     private Integer itemEditing = 0;
 
+    private Integer entrySceneWidth = 450;
+    private Integer entrySceneHeight = 700;
+
     private Stage savePopup;
     private Stage deletePopup;
     private Stage removeCertificatePopup;
     private ContextMenu contextMenu;
 
-    Client tempClient;
+    Client tempClient = new Client();
 
 
     public static void main(String[] args){
@@ -131,20 +137,20 @@ public class TrackerGUI extends Application {
         HBox topBox = new HBox(10);
         topBox.setPadding(new Insets(10,10,10,10));
 
-        // Button undoButton = new Button("Undo");
-        // undoButton.setOnAction(Event->{
-        //     if(sT.undo()){
-        //         table.refresh();
-        //     }
-        // });
+        Button undoButton = new Button("Undo");
+        undoButton.setOnAction(Event->{
+            if(sT.undo()){
+                table.refresh();
+            }
+        });
 
-        // Button redoButton = new Button("Redo");
-        // redoButton.setOnAction(Event->{
-        //     if(sT.redo()){
-        //         table.refresh();
-        //     }
-        // });
-        // topBox.getChildren().addAll(tableLabel,undoButton,redoButton);
+        Button redoButton = new Button("Redo");
+        redoButton.setOnAction(Event->{
+            if(sT.redo()){
+                table.refresh();
+            }
+        });
+        topBox.getChildren().addAll(tableLabel,undoButton,redoButton);
 
         configureTable();
         configurePlainTextWindow(primaryStage);
@@ -165,7 +171,7 @@ public class TrackerGUI extends Application {
             entryStage.show();
         });
 
-        Button resetButton = new Button("Reset Search");
+        Button resetButton = new Button("View All");
         resetButton.setOnAction(Event->{
             table.setItems(FXCollections.observableArrayList(sT.getClientList()));
             table.scrollTo(0);
@@ -234,6 +240,13 @@ public class TrackerGUI extends Application {
         }
     }
 
+    private TableColumn<Client, ?> tableColumnCreate(String columnLabel, String CellFactoryKey, Double colWidthFactor ) {
+        TableColumn<Client, String> tempCol = new TableColumn<>(columnLabel);
+        tempCol.setCellValueFactory(new PropertyValueFactory<>(CellFactoryKey));
+        tempCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidthFactor));
+        return tempCol;
+    }
+
     private void configureTable(){
         table = new TableView<>();
         ObservableList<Client> clientList = FXCollections.observableArrayList(sT.getClientList());
@@ -245,81 +258,30 @@ public class TrackerGUI extends Application {
 
         double colWidth = ((1.0-0.04)/16.0);
 
-        TableColumn<Client, Integer> indexCol = new TableColumn<>("#");
-        indexCol.setCellValueFactory(new PropertyValueFactory<>("index"));
-        indexCol.prefWidthProperty().bind(table.widthProperty().multiply(0.031));
-
-        TableColumn<Client, String> soldToCol = new TableColumn<>("*Sold To");
-        soldToCol.setCellValueFactory(new PropertyValueFactory<>("soldTo"));
-        soldToCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth-0.0042));
-
-        TableColumn<Client, String> soldPhoneCol = new TableColumn<>("*Sold Phone");
-        soldPhoneCol.setCellValueFactory(new PropertyValueFactory<>("soldPhone"));
-        soldPhoneCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
-
-        TableColumn<Client, String> shipToCol = new TableColumn<>("*Shipped To");
-        shipToCol.setCellValueFactory(new PropertyValueFactory<>("shipTo"));
-        shipToCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
-
-        TableColumn<Client, String> companyCol = new TableColumn<>("*Company");
-        companyCol.setCellValueFactory(new PropertyValueFactory<>("company"));
-        companyCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
-
-        TableColumn<Client, String> address1Col = new TableColumn<>("*Address1");
-        address1Col.setCellValueFactory(new PropertyValueFactory<>("address1"));
-        address1Col.prefWidthProperty().bind(table.widthProperty().multiply(colWidth+0.025));
-
-        TableColumn<Client, String> address2Col = new TableColumn<>("*Address2");
-        address2Col.setCellValueFactory(new PropertyValueFactory<>("address2"));
-        address2Col.prefWidthProperty().bind(table.widthProperty().multiply(colWidth-0.025));
-
-        TableColumn<Client, String> cityCol = new TableColumn<>("City");
-        cityCol.setCellValueFactory(new PropertyValueFactory<>("city"));
-        cityCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
-
-        TableColumn<Client, String> regionCol = new TableColumn<>("Region");
-        regionCol.setCellValueFactory(new PropertyValueFactory<>("region"));
-        regionCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth/2));
-
-        TableColumn<Client, String> postCodeCol = new TableColumn<>("Postal Code");
-        postCodeCol.setCellValueFactory(new PropertyValueFactory<>("postCode"));
-        postCodeCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
-
-        TableColumn<Client, String> countryCol = new TableColumn<>("Country");
-        countryCol.setCellValueFactory(new PropertyValueFactory<>("country"));
-        countryCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth-0.03));
-
-        TableColumn<Client, String> shipPhoneCol = new TableColumn<>("*Shipped Phone");
-        shipPhoneCol.setCellValueFactory(new PropertyValueFactory<>("shipPhone"));
-        shipPhoneCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
-
-        TableColumn<Client, String> emailCol = new TableColumn<>("*Email");
-        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
-        emailCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth+0.04));
-
-        TableColumn<Client, String> shippedDateCol = new TableColumn<>("Shipped Date");
-        shippedDateCol.setCellValueFactory(new PropertyValueFactory<>("shippedDate"));
-        shippedDateCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
-
-        TableColumn<Client, String> licenseNumCol = new TableColumn<>("*License #");
-        licenseNumCol.setCellValueFactory(new PropertyValueFactory<>("licenseNum"));
-        licenseNumCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
-
-        TableColumn<Client, String> certificateCompanyCol = new TableColumn<>("Certificate Company");
-        certificateCompanyCol.setCellValueFactory(new PropertyValueFactory<>("certificateCompany"));
-        certificateCompanyCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth+0.03));
-
-        TableColumn<Client, String> commentCol = new TableColumn<>("Comments");
-        commentCol.setCellValueFactory(new PropertyValueFactory<>("comments"));
-        commentCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidth));
-
+        table.getColumns().add(tableColumnCreate(tempClient.getindexDispString()             , "index"             , 0.031));
+        table.getColumns().add(tableColumnCreate(tempClient.getsoldToDispString()            , "soldTo"            , colWidth-0.0042));
+        table.getColumns().add(tableColumnCreate(tempClient.getsoldPhoneDispString()         , "soldPhone"         , colWidth));
+        table.getColumns().add(tableColumnCreate(tempClient.getshipToDispString()            , "shipTo"            , colWidth));
+        table.getColumns().add(tableColumnCreate(tempClient.getcompanyDispString()           , "company"           , colWidth));
+        table.getColumns().add(tableColumnCreate(tempClient.getaddress1DispString()          , "address1"          , colWidth+0.025));
+        table.getColumns().add(tableColumnCreate(tempClient.getaddress2DispString()          , "address2"          , colWidth-0.025));
+        table.getColumns().add(tableColumnCreate(tempClient.getcityDispString()              , "city"              , colWidth));
+        table.getColumns().add(tableColumnCreate(tempClient.getregionDispString()            , "region"            , colWidth/2));
+        table.getColumns().add(tableColumnCreate(tempClient.getpostCodeDispString()          , "postCode"          , colWidth));
+        table.getColumns().add(tableColumnCreate(tempClient.getcountryDispString()           , "country"           , colWidth));
+        table.getColumns().add(tableColumnCreate(tempClient.getshipPhoneDispString()         , "shipPhone"         , colWidth));
+        table.getColumns().add(tableColumnCreate(tempClient.getemailDispString()             , "email"             , colWidth+0.04));
+        table.getColumns().add(tableColumnCreate(tempClient.getshippedDateDispString()       , "shippedDate"       , colWidth));
+        table.getColumns().add(tableColumnCreate(tempClient.getlicenseNumDispString()        , "licenseNum"        , colWidth));
+        table.getColumns().add(tableColumnCreate(tempClient.getcertificateCompanyDispString(), "certificateCompany", colWidth+0.03));
+        table.getColumns().add(tableColumnCreate(tempClient.getcommentsDispString()          , "comments"          , colWidth));
 
         table.setRowFactory( tv -> {
             TableRow<Client> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty()) ) {
                     tempClient = row.getItem();
-                    if(tempClient.getCertificate().equals("")){
+                    if(tempClient.getCertificate().isEmpty()){
                         contextMenu.getItems().get(1).setDisable(false);
                         contextMenu.getItems().get(2).setDisable(true);
                         contextMenu.getItems().get(3).setDisable(true);
@@ -341,11 +303,22 @@ public class TrackerGUI extends Application {
             return row ;
         });
 
-
-        table.getColumns().setAll(indexCol, soldToCol, soldPhoneCol, shipToCol, companyCol, address1Col, address2Col, cityCol,
-                regionCol, postCodeCol, countryCol, shipPhoneCol, emailCol, shippedDateCol,
-                licenseNumCol,certificateCompanyCol, commentCol);
     }
+
+    private HBox entryWindowLineCreate(String labelString, String promptString, Integer fieldWidth, TextField textField) {
+        HBox tempHBox = new HBox();
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Label tempLabel = new Label(labelString);
+        tempHBox.setAlignment(Pos.BASELINE_CENTER);
+        textField.setPrefWidth(fieldWidth);
+        textField.setPromptText(promptString);
+        tempHBox.setMaxWidth(entrySceneWidth - 40);
+        tempHBox.getChildren().addAll(tempLabel, spacer, textField);
+        return tempHBox;
+    }
+    
 
     private void configureEntryWindow(Stage primaryStage){
         entryStage = new Stage();
@@ -354,8 +327,9 @@ public class TrackerGUI extends Application {
         entryStage.setResizable(false);
         entryBox = new VBox(12);
         entryBox.setAlignment(Pos.CENTER);
-        Scene entryScene = new Scene(entryBox,450, 700);
+        Scene entryScene = new Scene(entryBox,entrySceneWidth, entrySceneHeight);
         entryStage.setScene(entryScene);
+
 
         try {
             FileInputStream inputStream = new FileInputStream("TrackerIcon.png");
@@ -365,98 +339,16 @@ public class TrackerGUI extends Application {
             System.out.println("loading icon exception: " + e.getMessage());
         }
 
+        Label searchable = new Label("\"*\" Denotes searchable fields");
+        entryBox.getChildren().add(searchable);
 
-        Label soldToLabel =             new Label(" *Sold To:                ");
-        HBox soldTo = new HBox(10);
-        soldTo.setAlignment(Pos.BASELINE_CENTER);
-        soldToField.setPrefWidth(250);
-        soldToField.setPromptText("Eyelash Express");
-        soldTo.getChildren().addAll(soldToLabel, soldToField);
-
-
-        Label soldPhoneLabel =          new Label(" *Sold Phone:          ");
-        HBox soldPhone = new HBox(10);
-        soldPhone.setAlignment(Pos.BASELINE_CENTER);
-        soldPhoneField.setPrefWidth(250);
-        soldPhoneField.setPromptText("555-555-5555");
-        soldPhone.getChildren().addAll(soldPhoneLabel, soldPhoneField);
-
-        Label shippedToLabel =          new Label(" *Shipped To:          ");
-        HBox shippedTo = new HBox(10);
-        shippedTo.setAlignment(Pos.BASELINE_CENTER);
-        shippedToField.setPrefWidth(250);
-        shippedToField.setPromptText("Jane Doe");
-        shippedTo.getChildren().addAll(shippedToLabel, shippedToField);
-
-        Label companyLabel =          new Label(" *Company:          ");
-        HBox company = new HBox(10);
-        company.setAlignment(Pos.BASELINE_CENTER);
-        companyField.setPrefWidth(250);
-        companyField.setPromptText("Lash inc.");
-        company.getChildren().addAll(companyLabel, companyField);
-
-        Label address1Label =           new Label(" *Address 1:           ");
-        HBox address1 = new HBox(10);
-        address1.setAlignment(Pos.BASELINE_CENTER);
-        address1Field.setPrefWidth(250);
-        address1Field.setPromptText("12345 Pine ST");
-        address1.getChildren().addAll(address1Label, address1Field);
-
-        Label address2LAbel =           new Label(" *Address 2:           ");
-        HBox address2 = new HBox(10);
-        address2.setAlignment(Pos.BASELINE_CENTER);
-        address2Field.setPrefWidth(250);
-        address2.getChildren().addAll(address2LAbel, address2Field);
-
-        Label cityLabel =               new Label(" City:                ");
-        HBox city = new HBox(10);
-        city.setAlignment(Pos.BASELINE_CENTER);
-        cityField.setPrefWidth(250);
-        cityField.setPromptText("New York");
-        city.getChildren().addAll(cityLabel, cityField);
-
-        Label regionLabel =             new Label(" Region:              ");
-        HBox region = new HBox(10);
-        region.setAlignment(Pos.BASELINE_CENTER);
-        regionField.setPrefWidth(250);
-        regionField.setPromptText("AB");
-        region.getChildren().addAll(regionLabel, regionField);
-
-        Label postCodeLAbel =           new Label(" Postal Code:         ");
-        postCodeField.setPrefWidth(250);
-        postCodeField.setPromptText("T7X 1J4");
-        HBox postCode = new HBox(10);
-        postCode.setAlignment(Pos.BASELINE_CENTER);
-        postCode.getChildren().addAll(postCodeLAbel, postCodeField);
-
-        Label countryLabel =            new Label(" Country:             ");
-        HBox country = new HBox(10);
-        country.setAlignment(Pos.BASELINE_CENTER);
-        countryField.setPrefWidth(250);
-        countryField.setPromptText("CA");
-        country.getChildren().addAll(countryLabel, countryField);
-
-        Label shippedPhoneLabel =       new Label(" *Shipped Phone:            ");
-        HBox phone = new HBox(10);
-        phone.setAlignment(Pos.BASELINE_CENTER);
-        shippedPhoneField.setPrefWidth(250);
-        shippedPhoneField.setPromptText("555-555-5555");
-        phone.getChildren().addAll(shippedPhoneLabel, shippedPhoneField);
-
-        Label emailLabel =              new Label(" *Email:                    ");
-        HBox email = new HBox(10);
-        email.setAlignment(Pos.BASELINE_CENTER);
-        emailField.setPrefWidth(250);
-        emailField.setPromptText("janedoe@gmail.com");
-        email.getChildren().addAll(emailLabel, emailField);
-
-        DateTimeFormatter dtf = new DateTimeFormatterBuilder().parseCaseSensitive().appendPattern("MMM dd YYYY").toFormatter();
+        DateTimeFormatter dtf = new DateTimeFormatterBuilder().parseCaseSensitive().appendPattern("MMM dd yyyy").toFormatter();
         datePicker = new DatePicker();
         datePicker.setConverter(new StringConverter<>() {
             @Override
             public String toString(LocalDate localDate) {
                 if(localDate != null){
-                    return dtf.format(localDate).toUpperCase().replace(".", "");
+                    return dtf.format(localDate).toUpperCase();
                 }else{
                     return "";
                 }
@@ -472,51 +364,51 @@ public class TrackerGUI extends Application {
             }
         });
 
-        Label shippedDateLabel =        new Label(" Shipped Date:            ");
-        HBox shippedDate = new HBox(10);
+        Label shippedDateLabel = new Label(tempClient.getshippedDateDispString());
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        HBox shippedDate = new HBox();
         shippedDate.setAlignment(Pos.BASELINE_CENTER);
-        shippedDate.getChildren().addAll(shippedDateLabel, datePicker);
+        shippedDate.setMaxWidth(entrySceneWidth - 40);
+        shippedDate.getChildren().addAll(shippedDateLabel, spacer, datePicker);
 
-        Label licenseLabel =            new Label(" *License Number:       ");
-        HBox license = new HBox(10);
-        license.setAlignment(Pos.BASELINE_CENTER);
-        licenseField.setPrefWidth(250);
-        license.getChildren().addAll(licenseLabel, licenseField);
-
-        Label certificateCompanyLabel = new Label(" Certificate Company: ");
-        HBox certificateCompany = new HBox(10);
-        certificateCompany.setAlignment(Pos.BASELINE_CENTER);
-        certificateCompanyField.setPrefWidth(250);
-        certificateCompany.getChildren().addAll(certificateCompanyLabel, certificateCompanyField);
-
-        Label commentLabel = new Label(" *Comments: ");
-        HBox comment = new HBox(10);
-        comment.setAlignment(Pos.BASELINE_CENTER);
-        commentField.setPrefWidth(300);
-        comment.getChildren().addAll(commentLabel, commentField);
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getsoldToDispString()            , "Eyelash Express"  , 250, soldToField));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getsoldPhoneDispString()         , "555-555-5555"     , 250, soldPhoneField));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getshipToDispString()            , "Jane Doe"         , 250, shippedToField));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getcompanyDispString()           , "Lash inc."        , 250, companyField));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getaddress1DispString()          , "12345 Pine ST"    , 250, address1Field));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getaddress2DispString()          , ""                 , 250, address2Field));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getcityDispString()              , "New York"         , 250, cityField));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getregionDispString()            , "Alberta"          , 250, regionField));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getpostCodeDispString()          , "T7X 1J4"          , 250, postCodeField));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getcountryDispString()           , "Canada"           , 250, countryField));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getshipPhoneDispString()         , "555-555-5555"     , 250, shippedPhoneField));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getemailDispString()             , "janedoe@gmail.com", 250, emailField));
+        entryBox.getChildren().add(shippedDate);
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getlicenseNumDispString()        , ""                 , 250, licenseField));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getcertificateCompanyDispString(), ""                 , 250, certificateCompanyField));
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getcommentsDispString()          , ""                 , 300, commentField));
 
 
         Button addButton = new Button("Add Client");
         addButton.setOnAction(Event ->{
             entryStage.close();
-            List<String> tempClient= new ArrayList<>();
-            tempClient.add(soldToField.getText());
-            tempClient.add(soldPhoneField.getText());
-            tempClient.add(shippedToField.getText());
-            tempClient.add(companyField.getText());
-            tempClient.add(address1Field.getText());
-            tempClient.add(address2Field.getText());
-            tempClient.add(cityField.getText());
-            tempClient.add(regionField.getText());
-            tempClient.add(postCodeField.getText());
-            tempClient.add(countryField.getText());
-            tempClient.add(shippedPhoneField.getText());
-            tempClient.add(emailField.getText());
-            tempClient.add(datePicker.getConverter().toString(datePicker.getValue()));
-            tempClient.add(licenseField.getText());
-            tempClient.add(certificateCompanyField.getText());
-            tempClient.add(commentField.getText());
-            sT.addClient(tempClient);
+            List<String> tempClientList= new ArrayList<>();
+
+            for (int i = 1; i < entryBox.getChildren().size(); i++) { // Skip the first element. that's a fixed string
+                Node nodeOut = entryBox.getChildren().get(i);
+                if (nodeOut instanceof HBox) {
+                    for (Node nodeIn:((HBox)nodeOut).getChildren()) {
+                        if(nodeIn instanceof TextField) {
+                            tempClientList.add(((TextField)nodeIn).getText());
+                        } else if (nodeIn instanceof DatePicker) {
+                            tempClientList.add(datePicker.getConverter().toString(((DatePicker)nodeIn).getValue()));
+                        }
+                    }
+                }
+            }
+
+            sT.addClient(tempClientList);
             //clearEntryFields();
             table.setItems(FXCollections.observableArrayList(sT.getClientList()));
             table.refresh();
@@ -536,16 +428,10 @@ public class TrackerGUI extends Application {
 
         });
 
-
         HBox buttons = new HBox(30);
         buttons.setAlignment(Pos.CENTER);
         buttons.getChildren().addAll(cancelButton, searchButton, addButton);
-
-        Label searchable = new Label("\"*\" Denotes searchable fields");
-
-
-        entryBox.getChildren().addAll(searchable, soldTo,soldPhone,shippedTo,company,address1,address2,city, region, postCode, country,
-                phone, email, shippedDate, license, certificateCompany,comment, buttons);
+        entryBox.getChildren().add(buttons);
 
     }
 
@@ -651,6 +537,7 @@ public class TrackerGUI extends Application {
         }
     }
 
+    /* Currently deprecated */
     private void fillEntryStage(List<String> newClientData){
         soldToField.setText(newClientData.get(0));
         soldPhoneField.setText(newClientData.get(1));
@@ -679,86 +566,13 @@ public class TrackerGUI extends Application {
         changesStage.setScene(changesScene);
 
 
-        Label soldToLabel =             new Label(" Sold To:                ");
-        HBox soldTo = new HBox(10);
-        soldTo.setAlignment(Pos.BASELINE_CENTER);
-        soldToField2.setPrefWidth(250);
-        soldTo.getChildren().addAll(soldToLabel, soldToField2);
-
-
-        Label soldPhoneLabel =          new Label(" Sold Phone:          ");
-        HBox soldPhone = new HBox(10);
-        soldPhone.setAlignment(Pos.BASELINE_CENTER);
-        soldPhoneField2.setPrefWidth(250);
-        soldPhone.getChildren().addAll(soldPhoneLabel, soldPhoneField2);
-
-        Label shippedToLabel =          new Label(" Shipped To:          ");
-        HBox shippedTo = new HBox(10);
-        shippedTo.setAlignment(Pos.BASELINE_CENTER);
-        shippedToField2.setPrefWidth(250);
-        shippedTo.getChildren().addAll(shippedToLabel, shippedToField2);
-
-        Label companyLabel =          new Label(" Company:          ");
-        HBox company = new HBox(10);
-        company.setAlignment(Pos.BASELINE_CENTER);
-        companyField2.setPrefWidth(250);
-        company.getChildren().addAll(companyLabel, companyField2);
-
-        Label address1Label =           new Label(" Address 1:           ");
-        HBox address1 = new HBox(10);
-        address1.setAlignment(Pos.BASELINE_CENTER);
-        address1Field2.setPrefWidth(250);
-        address1.getChildren().addAll(address1Label, address1Field2);
-
-        Label address2LAbel =           new Label(" Address 2:           ");
-        HBox address2 = new HBox(10);
-        address2.setAlignment(Pos.BASELINE_CENTER);
-        address2Field2.setPrefWidth(250);
-        address2.getChildren().addAll(address2LAbel, address2Field2);
-
-        Label cityLabel =               new Label(" City:                ");
-        HBox city = new HBox(10);
-        city.setAlignment(Pos.BASELINE_CENTER);
-        cityField2.setPrefWidth(250);
-        city.getChildren().addAll(cityLabel, cityField2);
-
-        Label regionLabel =             new Label(" Region:              ");
-        HBox region = new HBox(10);
-        region.setAlignment(Pos.BASELINE_CENTER);
-        regionField2.setPrefWidth(250);
-        region.getChildren().addAll(regionLabel, regionField2);
-
-        Label postCodeLAbel =           new Label(" Postal Code:         ");
-        postCodeField2.setPrefWidth(250);
-        HBox postCode = new HBox(10);
-        postCode.setAlignment(Pos.BASELINE_CENTER);
-        postCode.getChildren().addAll(postCodeLAbel, postCodeField2);
-
-        Label countryLabel =            new Label(" Country:             ");
-        HBox country = new HBox(10);
-        country.setAlignment(Pos.BASELINE_CENTER);
-        countryField2.setPrefWidth(250);
-        country.getChildren().addAll(countryLabel, countryField2);
-
-        Label shippedPhoneLabel =       new Label(" Shipped Phone:            ");
-        HBox phone = new HBox(10);
-        phone.setAlignment(Pos.BASELINE_CENTER);
-        shippedPhoneField2.setPrefWidth(250);
-        phone.getChildren().addAll(shippedPhoneLabel, shippedPhoneField2);
-
-        Label emailLabel =              new Label(" Email:                    ");
-        HBox email = new HBox(10);
-        email.setAlignment(Pos.BASELINE_CENTER);
-        emailField2.setPrefWidth(250);
-        email.getChildren().addAll(emailLabel, emailField2);
-
-        DateTimeFormatter dtf = new DateTimeFormatterBuilder().parseCaseSensitive().appendPattern("MMM dd YYYY").toFormatter();
+        DateTimeFormatter dtf = new DateTimeFormatterBuilder().parseCaseSensitive().appendPattern("MMM dd yyyy").toFormatter();
         datePicker2 = new DatePicker();
         datePicker2.setConverter(new StringConverter<>() {
             @Override
             public String toString(LocalDate localDate) {
                 if(localDate != null){
-                    return dtf.format(localDate).toUpperCase().replace(".", "");
+                    return dtf.format(localDate).toUpperCase();
                 }else{
                     return "";
                 }
@@ -773,29 +587,31 @@ public class TrackerGUI extends Application {
                 }
             }
         });
-
-        Label shippedDateLabel =        new Label(" Shipped Date:            ");
-        HBox shippedDate = new HBox(10);
+        Label shippedDateLabel = new Label(tempClient.getshippedDateDispString());
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        HBox shippedDate = new HBox();
         shippedDate.setAlignment(Pos.BASELINE_CENTER);
-        shippedDate.getChildren().addAll(shippedDateLabel, datePicker2);
+        shippedDate.setMaxWidth(entrySceneWidth - 40);
+        shippedDate.getChildren().addAll(shippedDateLabel, spacer, datePicker2);
 
-        Label licenseLabel =            new Label(" License Number:       ");
-        HBox license = new HBox(10);
-        license.setAlignment(Pos.BASELINE_CENTER);
-        licenseField2.setPrefWidth(250);
-        license.getChildren().addAll(licenseLabel, licenseField2);
 
-        Label certificateCompanyLabel = new Label(" Certificate Company: ");
-        HBox certificateCompany = new HBox(10);
-        certificateCompany.setAlignment(Pos.BASELINE_CENTER);
-        certificateCompanyField2.setPrefWidth(250);
-        certificateCompany.getChildren().addAll(certificateCompanyLabel, certificateCompanyField2);
-
-        Label commentLabel = new Label(" Comments: ");
-        HBox comment = new HBox(10);
-        comment.setAlignment(Pos.BASELINE_CENTER);
-        commentField2.setPrefWidth(300);
-        comment.getChildren().addAll(commentLabel, commentField2);
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getsoldToDispString()            , "Eyelash Express"  , 250, soldToField2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getsoldPhoneDispString()         , "555-555-5555"     , 250, soldPhoneField2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getshipToDispString()            , "Jane Doe"         , 250, shippedToField2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getcompanyDispString()           , "Lash inc."        , 250, companyField2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getaddress1DispString()          , "12345 Pine ST"    , 250, address1Field2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getaddress2DispString()          , ""                 , 250, address2Field2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getcityDispString()              , "New York"         , 250, cityField2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getregionDispString()            , "Alberta"          , 250, regionField2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getpostCodeDispString()          , "T7X 1J4"          , 250, postCodeField2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getcountryDispString()           , "Canada"           , 250, countryField2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getshipPhoneDispString()         , "555-555-5555"     , 250, shippedPhoneField2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getemailDispString()             , "janedoe@gmail.com", 250, emailField2));
+        changesBox.getChildren().add(shippedDate);
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getlicenseNumDispString()        , ""                 , 250, licenseField2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getcertificateCompanyDispString(), ""                 , 250, certificateCompanyField2));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getcommentsDispString()          , ""                 , 300, commentField2));
 
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(Event->{
@@ -829,14 +645,11 @@ public class TrackerGUI extends Application {
             table.refresh();
         });
 
-
-
         HBox buttons2 = new HBox(30);
         buttons2.setAlignment(Pos.CENTER);
         buttons2.getChildren().addAll(cancelButton, changesButton);
+        changesBox.getChildren().add(buttons2);
 
-        changesBox.getChildren().addAll(soldTo,soldPhone,shippedTo,company,address1,address2,city, region, postCode, country,
-                phone, email, shippedDate, license, certificateCompany,comment, buttons2);
     }
 
 
@@ -856,19 +669,21 @@ public class TrackerGUI extends Application {
         company
         comments
         */
-        List<String> tempClient= new ArrayList<>();
-        tempClient.add(soldToField.getText());
-        tempClient.add(shippedToField.getText());
-        tempClient.add(address1Field.getText());
-        tempClient.add(address2Field.getText());
-        tempClient.add(soldPhoneField.getText());
-        tempClient.add(shippedPhoneField.getText());
-        tempClient.add(emailField.getText());
-        tempClient.add(licenseField.getText());
-        tempClient.add(companyField.getText());
-        tempClient.add(commentField.getText());
+        /*Searcheable fields */
+        List<String> tempClientList= new ArrayList<>();
+        tempClientList.add(soldToField.getText());
+        tempClientList.add(shippedToField.getText());
+        tempClientList.add(address1Field.getText());
+        tempClientList.add(address2Field.getText());
+        tempClientList.add(soldPhoneField.getText());
+        tempClientList.add(shippedPhoneField.getText());
+        tempClientList.add(emailField.getText());
+        tempClientList.add(licenseField.getText());
+        tempClientList.add(companyField.getText());
+        tempClientList.add(commentField.getText());
+        /*Searcheable fields */
 
-        filteredClients = sT.filterClients(tempClient, filteredClients);
+        filteredClients = sT.filterClients(tempClientList, filteredClients);
         table.setItems(FXCollections.observableArrayList(filteredClients));
         table.scrollTo(0);
         if(filteredClients.size()<1){
