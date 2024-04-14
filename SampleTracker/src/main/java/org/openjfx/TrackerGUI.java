@@ -54,6 +54,8 @@ public class TrackerGUI extends Application {
     private Stage plainTextStage;
     private VBox plainTextBox;
 
+    private Image IconImage;
+
     private TextArea textArea;
 
     private TextField soldToField = new TextField();
@@ -115,8 +117,8 @@ public class TrackerGUI extends Application {
     public void start(Stage primaryStage) throws Exception {
         try {
             FileInputStream inputStream = new FileInputStream("TrackerIcon.png");
-            Image image = new Image(inputStream);
-            primaryStage.getIcons().add(image);
+            IconImage = new Image(inputStream);
+            primaryStage.getIcons().add(IconImage);
         } catch (Exception e) {
             System.out.println("loading icon exception: " + e.getMessage());
         }
@@ -160,6 +162,17 @@ public class TrackerGUI extends Application {
         configureContextMenu(primaryStage);
         configureDelete(primaryStage);
         configureRemoveCertificate(primaryStage);
+
+        if (IconImage != null) {
+            entryStage.getIcons().add(IconImage);
+            changesStage.getIcons().add(IconImage);
+            plainTextStage.getIcons().add(IconImage);
+            savePopup.getIcons().add(IconImage);
+            deletePopup.getIcons().add(IconImage);
+            removeCertificatePopup.getIcons().add(IconImage);
+            
+            
+        }
 
         Button searchButton = new Button("Search/Add New");
         searchButton.setOnAction(Event ->{
@@ -330,15 +343,6 @@ public class TrackerGUI extends Application {
         Scene entryScene = new Scene(entryBox,entrySceneWidth, entrySceneHeight);
         entryStage.setScene(entryScene);
 
-
-        try {
-            FileInputStream inputStream = new FileInputStream("TrackerIcon.png");
-            Image image = new Image(inputStream);
-            entryStage.getIcons().add(image);
-        } catch (Exception e) {
-            System.out.println("loading icon exception: " + e.getMessage());
-        }
-
         Label searchable = new Label("\"*\" Denotes searchable fields");
         entryBox.getChildren().add(searchable);
 
@@ -440,13 +444,7 @@ public class TrackerGUI extends Application {
         plainTextStage.initModality(Modality.APPLICATION_MODAL);
         plainTextStage.initOwner(primaryStage);
         plainTextStage.setResizable(false);
-        try {
-            FileInputStream inputStream = new FileInputStream("TrackerIcon.png");
-            Image image = new Image(inputStream);
-            plainTextStage.getIcons().add(image);
-        } catch (Exception e) {
-            System.out.println("loading icon exception: " + e.getMessage());
-        }
+
         //plainTextStage.setAlwaysOnTop(true);
         plainTextBox = new VBox(10);
         plainTextBox.setAlignment(Pos.CENTER);
@@ -738,7 +736,6 @@ public class TrackerGUI extends Application {
         savePopup.setResizable(false);
 
         //savePopup.setTitle("");
-
 
         VBox savePopBox = new VBox(20);
         Label label = new Label("Save your changes to this file?");
