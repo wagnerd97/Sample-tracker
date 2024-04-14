@@ -131,20 +131,20 @@ public class TrackerGUI extends Application {
         HBox topBox = new HBox(10);
         topBox.setPadding(new Insets(10,10,10,10));
 
-        Button undoButton = new Button("Undo");
-        undoButton.setOnAction(Event->{
-            if(sT.undo()){
-                table.refresh();
-            }
-        });
+        // Button undoButton = new Button("Undo");
+        // undoButton.setOnAction(Event->{
+        //     if(sT.undo()){
+        //         table.refresh();
+        //     }
+        // });
 
-        Button redoButton = new Button("Redo");
-        redoButton.setOnAction(Event->{
-            if(sT.redo()){
-                table.refresh();
-            }
-        });
-        topBox.getChildren().addAll(tableLabel,undoButton,redoButton);
+        // Button redoButton = new Button("Redo");
+        // redoButton.setOnAction(Event->{
+        //     if(sT.redo()){
+        //         table.refresh();
+        //     }
+        // });
+        // topBox.getChildren().addAll(tableLabel,undoButton,redoButton);
 
         configureTable();
         configurePlainTextWindow(primaryStage);
