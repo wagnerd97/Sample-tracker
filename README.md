@@ -22,7 +22,12 @@ from there you need to set up the configurations to run it.
 > - Open Modify options and choose Add before launch task
 > - under Add new Task choose "Run another configuration"
 > - Choose our maven install task we just created
-> - Hit Apply and Ok and test it out. the program should launch
+> - Hit Apply and Ok and test it out. the program should launch.
+> - If you edit in vs code and you find the project sometimes won't build
+> - then you may need to add the following flow of maven tasks:
+>> - clean
+>> - compile
+>> - install
 
 > ### 3. Build Artifact
 > We need a jar artifact to be built in order to create an installer for
