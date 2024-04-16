@@ -25,7 +25,6 @@ import javafx.util.StringConverter;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -36,8 +35,6 @@ import java.nio.file.Path;
 public class TrackerGUI extends Application {
 
     private String desktopLocation = System.getProperty("user.home") + "/Desktop";
-    // private String desktopLocation = "C:\\Users\\User\\Desktop";
-    // private String desktopLocation = "C:\\Users\\sandy\\OneDrive\\Desktop";
 
     private static SampleTracker sT;
     private static PropertiesHandler pH;
@@ -84,24 +81,6 @@ public class TrackerGUI extends Application {
     private TextField  secondLicenseNumField =         new TextField();
     private TextField  secondCertificateCompanyField = new TextField();
     private TextField  commentsField =                 new TextField();
-
-
-    // private TextField soldToField2 = new TextField();
-    // private TextField soldPhoneField2 = new TextField();
-    // private TextField shippedToField2 = new TextField();
-    // private TextField companyField2 = new TextField();
-    // private TextField address1Field2 = new TextField();
-    // private TextField address2Field2 = new TextField();
-    // private TextField cityField2 = new TextField();
-    // private TextField regionField2 = new TextField();
-    // private TextField postCodeField2 = new TextField();
-    // private TextField countryField2 = new TextField();
-    // private TextField shippedPhoneField2 = new TextField();
-    // private TextField emailField2 = new TextField();
-    // private DatePicker datePicker2 = new DatePicker();
-    // private TextField licenseField2 = new TextField();
-    // private TextField certificateCompanyField2 = new TextField();
-    // private TextField commentField2 = new TextField();
 
     private TextField  shipNameField2 =                 new TextField();
     private TextField  shipPhoneField2 =                new TextField();
@@ -160,7 +139,6 @@ public class TrackerGUI extends Application {
         } catch (Exception e) {
             System.out.println("loading icon exception: " + e.getMessage());
         }
-        // primaryStage.getIcons().add(new Image(TrackerGUI.class.getResourceAsStream("TrackerIcon.png")));
 
         populateTrackerData();
 
@@ -488,7 +466,6 @@ public class TrackerGUI extends Application {
             }
 
             sT.addClient(tempClientList);
-            //clearEntryFields();
             table.setItems(FXCollections.observableArrayList(sT.getClientList()));
             table.refresh();
             table.scrollTo(sT.getClientList().get(sT.getClientList().size()-1));
@@ -496,14 +473,12 @@ public class TrackerGUI extends Application {
         });
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(Event->{
-            //clearEntryFields();
             entryStage.close();
         });
         Button searchButton = new Button("Search");
         searchButton.setOnAction(Event->{
             entryStage.close();
             performSearch();
-            //clearEntryFields();
 
         });
 
@@ -520,7 +495,6 @@ public class TrackerGUI extends Application {
         plainTextStage.initOwner(primaryStage);
         plainTextStage.setResizable(false);
 
-        //plainTextStage.setAlwaysOnTop(true);
         plainTextBox = new VBox(10);
         plainTextBox.setAlignment(Pos.CENTER);
         Scene plainTextScene = new Scene(plainTextBox,450, 400);
@@ -530,7 +504,6 @@ public class TrackerGUI extends Application {
         continueButton.setOnAction(Event ->{
             plainTextStage.close();
             clearPrimaryEntryFields();
-            // List<String> newClientData = sT.parsePlain(textArea.getText());
             String textData = textArea.getText();
             Map<String, String> attributeMap = new HashMap<>();
             if (!textData.isEmpty()) {
@@ -679,23 +652,6 @@ public class TrackerGUI extends Application {
         shippedDate.getChildren().addAll(shippedDateLabel, spacer, dateShippedPicker2);
 
 
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getsoldToDispString()            , "Eyelash Express"  , 250, soldToField2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getsoldPhoneDispString()         , "555-555-5555"     , 250, soldPhoneField2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getshipToDispString()            , "Jane Doe"         , 250, shippedToField2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getcompanyDispString()           , "Lash inc."        , 250, companyField2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getaddress1DispString()          , "12345 Pine ST"    , 250, address1Field2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getaddress2DispString()          , ""                 , 250, address2Field2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getcityDispString()              , "New York"         , 250, cityField2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getregionDispString()            , "Alberta"          , 250, regionField2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getpostCodeDispString()          , "T7X 1J4"          , 250, postCodeField2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getcountryDispString()           , "Canada"           , 250, countryField2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getshipPhoneDispString()         , "555-555-5555"     , 250, shippedPhoneField2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getemailDispString()             , "janedoe@gmail.com", 250, emailField2));
-        // changesBox.getChildren().add(shippedDate);
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getlicenseNumDispString()        , ""                 , 250, licenseField2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getcertificateCompanyDispString(), ""                 , 250, certificateCompanyField2));
-        // changesBox.getChildren().add(entryWindowLineCreate(tempClient.getcommentsDispString()          , ""                 , 300, commentField2));
-
         changesBox.getChildren().add(entryWindowLineCreate(tempClient.getshipNameDispString(),                 "Eyelash Express",       250, shipNameField2));
         changesBox.getChildren().add(entryWindowLineCreate(tempClient.getshipPhoneDispString(),                "555-555-5555",          250, shipPhoneField2));
         changesBox.getChildren().add(entryWindowLineCreate(tempClient.getshipCompanyDispString(),              "Lash Inc.",             250, shipCompanyField2));
@@ -761,33 +717,7 @@ public class TrackerGUI extends Application {
 
 
     private void performSearch(){
-        Boolean flag = false;
         List<Client> filteredClients = sT.getClientList();
-        /*search by fields
-        sold to
-        shipped to
-        address1
-        address2
-        sold phone
-        shipped phone
-        email
-        license #
-        company
-        comments
-        */
-        /*Searcheable fields */
-        // List<String> tempClientList= new ArrayList<>();
-        // tempClientList.add(soldToField.getText());
-        // tempClientList.add(shippedToField.getText());
-        // tempClientList.add(address1Field.getText());
-        // tempClientList.add(address2Field.getText());
-        // tempClientList.add(soldPhoneField.getText());
-        // tempClientList.add(shippedPhoneField.getText());
-        // tempClientList.add(emailField.getText());
-        // tempClientList.add(licenseField.getText());
-        // tempClientList.add(companyField.getText());
-        // tempClientList.add(commentField.getText());
-        /*Searcheable fields */
         Map<String, String> tempClientMap= new HashMap<>();
         tempClientMap.put("shipName",                 shipNameField.getText());
         tempClientMap.put("shipPhone",                shipPhoneField.getText());
@@ -824,24 +754,6 @@ public class TrackerGUI extends Application {
     }
 
     public void clearPrimaryEntryFields() {
-        // soldToField.clear();
-        // soldPhoneField.clear();
-        // shippedToField.clear();
-        // companyField.clear();
-        // address1Field.clear();
-        // address2Field.clear();
-        // cityField.clear();
-        // regionField.clear();
-        // postCodeField.clear();
-        // countryField.clear();
-        // shippedPhoneField.clear();
-        // emailField.clear();
-        // datePicker.setValue(null);
-        // datePicker.getEditor().clear();
-        // licenseField.clear();
-        // certificateCompanyField.clear();
-        // commentField.clear();
-
         shipNameField.clear();
         shipPhoneField.clear();
         shipCompanyField.clear();
@@ -872,24 +784,6 @@ public class TrackerGUI extends Application {
     }
 
     public void clearSecondaryEntryFields(){
-        // soldToField2.clear();
-        // soldPhoneField2.clear();
-        // shippedToField2.clear();
-        // companyField2.clear();
-        // address1Field2.clear();
-        // address2Field2.clear();
-        // cityField2.clear();
-        // regionField2.clear();
-        // postCodeField2.clear();
-        // countryField2.clear();
-        // shippedPhoneField2.clear();
-        // emailField2.clear();
-        // datePicker2.setValue(null);
-        // datePicker2.getEditor().clear();
-        // licenseField2.clear();
-        // certificateCompanyField2.clear();
-        // commentField2.clear();
-
         shipNameField2.clear();
         shipPhoneField2.clear();
         shipCompanyField2.clear();
@@ -933,7 +827,6 @@ public class TrackerGUI extends Application {
         Scene loadingPopScene = new Scene(savePopBox,300, 100);
         savePopup.setScene(loadingPopScene);
 
-        // Save, Don't Save, Cancel
         HBox buttons = new HBox(20);
 
         Button saveButton = new Button("Save");
@@ -994,22 +887,6 @@ public class TrackerGUI extends Application {
         editItem.setOnAction(Event -> {
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
-            // soldToField2.setText(clientToChange.getSoldTo());
-            // soldPhoneField2.setText(clientToChange.getSoldPhone());
-            // shippedToField2.setText(clientToChange.getShipTo());
-            // companyField2.setText(clientToChange.getCompany());
-            // address1Field2.setText(clientToChange.getAddress1());
-            // address2Field2.setText(clientToChange.getAddress2());
-            // cityField2.setText(clientToChange.getCity());
-            // regionField2.setText(clientToChange.getRegion());
-            // postCodeField2.setText(clientToChange.getPostCode());
-            // countryField2.setText(clientToChange.getCountry());
-            // shippedPhoneField2.setText(clientToChange.getShipPhone());
-            // emailField2.setText(clientToChange.getEmail());
-            // datePicker2.setValue(clientToChange.getDateFormat());
-            // licenseField2.setText(clientToChange.getLicenseNum());
-            // certificateCompanyField2.setText(clientToChange.getCertificateCompany());
-            // commentField2.setText(clientToChange.getComments());
 
             shipNameField2.setText(                clientToChange.getShipName());
             shipPhoneField2.setText(               clientToChange.getShipPhone());
@@ -1097,7 +974,6 @@ public class TrackerGUI extends Application {
             deletePopup.show();
         });
 
-        // contextMenu.getItems().addAll(editItem,addCertificateButton,replaceCertificateButton,removeCertificateButton, viewCertificateButton, deleteItem);
         contextMenu.getItems().add(editItem);
         contextMenu.getItems().add(addCertificate1Button);
         contextMenu.getItems().add(addCertificate2Button);

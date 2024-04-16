@@ -12,10 +12,6 @@ import java.util.*;
 import java.util.List;
 
 /*
-notes to self:
-    data file location has to be different to run on my computer as opposed to moms computer
-    can no longer run this program outside of IDE due to compatibility issues that have arisen now
-
 Features to add:
     undo and redo button.
 
@@ -25,19 +21,11 @@ known bugs:
     in some instances a search or a removal of an item causes context menu to lock up. can't select any items.
     the fix required is to do another action using a permanent button.
 
-build information:
-    lib classes and sources:
-    C:\Users\dusti\Documents\openjfx-11.0.2_windows-x64_bin-sdk\javafx-sdk-11.0.2\lib
-    15 java version SDK java 15.0.1
-
  */
 
 
 public class SampleTracker {
-
-    // lets consider %HOMEPATH% or %USERPROFILE% as a way to more generically get to the users home directory
-    //private String fileLocation = "C:\\Users\\User\\Documents\\SampleTrackerData\\";
-    private String fileLocation;  // = "C:\\Users\\sandy\\Documents\\SampleTrackerData\\";
+    private String fileLocation;
     private String fileName = "clientData.csv";
 
 
@@ -284,20 +272,7 @@ public class SampleTracker {
     }
 
 
-    // public List<Client> filterClients(List<String> clientInfo, List<Client> clientList){
     public List<Client> filterClients(Map<String, String> clientInfo, List<Client> clientList){
-        /*search by fields
-        sold to
-        shipped to
-        address1
-        address2
-        sold phone
-        shipped phone
-        email
-        license #
-        company
-        comments
-        */
         List<Client> filtered = new ArrayList<>();
         for (Client client : clientList) {
             if(!clientInfo.get("shipName").equals("")){
