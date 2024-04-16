@@ -56,30 +56,44 @@ public class SampleTracker {
         while(file.hasNextLine()){
             String str = file.nextLine();
             String[] clientInfo = str.split(",");
-            String[] finalInfo = new String[17];
+            String[] finalInfo = new String[30];
             Arrays.fill(finalInfo, "");
             for(int i = 0;i<clientInfo.length;i++){
                 finalInfo[i] = clientInfo[i];
             }
             Client tempClient = new Client();
             tempClient.setIndex(counter);
-            tempClient.setSoldTo(finalInfo[0]);
-            tempClient.setSoldPhone(finalInfo[1]);
-            tempClient.setShipTo(finalInfo[2]);
-            tempClient.setCompany(finalInfo[3]);
-            tempClient.setAddress1(finalInfo[4]);
-            tempClient.setAddress2(finalInfo[5]);
-            tempClient.setCity(finalInfo[6]);
-            tempClient.setRegion(finalInfo[7]);
-            tempClient.setPostCode(finalInfo[8]);
-            tempClient.setCountry(finalInfo[9]);
-            tempClient.setShipPhone(finalInfo[10]);
-            tempClient.setEmail(finalInfo[11]);
-            tempClient.setShippedDate(finalInfo[12]);
-            tempClient.setLicenseNum(finalInfo[13]);
-            tempClient.setCertificateCompany(finalInfo[14]);
-            tempClient.setComments(finalInfo[15].replaceAll("~", ","));
-            tempClient.setCertificate(finalInfo[16]);
+
+            tempClient.setShipName                (finalInfo[0]);
+            tempClient.setShipPhone               (finalInfo[1]);
+            tempClient.setShipCompany             (finalInfo[2]);
+            tempClient.setShipAddress1            (finalInfo[3]);
+            tempClient.setShipAddress2            (finalInfo[4]);
+            tempClient.setShipCity                (finalInfo[5]);
+            tempClient.setShipRegion              (finalInfo[6]);
+            tempClient.setShipPostCode            (finalInfo[7]);
+            tempClient.setShipCountry             (finalInfo[8]);
+            tempClient.setShipEmail               (finalInfo[9]);
+            tempClient.setBillName                (finalInfo[10]);
+            tempClient.setBillPhone               (finalInfo[11]);
+            tempClient.setBillCompany             (finalInfo[12]);
+            tempClient.setBillAddress1            (finalInfo[13]);
+            tempClient.setBillAddress2            (finalInfo[14]);
+            tempClient.setBillCity                (finalInfo[15]);
+            tempClient.setBillRegion              (finalInfo[16]);
+            tempClient.setBillPostCode            (finalInfo[17]);
+            tempClient.setBillCountry             (finalInfo[18]);
+            tempClient.setBillEmail               (finalInfo[19]);
+            tempClient.setDateShipped             (finalInfo[20]);
+            tempClient.setFirstLicenseNum         (finalInfo[21]);
+            tempClient.setFirstCertificateCompany (finalInfo[22]);
+            tempClient.setSecondLicenseNum        (finalInfo[23]);
+            tempClient.setSecondCertificateCompany(finalInfo[24]);
+            tempClient.setComments                (finalInfo[25]);
+            tempClient.setFirstCertificate        (finalInfo[26]);
+            tempClient.setSecondCertificate       (finalInfo[27]);
+            tempClient.setDateClientAdded         (finalInfo[28]);
+            tempClient.setDateClientEdited        (finalInfo[29]);
 
             clientList.add(tempClient);
             counter++;
@@ -91,23 +105,36 @@ public class SampleTracker {
         StringBuilder builder = new StringBuilder();
         //add header line
         Client tempClient = new Client();
-        builder.append(tempClient.getsoldToDispString()).append(",");
-        builder.append(tempClient.getsoldPhoneDispString()).append(",");
-        builder.append(tempClient.getshipToDispString()).append(",");
-        builder.append(tempClient.getcompanyDispString()).append(",");
-        builder.append(tempClient.getaddress1DispString()).append(",");
-        builder.append(tempClient.getaddress2DispString()).append(",");
-        builder.append(tempClient.getcityDispString()).append(",");
-        builder.append(tempClient.getregionDispString()).append(",");
-        builder.append(tempClient.getpostCodeDispString()).append(",");
-        builder.append(tempClient.getcountryDispString()).append(",");
+        builder.append(tempClient.getshipNameDispString()).append(",");
         builder.append(tempClient.getshipPhoneDispString()).append(",");
-        builder.append(tempClient.getemailDispString()).append(",");
-        builder.append(tempClient.getshippedDateDispString()).append(",");
-        builder.append(tempClient.getlicenseNumDispString()).append(",");
-        builder.append(tempClient.getcertificateCompanyDispString()).append(",");
+        builder.append(tempClient.getshipCompanyDispString()).append(",");
+        builder.append(tempClient.getshipAddress1DispString()).append(",");
+        builder.append(tempClient.getshipAddress2DispString()).append(",");
+        builder.append(tempClient.getshipCityDispString()).append(",");
+        builder.append(tempClient.getshipRegionDispString()).append(",");
+        builder.append(tempClient.getshipPostCodeDispString()).append(",");
+        builder.append(tempClient.getshipCountryDispString()).append(",");
+        builder.append(tempClient.getshipEmailDispString()).append(",");
+        builder.append(tempClient.getbillNameDispString()).append(",");
+        builder.append(tempClient.getbillPhoneDispString()).append(",");
+        builder.append(tempClient.getbillCompanyDispString()).append(",");
+        builder.append(tempClient.getbillAddress1DispString()).append(",");
+        builder.append(tempClient.getbillAddress2DispString()).append(",");
+        builder.append(tempClient.getbillCityDispString()).append(",");
+        builder.append(tempClient.getbillRegionDispString()).append(",");
+        builder.append(tempClient.getbillPostCodeDispString()).append(",");
+        builder.append(tempClient.getbillCountryDispString()).append(",");
+        builder.append(tempClient.getbillEmailDispString()).append(",");
+        builder.append(tempClient.getdateShippedDispString()).append(",");
+        builder.append(tempClient.getfirstLicenseNumDispString()).append(",");
+        builder.append(tempClient.getfirstCertificateCompanyDispString()).append(",");
+        builder.append(tempClient.getsecondLicenseNumDispString()).append(",");
+        builder.append(tempClient.getsecondCertificateCompanyDispString()).append(",");
         builder.append(tempClient.getcommentsDispString()).append(",");
-        builder.append(tempClient.getcertificateDispString()).append("\n");
+        builder.append(tempClient.getfirstCertificateDispString()).append(",");
+        builder.append(tempClient.getsecondCertificateDispString()).append(",");
+        builder.append(tempClient.getdateClientAddedDispString()).append(",");
+        builder.append(tempClient.getdateClientEditedDispString()).append("\n");
         for (Client client : clientList) {
             builder.append(client.toString());
         }
@@ -150,28 +177,43 @@ public class SampleTracker {
     }
 
 
-    //list clientInfo is expected to be 14 items long
+    //list clientInfo is expected to be ? items long
     public Boolean addClient(List<String> clientInfo){
         Client tempClient = new Client();
-        tempClient.setSoldTo(clientInfo.get(0));
-        tempClient.setSoldPhone(clientInfo.get(1));
-        tempClient.setShipTo(clientInfo.get(2));
-        tempClient.setCompany(clientInfo.get(3));
-        tempClient.setAddress1(clientInfo.get(4));
-        tempClient.setAddress2(clientInfo.get(5));
-        tempClient.setCity(clientInfo.get(6));
-        tempClient.setRegion(clientInfo.get(7));
-        tempClient.setPostCode(clientInfo.get(8).toUpperCase());
-        tempClient.setCountry(clientInfo.get(9));
-        tempClient.setShipPhone(clientInfo.get(10));
-        tempClient.setEmail(clientInfo.get(11));
-        tempClient.setShippedDate(clientInfo.get(12));
-        tempClient.setLicenseNum(clientInfo.get(13));
-        tempClient.setCertificateCompany(clientInfo.get(14));
-        tempClient.setComments(clientInfo.get(15));
-        tempClient.setCertificate("");
 
         tempClient.setIndex(clientList.size()+1);
+
+        tempClient.setShipName                (clientInfo.get(0));
+        tempClient.setShipPhone               (clientInfo.get(1));
+        tempClient.setShipCompany             (clientInfo.get(2));
+        tempClient.setShipAddress1            (clientInfo.get(3));
+        tempClient.setShipAddress2            (clientInfo.get(4));
+        tempClient.setShipCity                (clientInfo.get(5));
+        tempClient.setShipRegion              (clientInfo.get(6));
+        tempClient.setShipPostCode            (clientInfo.get(7));
+        tempClient.setShipCountry             (clientInfo.get(8));
+        tempClient.setShipEmail               (clientInfo.get(9));
+        tempClient.setBillName                (clientInfo.get(10));
+        tempClient.setBillPhone               (clientInfo.get(11));
+        tempClient.setBillCompany             (clientInfo.get(12));
+        tempClient.setBillAddress1            (clientInfo.get(13));
+        tempClient.setBillAddress2            (clientInfo.get(14));
+        tempClient.setBillCity                (clientInfo.get(15));
+        tempClient.setBillRegion              (clientInfo.get(16));
+        tempClient.setBillPostCode            (clientInfo.get(17));
+        tempClient.setBillCountry             (clientInfo.get(18));
+        tempClient.setBillEmail               (clientInfo.get(19));
+        tempClient.setDateShipped             (clientInfo.get(20));
+        tempClient.setFirstLicenseNum         (clientInfo.get(21));
+        tempClient.setFirstCertificateCompany (clientInfo.get(22));
+        tempClient.setSecondLicenseNum        (clientInfo.get(23));
+        tempClient.setSecondCertificateCompany(clientInfo.get(24));
+        tempClient.setComments                (clientInfo.get(25));
+        tempClient.setFirstCertificate        ("");
+        tempClient.setSecondCertificate       ("");
+        // Add a function that can help us set these dates
+        tempClient.setDateClientAdded         ("");
+        tempClient.setDateClientEdited        ("");
 
         saveRequired = true;
         return clientList.add(tempClient);
@@ -184,7 +226,7 @@ public class SampleTracker {
             return;
         }
         boolean imageProcessed = false;
-        if(removeCertificateImage(zeroIndex + 1)){
+        if(removeCertificateImage(zeroIndex + 1, 1) && removeCertificateImage(zeroIndex + 1, 2)){
             imageProcessed = true;
         }
         for(int i =zeroIndex+1; i<clientList.size();i++){
@@ -204,34 +246,46 @@ public class SampleTracker {
     }
 
     public Boolean makeChanges(List<String> clientInfo, Integer itemNum){
-        if (clientInfo.size() != 16){
+        if (clientInfo.size() != 26){
             return false;
         }
 
         Integer i = itemNum-1;
-        clientList.get(i).setSoldTo(clientInfo.get(0));
-        clientList.get(i).setSoldPhone(clientInfo.get(1));
-        clientList.get(i).setShipTo(clientInfo.get(2));
-        clientList.get(i).setCompany(clientInfo.get(3));
-        clientList.get(i).setAddress1(clientInfo.get(4));
-        clientList.get(i).setAddress2(clientInfo.get(5));
-        clientList.get(i).setCity(clientInfo.get(6));
-        clientList.get(i).setRegion(clientInfo.get(7));
-        clientList.get(i).setPostCode(clientInfo.get(8).toUpperCase());
-        clientList.get(i).setCountry(clientInfo.get(9));
-        clientList.get(i).setShipPhone(clientInfo.get(10));
-        clientList.get(i).setEmail(clientInfo.get(11));
-        clientList.get(i).setShippedDate(clientInfo.get(12));
-        clientList.get(i).setLicenseNum(clientInfo.get(13));
-        clientList.get(i).setCertificateCompany(clientInfo.get(14));
-        clientList.get(i).setComments(clientInfo.get(15));
+
+        clientList.get(i).setShipName                (clientInfo.get(0));
+        clientList.get(i).setShipPhone               (clientInfo.get(1));
+        clientList.get(i).setShipCompany             (clientInfo.get(2));
+        clientList.get(i).setShipAddress1            (clientInfo.get(3));
+        clientList.get(i).setShipAddress2            (clientInfo.get(4));
+        clientList.get(i).setShipCity                (clientInfo.get(5));
+        clientList.get(i).setShipRegion              (clientInfo.get(6));
+        clientList.get(i).setShipPostCode            (clientInfo.get(7));
+        clientList.get(i).setShipCountry             (clientInfo.get(8));
+        clientList.get(i).setShipEmail               (clientInfo.get(9));
+        clientList.get(i).setBillName                (clientInfo.get(10));
+        clientList.get(i).setBillPhone               (clientInfo.get(11));
+        clientList.get(i).setBillCompany             (clientInfo.get(12));
+        clientList.get(i).setBillAddress1            (clientInfo.get(13));
+        clientList.get(i).setBillAddress2            (clientInfo.get(14));
+        clientList.get(i).setBillCity                (clientInfo.get(15));
+        clientList.get(i).setBillRegion              (clientInfo.get(16));
+        clientList.get(i).setBillPostCode            (clientInfo.get(17));
+        clientList.get(i).setBillCountry             (clientInfo.get(18));
+        clientList.get(i).setBillEmail               (clientInfo.get(19));
+        clientList.get(i).setDateShipped             (clientInfo.get(20));
+        clientList.get(i).setFirstLicenseNum         (clientInfo.get(21));
+        clientList.get(i).setFirstCertificateCompany (clientInfo.get(22));
+        clientList.get(i).setSecondLicenseNum        (clientInfo.get(23));
+        clientList.get(i).setSecondCertificateCompany(clientInfo.get(24));
+        clientList.get(i).setComments                (clientInfo.get(25));
 
         saveRequired = true;
         return true;
     }
 
 
-    public List<Client> filterClients(List<String> clientInfo, List<Client> clientList){
+    // public List<Client> filterClients(List<String> clientInfo, List<Client> clientList){
+    public List<Client> filterClients(Map<String, String> clientInfo, List<Client> clientList){
         /*search by fields
         sold to
         shipped to
@@ -246,80 +300,140 @@ public class SampleTracker {
         */
         List<Client> filtered = new ArrayList<>();
         for (Client client : clientList) {
-            if(!clientInfo.get(0).equals("")){
-                if (client.getSoldTo().toLowerCase().contains(clientInfo.get(0).toLowerCase())) {
+            if(!clientInfo.get("shipName").equals("")){
+                if (client.getShipName().toLowerCase().contains(clientInfo.get("shipName").toLowerCase())) {
                     filtered.add(client);
                     continue;
-                }else if(client.getShipTo().toLowerCase().contains(clientInfo.get(0).toLowerCase())){
-                    filtered.add(client);
-                    continue;
-                }
-            }
-            if(!clientInfo.get(1).equals("")) {
-                if (client.getShipTo().toLowerCase().contains(clientInfo.get(1).toLowerCase())) {
-                    filtered.add(client);
-                    continue;
-                }else if(client.getSoldTo().toLowerCase().contains(clientInfo.get(1).toLowerCase())){
+                }else if(client.getBillName().toLowerCase().contains(clientInfo.get("shipName").toLowerCase())){
                     filtered.add(client);
                     continue;
                 }
             }
-            if(!clientInfo.get(2).equals("")){
-                if(client.getAddress1().toLowerCase().contains(clientInfo.get(2).toLowerCase())){
+            if(!clientInfo.get("soldName").equals("")) {
+                if (client.getShipName().toLowerCase().contains(clientInfo.get("soldName").toLowerCase())) {
+                    filtered.add(client);
+                    continue;
+                }else if(client.getBillName().toLowerCase().contains(clientInfo.get("soldName").toLowerCase())){
                     filtered.add(client);
                     continue;
                 }
             }
-            if(!clientInfo.get(3).equals("")){
-                if(client.getAddress2().toLowerCase().contains(clientInfo.get(3).toLowerCase())){
+            if(!clientInfo.get("shipAddress1").equals("")){
+                if(client.getShipAddress1().toLowerCase().contains(clientInfo.get("shipAddress1").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                } else if(client.getBillAddress1().toLowerCase().contains(clientInfo.get("shipAddress1").toLowerCase())){
                     filtered.add(client);
                     continue;
                 }
             }
-            if(!clientInfo.get(4).equals("")){
-                if(client.getSoldPhone().toLowerCase().replaceAll("-", "").
-                        contains(clientInfo.get(4).toLowerCase().replaceAll("-",""))){
+            if(!clientInfo.get("billAddress1").equals("")){
+                if(client.getShipAddress1().toLowerCase().contains(clientInfo.get("shipAddress1").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                } else if(client.getBillAddress1().toLowerCase().contains(clientInfo.get("shipAddress1").toLowerCase())){
                     filtered.add(client);
                     continue;
                 }
+            }
+            if(!clientInfo.get("shipAddress2").equals("")){
+                if(client.getShipAddress2().toLowerCase().contains(clientInfo.get("shipAddress2").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                } else if(client.getBillAddress2().toLowerCase().contains(clientInfo.get("shipAddress2").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                }
+            }
+            if(!clientInfo.get("billAddress2").equals("")){
+                if(client.getShipAddress2().toLowerCase().contains(clientInfo.get("billAddress2").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                } else if(client.getBillAddress2().toLowerCase().contains(clientInfo.get("billAddress2").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                }
+            }
+            if(!clientInfo.get("shipPhone").equals("")){
                 if(client.getShipPhone().toLowerCase().replaceAll("-", "").
-                        contains(clientInfo.get(4).toLowerCase().replaceAll("-",""))){
+                        contains(clientInfo.get("shipPhone").toLowerCase().replaceAll("-",""))){
+                    filtered.add(client);
+                    continue;
+                }
+                if(client.getBillPhone().toLowerCase().replaceAll("-", "").
+                        contains(clientInfo.get("shipPhone").toLowerCase().replaceAll("-",""))){
                     filtered.add(client);
                     continue;
                 }
             }
-            if(!clientInfo.get(5).equals("")){
+            if(!clientInfo.get("billPhone").equals("")){
                 if(client.getShipPhone().toLowerCase().replaceAll("-","").
-                        contains(clientInfo.get(5).toLowerCase().replaceAll("-",""))){
+                        contains(clientInfo.get("billPhone").toLowerCase().replaceAll("-",""))){
                     filtered.add(client);
                     continue;
                 }
-                if(client.getSoldPhone().toLowerCase().replaceAll("-","").
-                        contains(clientInfo.get(5).toLowerCase().replaceAll("-",""))){
-                    filtered.add(client);
-                    continue;
-                }
-            }
-            if(!clientInfo.get(6).equals("")){
-                if(client.getEmail().toLowerCase().contains(clientInfo.get(6).toLowerCase())){
+                if(client.getBillPhone().toLowerCase().replaceAll("-","").
+                        contains(clientInfo.get("billPhone").toLowerCase().replaceAll("-",""))){
                     filtered.add(client);
                     continue;
                 }
             }
-            if(!clientInfo.get(7).equals("")) {
-                if (client.getLicenseNum().toLowerCase().contains(clientInfo.get(7).toLowerCase())) {
+            if(!clientInfo.get("shipEmail").equals("")){
+                if(client.getShipEmail().toLowerCase().contains(clientInfo.get("shipEmail").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                } else if(client.getBillEmail().toLowerCase().contains(clientInfo.get("shipEmail").toLowerCase())){
                     filtered.add(client);
                     continue;
                 }
             }
-            if(!clientInfo.get(8).equals("")){
-                if (client.getCompany().toLowerCase().contains(clientInfo.get(8).toLowerCase())){
+            if(!clientInfo.get("billEmail").equals("")){
+                if(client.getShipEmail().toLowerCase().contains(clientInfo.get("billEmail").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                } else if(client.getBillEmail().toLowerCase().contains(clientInfo.get("billEmail").toLowerCase())){
                     filtered.add(client);
                     continue;
                 }
             }
-            if(!clientInfo.get(9).equals("")){
-                if(commentsSearch(client.getComments().toLowerCase(), clientInfo.get(9).toLowerCase())){
+            if(!clientInfo.get("firstLicenseNum").equals("")) {
+                if (client.getFirstLicenseNum().toLowerCase().contains(clientInfo.get("firstLicenseNum").toLowerCase())) {
+                    filtered.add(client);
+                    continue;
+                } else if (client.getSecondLicenseNum().toLowerCase().contains(clientInfo.get("firstLicenseNum").toLowerCase())) {
+                    filtered.add(client);
+                    continue;
+                }
+            }
+            if(!clientInfo.get("secondLicenseNum").equals("")) {
+                if (client.getFirstLicenseNum().toLowerCase().contains(clientInfo.get("secondLicenseNum").toLowerCase())) {
+                    filtered.add(client);
+                    continue;
+                } else if (client.getSecondLicenseNum().toLowerCase().contains(clientInfo.get("secondLicenseNum").toLowerCase())) {
+                    filtered.add(client);
+                    continue;
+                }
+            }
+            if(!clientInfo.get("firstCertificateCompany").equals("")){
+                if (client.getFirstCertificateCompany().toLowerCase().contains(clientInfo.get("firstCertificateCompany").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                } else if (client.getSecondCertificateCompany().toLowerCase().contains(clientInfo.get("firstCertificateCompany").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                }
+            }
+            if(!clientInfo.get("secondCertificateCompany").equals("")){
+                if (client.getFirstCertificateCompany().toLowerCase().contains(clientInfo.get("secondCertificateCompany").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                } else if (client.getSecondCertificateCompany().toLowerCase().contains(clientInfo.get("secondCertificateCompany").toLowerCase())){
+                    filtered.add(client);
+                    continue;
+                }
+            }
+            if(!clientInfo.get("comments").equals("")){
+                if(commentsSearch(client.getComments().toLowerCase(), clientInfo.get("comments").toLowerCase())){
                     filtered.add(client);
                 }
             }
@@ -542,16 +656,29 @@ public class SampleTracker {
         return saveRequired;
     }
 
-    public boolean addCertificateImage(Integer itemNum, File file) throws IOException{
+    public boolean addCertificateImage(Integer itemNum, File file, Integer whichCertificate) {
         int i = itemNum-1;
         if(file != null){
             long millis = System.currentTimeMillis();
             String[] extension = file.toString().split("\\.");
 
-            Path temp = Files.move(file.toPath(), Paths.get(fileLocation + "\\" + millis + "." + extension[extension.length -1]));
-
-            clientList.get(i).setCertificate(millis + "." + extension[extension.length-1]);
-
+            try {
+                Files.move(file.toPath(), Paths.get(fileLocation + "\\" + millis + "." + extension[extension.length -1]));
+            } catch (Exception e) {
+                System.out.println("Could not move file: " + e.getMessage());
+            }
+            
+            switch(whichCertificate) {
+                case 1:
+                    clientList.get(i).setFirstCertificate(millis + "." + extension[extension.length-1]);
+                    break;
+                case 2:
+                    clientList.get(i).setSecondCertificate(millis + "." + extension[extension.length-1]);
+                    break;
+                default:
+                    return false;
+            }
+                
             save();
 
             return true;
@@ -559,28 +686,41 @@ public class SampleTracker {
         }
         return false;
     }
-    public boolean replaceCertificateImage(Integer itemNum, File file){
-        removeCertificateImage(itemNum);
-        try{
-            addCertificateImage(itemNum, file);
-            return true;
-        }catch(IOException e){
-
-        }
-        return false;
+    public boolean replaceCertificateImage(Integer itemNum, File file, Integer whichCertificate){
+        removeCertificateImage(itemNum, whichCertificate);
+        addCertificateImage(itemNum, file, whichCertificate);
+        return true;
     }
 
 
-    public boolean removeCertificateImage(Integer itemNum){
+    public boolean removeCertificateImage(Integer itemNum, Integer whichCertificate){
         int i = itemNum-1;
-        if(clientList.get(i).getCertificate().equals("")){
+        String tempStringCertificate = new String("");
+        switch (whichCertificate) {
+            case 1:
+                tempStringCertificate = clientList.get(i).getFirstCertificate();
+                break;
+            case 2:
+                tempStringCertificate = clientList.get(i).getSecondCertificate();
+                break;
+            default:
+                return false;
+        }
+        if(tempStringCertificate.equals("")){
             return false;
         }
 
-        File f = new File(fileLocation + "\\" + clientList.get(i).getCertificate());
+        File f = new File(fileLocation + "\\" + tempStringCertificate);
 
         if(f.delete()){
-            clientList.get(i).setCertificate("");
+            switch (whichCertificate) {
+                case 1:
+                clientList.get(i).setFirstCertificate("");
+                    break;
+                case 2:
+                    clientList.get(i).setSecondCertificate("");
+                    break;
+            }
             save();
             return true;
         }
@@ -588,13 +728,24 @@ public class SampleTracker {
         return false;
     }
 
-    public boolean viewCertificateImage(Integer itemNum){
+    public boolean viewCertificateImage(Integer itemNum, Integer whichCertificate){
         int i = itemNum-1;
-        if(clientList.get(i).getCertificate().equals("")){
+        String tempStringCertificate = new String("");
+        switch (whichCertificate) {
+            case 1:
+                tempStringCertificate = clientList.get(i).getFirstCertificate();
+                break;
+            case 2:
+                tempStringCertificate = clientList.get(i).getSecondCertificate();
+                break;
+            default:
+                return false;
+        }
+        if(tempStringCertificate.equals("")){
             return false;
         }
 
-        File f = new File(fileLocation + "\\" + clientList.get(i).getCertificate());
+        File f = new File(fileLocation + "\\" + tempStringCertificate);
         try {
             Desktop.getDesktop().open(f);
         }catch(IOException e){

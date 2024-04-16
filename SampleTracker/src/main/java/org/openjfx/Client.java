@@ -5,43 +5,70 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class Client {
-    private Integer index;
-    private String soldTo;
-    private String soldPhone;
-    private String shipTo;
-    private String company;
-    private String address1;
-    private String address2;
-    private String city;
-    private String region;
-    private String postCode;
-    private String country;
-    private String shipPhone;
-    private String email;
-    private String shippedDate;
-    private String licenseNum;
-    private String certificateCompany;
-    private String comments;
-    private String certificate;
 
-    private final String indexDispString =              "#";
-    private final String soldToDispString =             "*Sold To";
-    private final String soldPhoneDispString =          "*Sold Phone";
-    private final String shipToDispString =             "*Shipped To";
-    private final String companyDispString =            "*Company";
-    private final String address1DispString =           "*Address1";
-    private final String address2DispString =           "*Address2";
-    private final String cityDispString =               "City";
-    private final String regionDispString =             "Region";
-    private final String postCodeDispString =           "Postal Code";
-    private final String countryDispString =            "Country";
-    private final String shipPhoneDispString =          "*Shipped Phone";
-    private final String emailDispString =              "*Email";
-    private final String shippedDateDispString =        "Shipped Date";
-    private final String licenseNumDispString =         "*License #";
-    private final String certificateCompanyDispString = "Certificate Company";
-    private final String commentsDispString =           "Comments";
-    private final String certificateDispString =        "Certificate";
+    private Integer index;
+    private String  shipName;
+    private String  shipPhone;
+    private String  shipCompany;
+    private String  shipAddress1;
+    private String  shipAddress2;
+    private String  shipCity;
+    private String  shipRegion;
+    private String  shipPostCode;
+    private String  shipCountry;
+    private String  shipEmail;
+    private String  billName;
+    private String  billPhone;
+    private String  billCompany;
+    private String  billAddress1;
+    private String  billAddress2;
+    private String  billCity;
+    private String  billRegion;
+    private String  billPostCode;
+    private String  billCountry;
+    private String  billEmail;
+    private String  dateShipped;
+    private String  firstLicenseNum;
+    private String  firstCertificateCompany;
+    private String  secondLicenseNum;
+    private String  secondCertificateCompany;
+    private String  comments;
+    private String  firstCertificate;
+    private String  secondCertificate;
+    private String  dateClientAdded;
+    private String  dateClientEdited;
+
+    private final String indexString =                    "#";
+    private final String shipNameString =                 "Ship To";
+    private final String shipPhoneString =                "Ship Phone";
+    private final String shipCompanyString =              "Ship Company";
+    private final String shipAddress1String =             "Ship Addr 1";
+    private final String shipAddress2String =             "Ship Addr 2";
+    private final String shipCityString =                 "Ship City";
+    private final String shipRegionString =               "Ship Region";
+    private final String shipPostCodeString =             "Ship Post Code";
+    private final String shipCountryString =              "Ship Country";
+    private final String shipEmailString =                "Ship Email";
+    private final String billNameString =                 "Bill To";
+    private final String billPhoneString =                "Bill Phone";
+    private final String billCompanyString =              "Bill Company";
+    private final String billAddress1String =             "Bill Addr 1";
+    private final String billAddress2String =             "Bill Addr 2";
+    private final String billCityString =                 "Bill City";
+    private final String billRegionString =               "Bill Region";
+    private final String billPostCodeString =             "Bill Post Code";
+    private final String billCountryString =              "Bill Country";
+    private final String billEmailString =                "Bill Email";
+    private final String dateShippedString =              "Date Shipped";
+    private final String firstLicenseNumString =          "First License #";
+    private final String firstCertificateCompanyString =  "First License Company";
+    private final String secondLicenseNumString =         "Second License #";
+    private final String secondCertificateCompanyString = "Second License Company";
+    private final String commentsString =                 "Comments";
+    private final String firstCertificateString =         "First Certificate";
+    private final String secondCertificateString =        "Second Certificate";
+    private final String dateClientAddedString =          "Date Added";
+    private final String dateClientEditedString =         "Date Last Edited";
 
     private Operation operation;
 
@@ -50,114 +77,14 @@ public class Client {
     //undo and redo ability will likely be volatile. each open will require clearing of deleted images. keep a record of
     //images stored in the folder that need to be permanently removed on startup.
 
-
-    public void setIndex(Integer index){
-        this.index = index;
-    }
-    public void setSoldTo(String soldTo){
-        this.soldTo = soldTo;
-    }
-    public void setSoldPhone(String soldPhone){
-        this.soldPhone = soldPhone;
-    }
-    public void setShipTo(String shipTo){
-        this.shipTo = shipTo;
-    }
-    public void setCompany(String company){this.company = company;}
-    public void setAddress1(String address1){
-        this.address1 = address1;
-    }
-    public void setAddress2(String address2){
-        this.address2 = address2;
-    }
-    public void setCity(String city){
-        this.city = city;
-    }
-    public void setRegion(String region){
-        this.region = region;
-    }
-    public void setPostCode(String postCode){
-        this.postCode = postCode;
-    }
-    public void setCountry(String country){
-        this.country = country;
-    }
-    public void setShipPhone(String shipPhone){
-        this.shipPhone = shipPhone;
-    }
-    public void setEmail(String email){
-        this.email = email;
-    }
-    public void setShippedDate(String shippedDate){
-        this.shippedDate = shippedDate.toUpperCase().replaceAll(",", "");
-    }
-    public void setLicenseNum(String licenseNum){
-        this.licenseNum = licenseNum;
-    }
-    public void setCertificateCompany(String certificateCompany){
-        this.certificateCompany = certificateCompany;
-    }
-    public void setComments(String comments){
-        this.comments = comments;
-    }
-    public void setCertificate(String certificate){
-        this.certificate = certificate;
-    }
-
-    public void setOperation(Operation operation){
-        this.operation = operation;
-    }
-
-
-
-
-
-    public Integer getIndex(){return this.index;}
-    public String getSoldTo(){
-        return this.soldTo;
-    }
-    public String getSoldPhone(){
-        return this.soldPhone;
-    }
-    public String getShipTo(){
-        return this.shipTo;
-    }
-    public String getCompany(){return this.company; }
-    public String getAddress1(){
-        return this.address1;
-    }
-    public String getAddress2(){
-        return this.address2;
-    }
-    public String getCity(){
-        return this.city;
-    }
-    public String getRegion(){
-        return this.region;
-    }
-    public String getPostCode(){
-        return this.postCode;
-    }
-    public String getCountry(){
-        return this.country;
-    }
-    public String getShipPhone(){
-        return this.shipPhone;
-    }
-    public String getEmail(){
-        return this.email;
-    }
-    public String getShippedDate(){
-        return this.shippedDate;
-    }
-    public LocalDate getDateFormat(){
-        if(shippedDate.equals("")){
+    private LocalDate formatDate(String dateString) {
+        if(dateString.equals("")){
             return null;
         }
         String tempDate = "";
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMM dd yyyy");
         try {
-            tempDate = shippedDate.substring(0,1) + shippedDate.substring(1,3).toLowerCase() + shippedDate.substring(3, 11);
+            tempDate = dateString.substring(0,1) + dateString.substring(1,3).toLowerCase() + dateString.substring(3, 11);
             LocalDate formattedDate = LocalDate.parse(tempDate, dtf);
             return formattedDate;
         } catch (DateTimeParseException e) {
@@ -165,54 +92,147 @@ public class Client {
         }
         return null;
     }
-    public String getLicenseNum(){
-        return this.licenseNum;
+
+
+    public void setIndex                   (Integer index)                  {this.index =                    index;}
+    public void setShipName                (String shipName)                {this.shipName =                 shipName;}
+    public void setShipPhone               (String shipPhone)               {this.shipPhone =                shipPhone;}
+    public void setShipCompany             (String shipCompany)             {this.shipCompany =              shipCompany;}
+    public void setShipAddress1            (String shipAddress1)            {this.shipAddress1 =             shipAddress1;}
+    public void setShipAddress2            (String shipAddress2)            {this.shipAddress2 =             shipAddress2;}
+    public void setShipCity                (String shipCity)                {this.shipCity =                 shipCity;}
+    public void setShipRegion              (String shipRegion)              {this.shipRegion =               shipRegion;}
+    public void setShipPostCode            (String shipPostCode)            {this.shipPostCode =             shipPostCode;}
+    public void setShipCountry             (String shipCountry)             {this.shipCountry =              shipCountry;}
+    public void setShipEmail               (String shipEmail)               {this.shipEmail =                shipEmail;}
+    public void setBillName                (String billName)                {this.billName =                 billName;}
+    public void setBillPhone               (String billPhone)               {this.billPhone =                billPhone;}
+    public void setBillCompany             (String billCompany)             {this.billCompany =              billCompany;}
+    public void setBillAddress1            (String billAddress1)            {this.billAddress1 =             billAddress1;}
+    public void setBillAddress2            (String billAddress2)            {this.billAddress2 =             billAddress2;}
+    public void setBillCity                (String billCity)                {this.billCity =                 billCity;}
+    public void setBillRegion              (String billRegion)              {this.billRegion =               billRegion;}
+    public void setBillPostCode            (String billPostCode)            {this.billPostCode =             billPostCode;}
+    public void setBillCountry             (String billCountry)             {this.billCountry =              billCountry;}
+    public void setBillEmail               (String billEmail)               {this.billEmail =                billEmail;}
+    public void setDateShipped             (String dateShipped)             {this.dateShipped =              dateShipped.toUpperCase().replaceAll(",", "");}
+    public void setFirstLicenseNum         (String firstLicenseNum)         {this.firstLicenseNum =          firstLicenseNum;}
+    public void setFirstCertificateCompany (String firstCertificateCompany) {this.firstCertificateCompany =  firstCertificateCompany;}
+    public void setSecondLicenseNum        (String secondLicenseNum)        {this.secondLicenseNum =         secondLicenseNum;}
+    public void setSecondCertificateCompany(String secondCertificateCompany){this.secondCertificateCompany = secondCertificateCompany;}
+    public void setComments                (String comments)                {this.comments =                 comments;}
+    public void setFirstCertificate        (String firstCertificate)        {this.firstCertificate =         firstCertificate;}
+    public void setSecondCertificate       (String secondCertificate)       {this.secondCertificate =        secondCertificate;}
+    public void setDateClientAdded         (String dateClientAdded)         {this.dateClientAdded =          dateClientAdded;}
+    public void setDateClientEdited        (String dateClientEdited)        {this.dateClientEdited =         dateClientEdited;}
+
+    public void setOperation(Operation operation){
+        this.operation = operation;
     }
-    public String getCertificateCompany(){
-        return this.certificateCompany;
-    }
-    public String getComments(){return this.comments; }
-    public String getCertificate(){return this.certificate; }
+
+    public Integer   getIndex()                   {return this.index;}
+    public String    getShipName()                {return this.shipName;}
+    public String    getShipPhone()               {return this.shipPhone;}
+    public String    getShipCompany()             {return this.shipCompany;}
+    public String    getShipAddress1()            {return this.shipAddress1;}
+    public String    getShipAddress2()            {return this.shipAddress2;}
+    public String    getShipCity()                {return this.shipCity;}
+    public String    getShipRegion()              {return this.shipRegion;}
+    public String    getShipPostCode()            {return this.shipPostCode;}
+    public String    getShipCountry()             {return this.shipCountry;}
+    public String    getShipEmail()               {return this.shipEmail;}
+    public String    getBillName()                {return this.billName;}
+    public String    getBillPhone()               {return this.billPhone;}
+    public String    getBillCompany()             {return this.billCompany;}
+    public String    getBillAddress1()            {return this.billAddress1;}
+    public String    getBillAddress2()            {return this.billAddress2;}
+    public String    getBillCity()                {return this.billCity;}
+    public String    getBillRegion()              {return this.billRegion;}
+    public String    getBillPostCode()            {return this.billPostCode;}
+    public String    getBillCountry()             {return this.billCountry;}
+    public String    getBillEmail()               {return this.billEmail;}
+    public LocalDate getDateShipped()             {return formatDate(this.dateShipped);}
+    public String    getFirstLicenseNum()         {return this.firstLicenseNum;}
+    public String    getFirstCertificateCompany() {return this.firstCertificateCompany;}
+    public String    getSecondLicenseNum()        {return this.secondLicenseNum;}
+    public String    getSecondCertificateCompany(){return this.secondCertificateCompany;}
+    public String    getComments()                {return this.comments;}
+    public String    getFirstCertificate()        {return this.firstCertificate;}
+    public String    getSecondCertificate()       {return this.secondCertificate;}
+    public LocalDate getDateClientAdded()         {return formatDate(this.dateClientAdded);}
+    public LocalDate getDateClientEdited()        {return formatDate(this.dateClientEdited);}
 
     public Operation getOperation(){return this.operation; }
 
+    public String getindexDispString()                   {return this.indexString;};
+    public String getshipNameDispString()                {return this.shipNameString;};
+    public String getshipPhoneDispString()               {return this.shipPhoneString;};
+    public String getshipCompanyDispString()             {return this.shipCompanyString;};
+    public String getshipAddress1DispString()            {return this.shipAddress1String;};
+    public String getshipAddress2DispString()            {return this.shipAddress2String;};
+    public String getshipCityDispString()                {return this.shipCityString;};
+    public String getshipRegionDispString()              {return this.shipRegionString;};
+    public String getshipPostCodeDispString()            {return this.shipPostCodeString;};
+    public String getshipCountryDispString()             {return this.shipCountryString;};
+    public String getshipEmailDispString()               {return this.shipEmailString;};
+    public String getbillNameDispString()                {return this.billNameString;};
+    public String getbillPhoneDispString()               {return this.billPhoneString;};
+    public String getbillCompanyDispString()             {return this.billCompanyString;};
+    public String getbillAddress1DispString()            {return this.billAddress1String;};
+    public String getbillAddress2DispString()            {return this.billAddress2String;};
+    public String getbillCityDispString()                {return this.billCityString;};
+    public String getbillRegionDispString()              {return this.billRegionString;};
+    public String getbillPostCodeDispString()            {return this.billPostCodeString;};
+    public String getbillCountryDispString()             {return this.billCountryString;};
+    public String getbillEmailDispString()               {return this.billEmailString;};
+    public String getdateShippedDispString()             {return this.dateShippedString;};
+    public String getfirstLicenseNumDispString()         {return this.firstLicenseNumString;};
+    public String getfirstCertificateCompanyDispString() {return this.firstCertificateCompanyString;};
+    public String getsecondLicenseNumDispString()        {return this.secondLicenseNumString;};
+    public String getsecondCertificateCompanyDispString(){return this.secondCertificateCompanyString;};
+    public String getcommentsDispString()                {return this.commentsString;};
+    public String getfirstCertificateDispString()        {return this.firstCertificateString;};
+    public String getsecondCertificateDispString()       {return this.secondCertificateString;};
+    public String getdateClientAddedDispString()         {return this.dateClientAddedString;};
+    public String getdateClientEditedDispString()        {return this.dateClientEditedString;};
+
     @Override
     public String toString() {
-        return this.soldTo + "," +
-                this.soldPhone + "," +
-                this.shipTo + "," +
-                this.company + "," +
-                this.address1 + "," +
-                this.address2 + "," +
-                this.city + "," +
-                this.region + "," +
-                this.postCode + "," +
-                this.country + "," +
-                this.shipPhone + "," +
-                this.email + "," +
-                this.shippedDate + "," +
-                this.licenseNum + "," +
-                this.certificateCompany + "," +
-                this.comments.replaceAll(",", "~") + "," +
-                this.certificate + "\n";
-    }
+        StringBuilder builder = new StringBuilder();
+        
+        builder.append(this.shipName).append(",");
+        builder.append(this.shipPhone).append(",");
+        builder.append(this.shipCompany).append(",");
+        builder.append(this.shipAddress1).append(",");
+        builder.append(this.shipAddress2).append(",");
+        builder.append(this.shipCity).append(",");
+        builder.append(this.shipRegion).append(",");
+        builder.append(this.shipPostCode).append(",");
+        builder.append(this.shipCountry).append(",");
+        builder.append(this.shipEmail).append(",");
+        builder.append(this.billName).append(",");
+        builder.append(this.billPhone).append(",");
+        builder.append(this.billCompany).append(",");
+        builder.append(this.billAddress1).append(",");
+        builder.append(this.billAddress2).append(",");
+        builder.append(this.billCity).append(",");
+        builder.append(this.billRegion).append(",");
+        builder.append(this.billPostCode).append(",");
+        builder.append(this.billCountry).append(",");
+        builder.append(this.billEmail).append(",");
+        builder.append(this.dateShipped).append(",");
+        builder.append(this.firstLicenseNum).append(",");
+        builder.append(this.firstCertificateCompany).append(",");
+        builder.append(this.secondLicenseNum).append(",");
+        builder.append(this.secondCertificateCompany).append(",");
+        builder.append(this.comments.replaceAll(",", "~")).append(",");
+        builder.append(this.firstCertificate).append(",");
+        builder.append(this.secondCertificate).append(",");
+        builder.append(this.dateClientAdded).append(",");
+        builder.append(this.dateClientEdited).append("\n");
 
-    public String getindexDispString()              {return this.indexDispString;};
-    public String getsoldToDispString()             {return this.soldToDispString;};
-    public String getsoldPhoneDispString()          {return this.soldPhoneDispString;};
-    public String getshipToDispString()             {return this.shipToDispString;};
-    public String getcompanyDispString()            {return this.companyDispString;};
-    public String getaddress1DispString()           {return this.address1DispString;};
-    public String getaddress2DispString()           {return this.address2DispString;};
-    public String getcityDispString()               {return this.cityDispString;};
-    public String getregionDispString()             {return this.regionDispString;};
-    public String getpostCodeDispString()           {return this.postCodeDispString;};
-    public String getcountryDispString()            {return this.countryDispString;};
-    public String getshipPhoneDispString()          {return this.shipPhoneDispString;};
-    public String getemailDispString()              {return this.emailDispString;};
-    public String getshippedDateDispString()        {return this.shippedDateDispString;};
-    public String getlicenseNumDispString()         {return this.licenseNumDispString;};
-    public String getcertificateCompanyDispString() {return this.certificateCompanyDispString;};
-    public String getcommentsDispString()           {return this.commentsDispString;};
-    public String getcertificateDispString()        {return this.certificateDispString;};
+        return builder.toString();
+    }
+    
+
 }
