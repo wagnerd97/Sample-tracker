@@ -275,7 +275,7 @@ public class SampleTracker {
     public List<Client> filterClients(Map<String, String> clientInfo, List<Client> clientList){
         List<Client> filtered = new ArrayList<>();
         for (Client client : clientList) {
-            if(!clientInfo.get("shipName").equals("")){
+            if(clientInfo.get("shipName") != null && !clientInfo.get("shipName").isEmpty()){
                 if (client.getShipName().toLowerCase().contains(clientInfo.get("shipName").toLowerCase())) {
                     filtered.add(client);
                     continue;
@@ -284,7 +284,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("soldName").equals("")) {
+            if(clientInfo.get("soldName") != null && !clientInfo.get("soldName").isEmpty()) {
                 if (client.getShipName().toLowerCase().contains(clientInfo.get("soldName").toLowerCase())) {
                     filtered.add(client);
                     continue;
@@ -293,7 +293,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("shipAddress1").equals("")){
+            if(clientInfo.get("shipAddress1") != null && !clientInfo.get("shipAddress1").isEmpty()){
                 if(client.getShipAddress1().toLowerCase().contains(clientInfo.get("shipAddress1").toLowerCase())){
                     filtered.add(client);
                     continue;
@@ -302,7 +302,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("billAddress1").equals("")){
+            if(clientInfo.get("billAddress1") != null && !clientInfo.get("billAddress1").isEmpty()){
                 if(client.getShipAddress1().toLowerCase().contains(clientInfo.get("shipAddress1").toLowerCase())){
                     filtered.add(client);
                     continue;
@@ -311,7 +311,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("shipAddress2").equals("")){
+            if(clientInfo.get("shipAddress2") != null && !clientInfo.get("shipAddress2").isEmpty()){
                 if(client.getShipAddress2().toLowerCase().contains(clientInfo.get("shipAddress2").toLowerCase())){
                     filtered.add(client);
                     continue;
@@ -320,7 +320,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("billAddress2").equals("")){
+            if(clientInfo.get("billAddress2") != null && !clientInfo.get("billAddress2").isEmpty()){
                 if(client.getShipAddress2().toLowerCase().contains(clientInfo.get("billAddress2").toLowerCase())){
                     filtered.add(client);
                     continue;
@@ -329,7 +329,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("shipPhone").equals("")){
+            if(clientInfo.get("shipPhone") != null && !clientInfo.get("shipPhone").isEmpty()){
                 if(client.getShipPhone().toLowerCase().replaceAll("-", "").
                         contains(clientInfo.get("shipPhone").toLowerCase().replaceAll("-",""))){
                     filtered.add(client);
@@ -341,7 +341,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("billPhone").equals("")){
+            if(clientInfo.get("billPhone") != null && !clientInfo.get("billPhone").isEmpty()){
                 if(client.getShipPhone().toLowerCase().replaceAll("-","").
                         contains(clientInfo.get("billPhone").toLowerCase().replaceAll("-",""))){
                     filtered.add(client);
@@ -353,7 +353,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("shipEmail").equals("")){
+            if(clientInfo.get("shipEmail") != null && !clientInfo.get("shipEmail").isEmpty()){
                 if(client.getShipEmail().toLowerCase().contains(clientInfo.get("shipEmail").toLowerCase())){
                     filtered.add(client);
                     continue;
@@ -362,7 +362,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("billEmail").equals("")){
+            if(clientInfo.get("billEmail") != null && !clientInfo.get("billEmail").isEmpty()){
                 if(client.getShipEmail().toLowerCase().contains(clientInfo.get("billEmail").toLowerCase())){
                     filtered.add(client);
                     continue;
@@ -371,7 +371,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("firstLicenseNum").equals("")) {
+            if(clientInfo.get("firstLicenseNum") != null && !clientInfo.get("firstLicenseNum").isEmpty()) {
                 if (client.getFirstLicenseNum().toLowerCase().contains(clientInfo.get("firstLicenseNum").toLowerCase())) {
                     filtered.add(client);
                     continue;
@@ -380,7 +380,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("secondLicenseNum").equals("")) {
+            if(clientInfo.get("secondLicenseNum") != null && !clientInfo.get("secondLicenseNum").isEmpty()) {
                 if (client.getFirstLicenseNum().toLowerCase().contains(clientInfo.get("secondLicenseNum").toLowerCase())) {
                     filtered.add(client);
                     continue;
@@ -389,7 +389,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("firstCertificateCompany").equals("")){
+            if(clientInfo.get("firstCertificateCompany") != null && !clientInfo.get("firstCertificateCompany").isEmpty()){
                 if (client.getFirstCertificateCompany().toLowerCase().contains(clientInfo.get("firstCertificateCompany").toLowerCase())){
                     filtered.add(client);
                     continue;
@@ -398,7 +398,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("secondCertificateCompany").equals("")){
+            if(clientInfo.get("secondCertificateCompany") != null && !clientInfo.get("secondCertificateCompany").isEmpty()){
                 if (client.getFirstCertificateCompany().toLowerCase().contains(clientInfo.get("secondCertificateCompany").toLowerCase())){
                     filtered.add(client);
                     continue;
@@ -407,7 +407,7 @@ public class SampleTracker {
                     continue;
                 }
             }
-            if(!clientInfo.get("comments").equals("")){
+            if(clientInfo.get("comments") != null && !clientInfo.get("comments").isEmpty()){
                 if(commentsSearch(client.getComments().toLowerCase(), clientInfo.get("comments").toLowerCase())){
                     filtered.add(client);
                 }
