@@ -13,28 +13,16 @@ Edmonton, AB M4X 5L9 CA
 
 
 '{
-	"soldTo":"Jane Doe",
-	"soldPhone":"123-456-7890",
-	"email":"janedoe@gmail.com",
-	"company":"john doe lashes inc.",
-	"address1":"12345 Baker Street",
-	"address2":"unit 22",
-	"shippedTo":"John Doe",
-	"city":"Edmonton",
+	"billName":"Jane Doe",
+	"billPhoneField":"123-456-7890",
+	"billEmail":"janedoe@gmail.com",
+	"shipCompany":"john doe lashes inc.",
+	"shipAddress1":"12345 Baker Street",
+	"shipAddress2":"unit 22",
+	"shipName":"John Doe",
+	"shipCity":"Edmonton",
 	"region":"Alberta",
 	"postCode":"M4X 5L9",
 	"country":"Canada",
 	"shippedPhone":"098-765-4321"
 }'
-
-soldTo
-soldPhone
-email
-company
-address1
-address2
-city
-region
-postCode
-country
-shippedPhone
