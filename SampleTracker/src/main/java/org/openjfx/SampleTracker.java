@@ -25,6 +25,41 @@ known bugs:
 
 
 public class SampleTracker {
+
+    private boolean columnsShownSet = false;
+
+    private boolean  indexShow                    = false;
+    private boolean  shipNameShow                 = false;
+    private boolean  shipPhoneShow                = false;
+    private boolean  shipCompanyShow              = false;
+    private boolean  shipAddress1Show             = false;
+    private boolean  shipAddress2Show             = false;
+    private boolean  shipCityShow                 = false;
+    private boolean  shipRegionShow               = false;
+    private boolean  shipPostCodeShow             = false;
+    private boolean  shipCountryShow              = false;
+    private boolean  shipEmailShow                = false;
+    private boolean  billNameShow                 = false;
+    private boolean  billPhoneShow                = false;
+    private boolean  billCompanyShow              = false;
+    private boolean  billAddress1Show             = false;
+    private boolean  billAddress2Show             = false;
+    private boolean  billCityShow                 = false;
+    private boolean  billRegionShow               = false;
+    private boolean  billPostCodeShow             = false;
+    private boolean  billCountryShow              = false;
+    private boolean  billEmailShow                = false;
+    private boolean  dateShippedShow              = false;
+    private boolean  firstLicenseNumShow          = false;
+    private boolean  firstCertificateCompanyShow  = false;
+    private boolean  secondLicenseNumShow         = false;
+    private boolean  secondCertificateCompanyShow = false;
+    private boolean  commentsShow                 = false;
+    private boolean  firstCertificateShow         = false;
+    private boolean  secondCertificateShow        = false;
+    private boolean  dateClientAddedShow          = false;
+    private boolean  dateClientEditedShow         = false;
+
     private String fileLocation;
     private String fileName = "clientData.csv";
 
@@ -87,6 +122,89 @@ public class SampleTracker {
             counter++;
         }
         file.close();
+    }
+
+    public boolean getColumnsShownSet() {
+        return columnsShownSet;
+    }
+
+    public void setColumnsShownSet() {
+        columnsShownSet = true;
+    }
+
+    public boolean getAttributeShown(String attributeName) {
+        switch (attributeName) {
+            case "index":                    return indexShow;
+            case "shipName":                 return shipNameShow;
+            case "shipPhone":                return shipPhoneShow;
+            case "shipCompany":              return shipCompanyShow;
+            case "shipAddress1":             return shipAddress1Show;
+            case "shipAddress2":             return shipAddress2Show;
+            case "shipCity":                 return shipCityShow;
+            case "shipRegion":               return shipRegionShow;
+            case "shipPostCode":             return shipPostCodeShow;
+            case "shipCountry":              return shipCountryShow;
+            case "shipEmail":                return shipEmailShow;
+            case "billName":                 return billNameShow;
+            case "billPhone":                return billPhoneShow;
+            case "billCompany":              return billCompanyShow;
+            case "billAddress1":             return billAddress1Show;
+            case "billAddress2":             return billAddress2Show;
+            case "billCity":                 return billCityShow;
+            case "billRegion":               return billRegionShow;
+            case "billPostCode":             return billPostCodeShow;
+            case "billCountry":              return billCountryShow;
+            case "billEmail":                return billEmailShow;
+            case "dateShipped":              return dateShippedShow;
+            case "firstLicenseNum":          return firstLicenseNumShow;
+            case "firstCertificateCompany":  return firstCertificateCompanyShow;
+            case "secondLicenseNum":         return secondLicenseNumShow;
+            case "secondCertificateCompany": return secondCertificateCompanyShow;
+            case "comments":                 return commentsShow;
+            case "firstCertificate":         return firstCertificateShow;
+            case "secondCertificate":        return secondCertificateShow;
+            case "dateClientAdded":          return dateClientAddedShow;
+            case "dateClientEdited":         return dateClientEditedShow;
+            default: return false;
+        }
+    }
+
+    public boolean setAttributeShown(String attributeName, boolean newState) {
+        switch (attributeName) {
+            case "index":                    indexShow = newState; break;
+            case "shipName":                 shipNameShow = newState; break;
+            case "shipPhone":                shipPhoneShow = newState; break;
+            case "shipCompany":              shipCompanyShow = newState; break;
+            case "shipAddress1":             shipAddress1Show = newState; break;
+            case "shipAddress2":             shipAddress2Show = newState; break;
+            case "shipCity":                 shipCityShow = newState; break;
+            case "shipRegion":               shipRegionShow = newState; break;
+            case "shipPostCode":             shipPostCodeShow = newState; break;
+            case "shipCountry":              shipCountryShow = newState; break;
+            case "shipEmail":                shipEmailShow = newState; break;
+            case "billName":                 billNameShow = newState; break;
+            case "billPhone":                billPhoneShow = newState; break;
+            case "billCompany":              billCompanyShow = newState; break;
+            case "billAddress1":             billAddress1Show = newState; break;
+            case "billAddress2":             billAddress2Show = newState; break;
+            case "billCity":                 billCityShow = newState; break;
+            case "billRegion":               billRegionShow = newState; break;
+            case "billPostCode":             billPostCodeShow = newState; break;
+            case "billCountry":              billCountryShow = newState; break;
+            case "billEmail":                billEmailShow = newState; break;
+            case "dateShipped":              dateShippedShow = newState; break;
+            case "firstLicenseNum":          firstLicenseNumShow = newState; break;
+            case "firstCertificateCompany":  firstCertificateCompanyShow = newState; break;
+            case "secondLicenseNum":         secondLicenseNumShow = newState; break;
+            case "secondCertificateCompany": secondCertificateCompanyShow = newState; break;
+            case "comments":                 commentsShow = newState; break;
+            case "firstCertificate":         firstCertificateShow = newState; break;
+            case "secondCertificate":        secondCertificateShow = newState; break;
+            case "dateClientAdded":          dateClientAddedShow = newState; break;
+            case "dateClientEdited":         dateClientEditedShow = newState; break;
+            default: return false;
+        }
+        return true;
     }
 
     private void exportClients(String filename) throws IOException {

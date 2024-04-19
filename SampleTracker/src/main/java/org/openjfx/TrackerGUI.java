@@ -55,12 +55,17 @@ public class TrackerGUI extends Application {
     private Stage plainTextStage;
     private VBox plainTextBox;
 
+    private Stage configColumnsStage;
+    private VBox configColumnsBox;
+
     private Image IconImage;
 
     private TextArea textArea;
 
+    private boolean allowReorg = true;
+
     // List index is column position Map: (columnName, addToTableView)
-    private List<String[]> columnConfigData;
+    // private List<String[]> columnConfigData;
 
 
     private Integer certificateToRemove = 1; // Gets set right before confirm remove popup
@@ -123,6 +128,7 @@ public class TrackerGUI extends Application {
 
     private Integer entrySceneWidth = 450;
     private Integer entrySceneHeight = 700;
+    private double defaultColWidth = ((1.0-0.04)/16.0);
 
     private Stage savePopup;
     private Stage deletePopup;
@@ -151,7 +157,8 @@ public class TrackerGUI extends Application {
         }
 
         populateTrackerData();
-        columnConfigData = pH.getColumnConfigData();
+        // columnConfigData = pH.getColumnConfigData();
+        // setColumnsShown(); // Try to load visible column data from properties
 
         primaryStage.setTitle("Data to send free samples");
 
@@ -179,8 +186,15 @@ public class TrackerGUI extends Application {
                 table.refresh();
             }
         });
+
+        Button configColumnsButton = new Button("Configure Columns");
+        configColumnsButton.setOnAction(Event->{
+            setColumnsShownCheckboxes();
+            configColumnsStage.show();
+        });
+        
         // topBox.getChildren().addAll(tableLabel,undoButton,redoButton);
-        topBox.getChildren().addAll(tableLabel);
+        topBox.getChildren().addAll(tableLabel, configColumnsButton);
 
         configureTable();
         configurePlainTextWindow(primaryStage);
@@ -190,6 +204,7 @@ public class TrackerGUI extends Application {
         configureContextMenu(primaryStage);
         configureDelete(primaryStage);
         configureRemoveCertificate(primaryStage);
+        configureConfigColumnsStage(primaryStage);
 
         if (IconImage != null) {
             entryStage.getIcons().add(IconImage);
@@ -221,7 +236,8 @@ public class TrackerGUI extends Application {
         Button saveButton = new Button("Save");
         saveButton.setOnAction(Event ->{
             sT.save();
-            pH.setColumnConfigData(columnConfigData);
+            //pH.setColumnConfigData(columnConfigData);
+            pH.StoreProperties();
         });
 
         Button setDataPathButton = new Button("Set Location of Client Data");
@@ -282,7 +298,39 @@ public class TrackerGUI extends Application {
         }
     }
 
+    private void setColumnsShownCheckboxes() {
+        List<String[]> configData = pH.getColumnConfigData();
+        for (int i = 0; i < configColumnsBox.getChildren().size(); i++) {
+            Node nodeOut = configColumnsBox.getChildren().get(i);
+            if (nodeOut instanceof HBox) {
+                String columnKey = new String();
+                CheckBox tempCheckBox = null;
+                for (Node nodeIn:((HBox)nodeOut).getChildren()) {
+                    if(nodeIn instanceof Label) {
+                        columnKey = tempClient.getAttributeNameAsString(((Label)nodeIn).getText());
+                    } else if (nodeIn instanceof CheckBox) {
+                        tempCheckBox = (CheckBox)nodeIn;
+                    }
+                }
+                if (tempCheckBox != null) {
+                    tempCheckBox.setSelected(false);
+                    if (configData != null) {
+                        for (int j = 0; j < configData.size(); j++) {
+                            if (Objects.equals(configData.get(j)[0], columnKey)) {
+                                tempCheckBox.setSelected(true);
+                            }
+                        }
+                    } else {
+                        tempCheckBox.setSelected(true);
+                    }
+                    
+                }
+            }
+        }
+    }
+
     private List<String[]> reorganizeColumns(boolean resize) {
+        List<String[]> columnConfigData = pH.getColumnConfigData();
         List<String[]> newOrder = new ArrayList<String[]>();
         for(TableColumn<Client, ?> column : table.getColumns()) {
             String attributeKey = tempClient.getAttributeNameAsString(column.getText());
@@ -314,26 +362,34 @@ public class TrackerGUI extends Application {
         return newOrder;
     } 
 
-    private TableColumn<Client, ?> tableColumnCreate(String columnLabel, String CellFactoryKey, double colWidthFactor) {
+    private TableColumn<Client, ?> tableColumnCreate(String columnLabel, String CellFactoryKey, double colWidthFactor, List<String[]> configData, boolean configNull) {
         TableColumn<Client, String> tempCol = new TableColumn<>(columnLabel);
         tempCol.setCellValueFactory(new PropertyValueFactory<>(CellFactoryKey));
         tempCol.prefWidthProperty().bind(table.widthProperty().multiply(colWidthFactor));
+
+        if (configNull) {
+            configData.add(new String[]{CellFactoryKey, "true", String.valueOf(colWidthFactor)});
+        }
         
         tempCol.prefWidthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) {
-                columnConfigData = reorganizeColumns(true);
+                pH.setColumnConfigData(reorganizeColumns(true));
             }
         });
         return tempCol;
     }
 
     private void configureTable(){
-        table = new TableView<>();
+        if (table == null) {
+            table = new TableView<>();
+        } else {
+            table.getColumns().clear();
+        }
+        
         ObservableList<Client> clientList = FXCollections.observableArrayList(sT.getClientList());
         table.setItems(clientList);
 
-        double defaultColWidth = ((1.0-0.04)/16.0);
 
         //set table to fill the entire scene
         table.setFixedCellSize(25);
@@ -341,41 +397,43 @@ public class TrackerGUI extends Application {
 
         List<String[]> configData = pH.getColumnConfigData();
         if (configData == null) {
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("index"),                    "index",                     0.031));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipName"),                 "shipName",                  defaultColWidth-0.0042));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipPhone"),                "shipPhone",                 defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipCompany"),              "shipCompany",               defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipAddress1"),             "shipAddress1",              defaultColWidth+0.025));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipAddress2"),             "shipAddress2",              defaultColWidth-0.025));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipCity"),                 "shipCity",                  defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipRegion"),               "shipRegion",                defaultColWidth/2));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipPostCode"),             "shipPostCode",              defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipCountry"),              "shipCountry",               defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipEmail"),                "shipEmail",                 defaultColWidth+0.04));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billName"),                 "billName",                  defaultColWidth-0.0042));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billPhone"),                "billPhone",                 defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billCompany"),              "billCompany",               defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billAddress1"),             "billAddress1",              defaultColWidth+0.025));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billAddress2"),             "billAddress2",              defaultColWidth-0.025));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billCity"),                 "billCity",                  defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billRegion"),               "billRegion",                defaultColWidth/2));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billPostCode"),             "billPostCode",              defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billCountry"),              "billCountry",               defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billEmail"),                "billEmail",                 defaultColWidth+0.04));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("dateShipped"),              "dateShipped",               defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("firstLicenseNum"),          "firstLicenseNum",           defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("firstCertificateCompany"),  "firstCertificateCompany",   defaultColWidth+0.03));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("secondLicenseNum"),         "secondLicenseNum",          defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("secondCertificateCompany"), "secondCertificateCompany",  defaultColWidth+0.03));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("comments"),                 "comments",                  defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("firstCertificate"),         "firstCertificate",          defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("secondCertificate"),        "secondCertificate",         defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("dateClientAdded"),          "dateClientAdded",           defaultColWidth));
-            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("dateClientEdited"),         "dateClientEdited",          defaultColWidth));
+            configData = new ArrayList<String[]>();
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("index"),                    "index",                     0.031,   configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipName"),                 "shipName",                  defaultColWidth-0.0042, configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipPhone"),                "shipPhone",                 defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipCompany"),              "shipCompany",               defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipAddress1"),             "shipAddress1",              defaultColWidth+0.025,  configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipAddress2"),             "shipAddress2",              defaultColWidth-0.025,  configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipCity"),                 "shipCity",                  defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipRegion"),               "shipRegion",                defaultColWidth/2,      configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipPostCode"),             "shipPostCode",              defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipCountry"),              "shipCountry",               defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipEmail"),                "shipEmail",                 defaultColWidth+0.04,   configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billName"),                 "billName",                  defaultColWidth-0.0042, configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billPhone"),                "billPhone",                 defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billCompany"),              "billCompany",               defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billAddress1"),             "billAddress1",              defaultColWidth+0.025,  configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billAddress2"),             "billAddress2",              defaultColWidth-0.025,  configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billCity"),                 "billCity",                  defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billRegion"),               "billRegion",                defaultColWidth/2,      configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billPostCode"),             "billPostCode",              defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billCountry"),              "billCountry",               defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("billEmail"),                "billEmail",                 defaultColWidth+0.04,   configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("dateShipped"),              "dateShipped",               defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("firstLicenseNum"),          "firstLicenseNum",           defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("firstCertificateCompany"),  "firstCertificateCompany",   defaultColWidth+0.03,   configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("secondLicenseNum"),         "secondLicenseNum",          defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("secondCertificateCompany"), "secondCertificateCompany",  defaultColWidth+0.03,   configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("comments"),                 "comments",                  defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("firstCertificate"),         "firstCertificate",          defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("secondCertificate"),        "secondCertificate",         defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("dateClientAdded"),          "dateClientAdded",           defaultColWidth,        configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("dateClientEdited"),         "dateClientEdited",          defaultColWidth,        configData, true));
+            pH.setColumnConfigData(configData);
         } else {
             for(int i = 0; i<configData.size(); i++){
                 if (Boolean.parseBoolean(configData.get(i)[1]) == true) {
-                    table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString(configData.get(i)[0]), configData.get(i)[0], Double.parseDouble(configData.get(i)[2])));
+                    table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString(configData.get(i)[0]), configData.get(i)[0], Double.parseDouble(configData.get(i)[2]), configData, false));
                 }
             }
         }
@@ -420,15 +478,140 @@ public class TrackerGUI extends Application {
 
         table.getColumns().addListener(new ListChangeListener<TableColumn<Client, ?>>() {
             public void onChanged(Change<? extends TableColumn<Client, ?>> c) {
-                    System.out.println("Table List was changed");
-                    columnConfigData = reorganizeColumns(false);
+                System.out.println("Table List was changed");
+                if (allowReorg) { //done to prevent wiping configs while redrawing table
+                    pH.setColumnConfigData(reorganizeColumns(false));
+                }   
             }
         });
     }
 
+    private HBox configColumnsWindowLineCreate(String labelString, boolean defaultState) {
+        HBox tempHBox = new HBox();
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Label tempLabel = new Label(labelString);
+        tempHBox.setAlignment(Pos.BASELINE_CENTER);
+        CheckBox tempCheckBox = new CheckBox();
+
+        tempHBox.setMaxWidth(entrySceneWidth - 40);
+        tempHBox.getChildren().addAll(tempLabel, spacer, tempCheckBox);
+        return tempHBox;
+    }
+
+    private void configureConfigColumnsStage(Stage primaryStage) {
+        configColumnsStage = new Stage();
+        configColumnsBox = new VBox(12);
+        VBox configColumnsIntermediateBox = new VBox();
+        ScrollPane configColumnsScrollPane = new ScrollPane();
+        Scene configColumnsScene = new Scene(configColumnsIntermediateBox,entrySceneWidth, entrySceneHeight);
+
+        configColumnsStage.initModality(Modality.APPLICATION_MODAL);
+        configColumnsStage.initOwner(primaryStage);
+        configColumnsStage.setResizable(false);
+        configColumnsStage.setScene(configColumnsScene);
+
+        configColumnsBox.setAlignment(Pos.CENTER);
+
+        configColumnsScrollPane.setContent(configColumnsBox);
+
+        List<String[]> configData = pH.getColumnConfigData();
+
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getindexDispString(),                    true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getshipNameDispString(),                 true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getshipPhoneDispString(),                true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getshipCompanyDispString(),              true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getshipAddress1DispString(),             true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getshipAddress2DispString(),             true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getshipCityDispString(),                 true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getshipRegionDispString(),               true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getshipPostCodeDispString(),             true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getshipCountryDispString(),              true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getshipEmailDispString(),                true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getbillNameDispString(),                 true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getbillPhoneDispString(),                true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getbillCompanyDispString(),              true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getbillAddress1DispString(),             true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getbillAddress2DispString(),             true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getbillCityDispString(),                 true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getbillRegionDispString(),               true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getbillPostCodeDispString(),             true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getbillCountryDispString(),              true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getbillEmailDispString(),                true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getdateShippedDispString(),              true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getfirstLicenseNumDispString(),          true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getfirstCertificateCompanyDispString(),  true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getsecondLicenseNumDispString(),         true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getsecondCertificateCompanyDispString(), true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getcommentsDispString(),                 true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getfirstCertificateDispString(),         true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getsecondCertificateDispString(),        true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getdateClientAddedDispString(),          true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getdateClientEditedDispString(),         true));
+
+
+
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction(Event->{
+            configColumnsStage.close();
+        });
+        Button searchButton = new Button("Set Columns");
+        searchButton.setOnAction(Event->{
+            userSetColumnsShown();
+            configColumnsStage.close();
+        });
+
+        HBox buttons = new HBox(30);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.getChildren().addAll(cancelButton, searchButton);
+        configColumnsIntermediateBox.getChildren().addAll(configColumnsScrollPane, buttons);
+    }
+
+    private void userSetColumnsShown() {
+        pH.setColumnConfigData(reorganizeColumns(true));
+        List<String[]> configData = pH.getColumnConfigData();
+        for (int i = 0; i < configColumnsBox.getChildren().size(); i++) {
+            Node nodeOut = configColumnsBox.getChildren().get(i);
+            if (nodeOut instanceof HBox) {
+                String[] columnData = new String[3];
+                for (Node nodeIn:((HBox)nodeOut).getChildren()) {
+                    if(nodeIn instanceof Label) {
+                        columnData[0] = tempClient.getAttributeNameAsString(((Label)nodeIn).getText());
+                    } else if (nodeIn instanceof CheckBox) {
+                        columnData[1] = String.valueOf(((CheckBox)nodeIn).isSelected());
+                    }
+                }
+                columnData[2] = String.valueOf(defaultColWidth);
+
+                boolean found = false;
+                for (int j = 0; j < configData.size(); j++) {
+                    if (Objects.equals(configData.get(j)[0], columnData[0])) {
+                        found = true;
+                        if (Objects.equals(columnData[1], "false")) {
+                            configData.remove(j);
+                        }
+                    }
+                }
+                if (!found && Objects.equals(columnData[1], "true")) {
+                    configData.add(columnData);
+                }
+            }
+        }
+        pH.setColumnConfigData(configData);
+        allowReorg = false; // Don't let it erase configs
+        configureTable();
+        allowReorg = true;
+        table.refresh();
+    }
+
+
+
     private HBox entryWindowLineCreate(String labelString, String promptString, Integer fieldWidth, TextField textField) {
         HBox tempHBox = new HBox();
         Region spacer = new Region();
+        Region spacer1 = new Region();
+        spacer1.setPrefWidth(10);
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         Label tempLabel = new Label(labelString);
@@ -436,7 +619,7 @@ public class TrackerGUI extends Application {
         textField.setPrefWidth(fieldWidth);
         textField.setPromptText(promptString);
         tempHBox.setMaxWidth(entrySceneWidth - 40);
-        tempHBox.getChildren().addAll(tempLabel, spacer, textField);
+        tempHBox.getChildren().addAll(spacer1,tempLabel, spacer, textField);
         return tempHBox;
     }
     
@@ -444,7 +627,7 @@ public class TrackerGUI extends Application {
     private void configureEntryWindow(Stage primaryStage){
         entryStage = new Stage();
         entryBox = new VBox(12);
-        VBox entryIntermediateBox = new VBox();
+        VBox entryIntermediateBox = new VBox(12);
         ScrollPane entryScrollPane = new ScrollPane();
         Scene entryScene = new Scene(entryIntermediateBox,entrySceneWidth, entrySceneHeight);
 
@@ -454,6 +637,7 @@ public class TrackerGUI extends Application {
         entryStage.setScene(entryScene);
 
         entryBox.setAlignment(Pos.CENTER);
+        entryIntermediateBox.setAlignment(Pos.CENTER);
 
         entryScrollPane.setContent(entryBox);
 
@@ -902,7 +1086,7 @@ public class TrackerGUI extends Application {
         Button saveButton = new Button("Save");
         saveButton.setOnAction(Event ->{
             sT.save();
-            pH.setColumnConfigData(columnConfigData);
+            pH.StoreProperties();
             Platform.exit();
         });
 

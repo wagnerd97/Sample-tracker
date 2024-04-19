@@ -51,7 +51,7 @@ public class PropertiesHandler {
         return true;
     }
 
-    private boolean StoreProperties() {
+    public boolean StoreProperties() {
         try {
             trackerProperties.store(new FileWriter(trackerConfigPath), null);
         } catch(Exception e) {
