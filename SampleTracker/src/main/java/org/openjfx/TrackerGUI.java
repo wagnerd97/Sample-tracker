@@ -308,7 +308,9 @@ public class TrackerGUI extends Application {
             }
             newOrder.add(columnList);
         }
-        sT.setSaveRequired();
+        if (!resize) { // crude way to stop requiring save when the table loads up initially
+            sT.setSaveRequired();
+        }
         return newOrder;
     } 
 
