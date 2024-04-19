@@ -630,6 +630,9 @@ public class SampleTracker {
     public boolean isSaveRequired(){
         return saveRequired;
     }
+    public void setSaveRequired(){
+        saveRequired = true;
+    }
 
     public boolean addCertificateImage(Integer itemNum, File file, Integer whichCertificate) {
         int i = itemNum-1;

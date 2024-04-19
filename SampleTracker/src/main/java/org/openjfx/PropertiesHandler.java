@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Properties;
+import java.util.*;
 
 public class PropertiesHandler {
     private Properties trackerProperties = new Properties();
@@ -73,6 +73,57 @@ public class PropertiesHandler {
         return trackerProperties.getProperty("defaultPath");
     }
 
+    public Double getColumnWidthProperty(String columnName) {
+        try {
+            return Double.parseDouble(trackerProperties.getProperty(columnName));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<String[]> getColumnConfigData() {
+        List<String[]> listList = new ArrayList<String[]>();
+        String columnNames = trackerProperties.getProperty("columnNames");
+        String columnEnables = trackerProperties.getProperty("columnEnables");
+        String columnWidths = trackerProperties.getProperty("columnWidths");
+        if (columnNames == null || columnEnables == null) {
+            return null;
+        }
+        String[] columnNamesList = columnNames.split(" ");
+        String[] columnEnablesList = columnEnables.split(" ");
+        String[] columnWidthsList = columnWidths.split(" ");
+
+        for(int i = 0;i<columnNamesList.length;i++){
+            String[] tempStringList = new String[3];
+            tempStringList[0] = columnNamesList[i];
+            tempStringList[1] = columnEnablesList[i];
+            tempStringList[2] = columnWidthsList[i];
+            listList.add(tempStringList);
+        }
+        
+        return listList;
+    }
+
+    public boolean setColumnConfigData(List<String[]> configDataList) {
+        StringBuilder columnNamesBuilder = new StringBuilder();
+        StringBuilder columnEnablesBuilder = new StringBuilder();
+        StringBuilder columnWidthsBuilder = new StringBuilder();
+
+        for(int i = 0; i<configDataList.size(); i++){
+            columnNamesBuilder.append(configDataList.get(i)[0]).append(" ");
+            columnEnablesBuilder.append(configDataList.get(i)[1]).append(" ");
+            columnWidthsBuilder.append(configDataList.get(i)[2]).append(" ");
+        }
+        trackerProperties.setProperty("columnNames", columnNamesBuilder.toString());
+        trackerProperties.setProperty("columnEnables", columnEnablesBuilder.toString());
+        trackerProperties.setProperty("columnWidths", columnWidthsBuilder.toString());
+
+        if (!StoreProperties()) {
+            return false;
+        }
+        return true;
+    }
+
     public boolean setTrackerDataPath(String newPath) {
         trackerProperties.setProperty("csvLocation", newPath);
         if (!StoreProperties()) {
@@ -91,6 +142,14 @@ public class PropertiesHandler {
 
     public boolean setDefaultPath(String newPath) {
         trackerProperties.setProperty("defaultPath", newPath);
+        if (!StoreProperties()) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean setColumnWidthProperty(String columnName, Double newValue) {
+        trackerProperties.setProperty(columnName, newValue.toString());
         if (!StoreProperties()) {
             return false;
         }

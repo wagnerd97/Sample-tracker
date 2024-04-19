@@ -196,6 +196,80 @@ public class Client {
     public String getdateClientAddedDispString()         {return this.dateClientAddedString;};
     public String getdateClientEditedDispString()        {return this.dateClientEditedString;};
 
+    public String getAttributeNameAsString(String displayName) {
+        switch (displayName) {
+            case indexString:                    return "index";
+            case shipNameString:                 return "shipName";
+            case shipPhoneString:                return "shipPhone";
+            case shipCompanyString:              return "shipCompany";
+            case shipAddress1String:             return "shipAddress1";
+            case shipAddress2String:             return "shipAddress2";
+            case shipCityString:                 return "shipCity";
+            case shipRegionString:               return "shipRegion";
+            case shipPostCodeString:             return "shipPostCode";
+            case shipCountryString:              return "shipCountry";
+            case shipEmailString:                return "shipEmail";
+            case billNameString:                 return "billName";
+            case billPhoneString:                return "billPhone";
+            case billCompanyString:              return "billCompany";
+            case billAddress1String:             return "billAddress1";
+            case billAddress2String:             return "billAddress2";
+            case billCityString:                 return "billCity";
+            case billRegionString:               return "billRegion";
+            case billPostCodeString:             return "billPostCode";
+            case billCountryString:              return "billCountry";
+            case billEmailString:                return "billEmail";
+            case dateShippedString:              return "dateShipped";
+            case firstLicenseNumString:          return "firstLicenseNum";
+            case firstCertificateCompanyString:  return "firstCertificateCompany";
+            case secondLicenseNumString:         return "secondLicenseNum";
+            case secondCertificateCompanyString: return "secondCertificateCompany";
+            case commentsString:                 return "comments";
+            case firstCertificateString:         return "firstCertificate";
+            case secondCertificateString:        return "secondCertificate";
+            case dateClientAddedString:          return "dateClientAdded";
+            case dateClientEditedString:         return "dateClientEdited";
+            default: return null;
+        }
+    }
+
+    public String getAttributeNameDispString(String attributeName) {
+        switch (attributeName) {
+            case "index":                    return indexString;
+            case "shipName":                 return shipNameString;
+            case "shipPhone":                return shipPhoneString;
+            case "shipCompany":              return shipCompanyString;
+            case "shipAddress1":             return shipAddress1String;
+            case "shipAddress2":             return shipAddress2String;
+            case "shipCity":                 return shipCityString;
+            case "shipRegion":               return shipRegionString;
+            case "shipPostCode":             return shipPostCodeString;
+            case "shipCountry":              return shipCountryString;
+            case "shipEmail":                return shipEmailString;
+            case "billName":                 return billNameString;
+            case "billPhone":                return billPhoneString;
+            case "billCompany":              return billCompanyString;
+            case "billAddress1":             return billAddress1String;
+            case "billAddress2":             return billAddress2String;
+            case "billCity":                 return billCityString;
+            case "billRegion":               return billRegionString;
+            case "billPostCode":             return billPostCodeString;
+            case "billCountry":              return billCountryString;
+            case "billEmail":                return billEmailString;
+            case "dateShipped":              return dateShippedString;
+            case "firstLicenseNum":          return firstLicenseNumString;
+            case "firstCertificateCompany":  return firstCertificateCompanyString;
+            case "secondLicenseNum":         return secondLicenseNumString;
+            case "secondCertificateCompany": return secondCertificateCompanyString;
+            case "comments":                 return commentsString;
+            case "firstCertificate":         return firstCertificateString;
+            case "secondCertificate":        return secondCertificateString;
+            case "dateClientAdded":          return dateClientAddedString;
+            case "dateClientEdited":         return dateClientEditedString;
+            default: return null;
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
