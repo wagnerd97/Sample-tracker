@@ -613,7 +613,6 @@ public class TrackerGUI extends Application {
         Region spacer1 = new Region();
         spacer1.setPrefWidth(10);
         HBox.setHgrow(spacer, Priority.ALWAYS);
-
         Label tempLabel = new Label(labelString);
         tempHBox.setAlignment(Pos.BASELINE_CENTER);
         textField.setPrefWidth(fieldWidth);
@@ -669,10 +668,12 @@ public class TrackerGUI extends Application {
         Label shippedDateLabel = new Label(tempClient.getdateShippedDispString());
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
+        Region spacer1 = new Region();
+        spacer1.setPrefWidth(10);
         HBox shippedDate = new HBox();
         shippedDate.setAlignment(Pos.BASELINE_CENTER);
         shippedDate.setMaxWidth(entrySceneWidth - 40);
-        shippedDate.getChildren().addAll(shippedDateLabel, spacer, dateShippedPicker);
+        shippedDate.getChildren().addAll(spacer1, shippedDateLabel, spacer, dateShippedPicker);
 
         entryBox.getChildren().add(entryWindowLineCreate(tempClient.getshipNameDispString(),                 "Eyelash Express",       250, shipNameField));
         entryBox.getChildren().add(entryWindowLineCreate(tempClient.getshipPhoneDispString(),                "555-555-5555",          250, shipPhoneField));
@@ -739,7 +740,10 @@ public class TrackerGUI extends Application {
         HBox buttons = new HBox(30);
         buttons.setAlignment(Pos.CENTER);
         buttons.getChildren().addAll(cancelButton, searchButton, addButton);
-        entryIntermediateBox.getChildren().addAll(entryScrollPane, buttons);
+        Region spacer2 = new Region();
+        spacer2.setPrefHeight(10);
+
+        entryIntermediateBox.getChildren().addAll(entryScrollPane, buttons, spacer2);
 
     }
 
@@ -863,7 +867,7 @@ public class TrackerGUI extends Application {
     private void configureChangesWindow(Stage primaryStage){
         changesStage = new Stage();
         changesBox = new VBox(12);
-        VBox changesIntermediateBox = new VBox();
+        VBox changesIntermediateBox = new VBox(12);
         ScrollPane changesScrollPane = new ScrollPane();
         Scene changesScene = new Scene(changesIntermediateBox,entrySceneWidth, entrySceneHeight);
 
@@ -900,10 +904,12 @@ public class TrackerGUI extends Application {
         Label shippedDateLabel = new Label(tempClient.getdateShippedDispString());
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
+        Region spacer1 = new Region();
+        spacer1.setPrefWidth(10);
         HBox shippedDate = new HBox();
         shippedDate.setAlignment(Pos.BASELINE_CENTER);
         shippedDate.setMaxWidth(entrySceneWidth - 40);
-        shippedDate.getChildren().addAll(shippedDateLabel, spacer, dateShippedPicker2);
+        shippedDate.getChildren().addAll(spacer1, shippedDateLabel, spacer, dateShippedPicker2);
 
 
         changesBox.getChildren().add(entryWindowLineCreate(tempClient.getshipNameDispString(),                 "Eyelash Express",       250, shipNameField2));
@@ -964,7 +970,10 @@ public class TrackerGUI extends Application {
         HBox buttons2 = new HBox(30);
         buttons2.setAlignment(Pos.CENTER);
         buttons2.getChildren().addAll(cancelButton, changesButton);
-        changesIntermediateBox.getChildren().addAll(changesScrollPane, buttons2);
+        Region spacer2 = new Region();
+        spacer2.setPrefHeight(10);
+
+        changesIntermediateBox.getChildren().addAll(changesScrollPane, buttons2, spacer2);
 
     }
 
