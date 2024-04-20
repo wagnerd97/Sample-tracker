@@ -338,7 +338,7 @@ public class TrackerGUI extends Application {
             boolean columnFound = false;
             if (columnConfigData != null) {
                 for (int i = 0; i < columnConfigData.size(); i++) {
-                    if (columnConfigData.get(i)[0] == attributeKey){
+                    if (Objects.equals(columnConfigData.get(i)[0], attributeKey)){
                         columnList = columnConfigData.get(i);
                         columnFound = true;
                     }
@@ -432,7 +432,7 @@ public class TrackerGUI extends Application {
             pH.setColumnConfigData(configData);
         } else {
             for(int i = 0; i<configData.size(); i++){
-                if (Boolean.parseBoolean(configData.get(i)[1]) == true) {
+                if (Boolean.parseBoolean(configData.get(i)[1])) {
                     table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString(configData.get(i)[0]), configData.get(i)[0], Double.parseDouble(configData.get(i)[2]), configData, false));
                 }
             }
@@ -473,7 +473,7 @@ public class TrackerGUI extends Application {
                     }
                 }
             });
-            return row ;
+            return row;
         });
 
         table.getColumns().addListener(new ListChangeListener<TableColumn<Client, ?>>() {
