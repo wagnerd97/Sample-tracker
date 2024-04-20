@@ -370,8 +370,7 @@ public class TrackerGUI extends Application {
         if (configNull) {
             configData.add(new String[]{CellFactoryKey, "true", String.valueOf(colWidthFactor)});
         }
-        
-        tempCol.prefWidthProperty().addListener(new ChangeListener<Number>() {
+        tempCol.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) {
                 pH.setColumnConfigData(reorganizeColumns(true));
