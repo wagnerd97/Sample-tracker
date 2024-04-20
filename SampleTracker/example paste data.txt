@@ -1,3 +1,5 @@
+Old style
+
 Sold ToJane Doe
 123-456-7890
 janedoe@gmail.com
@@ -12,17 +14,97 @@ Edmonton, AB M4X 5L9 CA
 098-765-4321
 
 
+New style
+
 '{
-	"billName":"Jane Doe",
-	"billPhoneField":"123-456-7890",
-	"billEmail":"janedoe@gmail.com",
-	"shipCompany":"john doe lashes inc.",
-	"shipAddress1":"12345 Baker Street",
-	"shipAddress2":"unit 22",
-	"shipName":"John Doe",
+	"shipName":"",
+	"shipPhone":"",
+	"shipCompany":"",
+	"shipAddress1":"",
+	"shipAddress2":"",
+	"shipCity":"",
+	"shipRegion":"",
+	"shipPostCode":"",
+	"shipCountry":"",
+	"shipEmail":"",
+	"billName":"",
+	"billPhone":"",
+	"billCompany":"",
+	"billAddress1":"",
+	"billAddress2":"",
+	"billCity":"",
+	"billRegion":"",
+	"billPostCode":"",
+	"billCountry":"",
+	"billEmail":"",
+}'
+
+'{
+	"shipName":"Janet Jackson",
+	"shipPhone":"876-092-3487",
+	"shipCompany":"Jackson Lashes",
+	"shipAddress1":"4631 199 ST NW",
+	"shipAddress2":"122",
 	"shipCity":"Edmonton",
-	"region":"Alberta",
-	"postCode":"M4X 5L9",
-	"country":"Canada",
-	"shippedPhone":"098-765-4321"
+	"shipRegion":"Alberta",
+	"shipPostCode":"T6M 0T1",
+	"shipCountry":"Canada",
+	"shipEmail":"jjackson@gmil.com",
+	"billName":"Janet Jackson",
+	"billPhone":"876-092-3487",
+	"billCompany":"Jackson Lashes",
+	"billAddress1":"4631 199 ST NW",
+	"billAddress2":"122",
+	"billCity":"Edmonton",
+	"billRegion":"Alberta",
+	"billPostCode":"T6M-0T1",
+	"billCountry":"Canada",
+	"billEmail":"jjackson@gmail.com",
+}'
+
+'{
+	"shipName":"Janet Jackson",
+	"shipPhone":"876-092-3487",
+	"shipCompany":"Jackson Lashes",
+	"shipAddress1":"4631 199 ST NW",
+	"shipAddress2":"122",
+	"shipCity":"Edmonton",
+	"shipRegion":"Alberta",
+	"shipPostCode":"T6M 0T1",
+	"shipCountry":"Canada",
+	"shipEmail":"jjackson@gmil.com",
+	"billName":"Doug Jackson",
+	"billPhone":"243-017-7834",
+	"billCompany":"",
+	"billAddress1":"4631 199 ST NW",
+	"billAddress2":"122",
+	"billCity":"Edmonton",
+	"billRegion":"Alberta",
+	"billPostCode":"T6M-0T1",
+	"billCountry":"Canada",
+	"billEmail":"djackson@gmail.com",
+}'
+
+
+'{
+	"shipName":"Chad Kroger",
+	"shipPhone":"3298765478",
+	"shipCompany":"",
+	"shipAddress1":"5th St",
+	"shipAddress2":"",
+	"shipCity":"Nashville",
+	"shipRegion":"Texas",
+	"shipPostCode":"84734",
+	"shipCountry":"US",
+	"shipEmail":"",
+	"billName":"",
+	"billPhone":"",
+	"billCompany":"",
+	"billAddress1":"",
+	"billAddress2":"",
+	"billCity":"",
+	"billRegion":"",
+	"billPostCode":"",
+	"billCountry":"",
+	"billEmail":"",
 }'
