@@ -946,14 +946,14 @@ public class TrackerGUI extends Application {
         Button changesButton = new Button("Save Changes");
         changesButton.setOnAction(Event -> {
             List<String> tempClientList = new ArrayList<>();
-            for (int i = 1; i < entryBox.getChildren().size(); i++) { // Skip the first element. that's a fixed string
-                Node nodeOut = entryBox.getChildren().get(i);
+            for (int i = 0; i < changesBox.getChildren().size(); i++) {
+                Node nodeOut = changesBox.getChildren().get(i);
                 if (nodeOut instanceof HBox) {
                     for (Node nodeIn:((HBox)nodeOut).getChildren()) {
                         if(nodeIn instanceof TextField) {
                             tempClientList.add(((TextField)nodeIn).getText());
                         } else if (nodeIn instanceof DatePicker) {
-                            tempClientList.add(dateShippedPicker.getConverter().toString(((DatePicker)nodeIn).getValue()));
+                            tempClientList.add(((DatePicker)nodeIn).getConverter().toString(((DatePicker)nodeIn).getValue()));
                         }
                     }
                 }
@@ -1171,7 +1171,7 @@ public class TrackerGUI extends Application {
             billPostCodeField2.setText(            clientToChange.getBillPostCode());
             billCountryField2.setText(             clientToChange.getBillCountry());
             billEmailField2.setText(               clientToChange.getBillEmail());
-            dateShippedPicker2.setValue(           clientToChange.getDateShipped());
+            dateShippedPicker2.setValue(           clientToChange.getDateShippedDate());
             firstLicenseNumField2.setText(         clientToChange.getFirstLicenseNum());
             firstCertificateCompanyField2.setText( clientToChange.getFirstCertificateCompany());
             secondLicenseNumField2.setText(        clientToChange.getSecondLicenseNum());

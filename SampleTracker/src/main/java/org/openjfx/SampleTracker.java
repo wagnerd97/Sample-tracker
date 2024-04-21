@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 import java.util.List;
 
@@ -277,6 +281,12 @@ public class SampleTracker {
         return true;
     }
 
+    public String getCurrentDateString() {
+        DateTimeFormatter dtf = new DateTimeFormatterBuilder().parseCaseSensitive().appendPattern("MMM dd yyyy").toFormatter();
+        LocalDate currentDate = LocalDate.now();
+        return currentDate.format(dtf);
+    }
+
 
     public List<Client> getClientList(){
         return this.clientList;
@@ -318,8 +328,8 @@ public class SampleTracker {
         tempClient.setFirstCertificate        ("");
         tempClient.setSecondCertificate       ("");
         // Add a function that can help us set these dates
-        tempClient.setDateClientAdded         ("");
-        tempClient.setDateClientEdited        ("");
+        tempClient.setDateClientAdded         (getCurrentDateString());
+        tempClient.setDateClientEdited        (getCurrentDateString());
 
         saveRequired = true;
         return clientList.add(tempClient);
@@ -384,6 +394,7 @@ public class SampleTracker {
         clientList.get(i).setSecondLicenseNum        (clientInfo.get(23));
         clientList.get(i).setSecondCertificateCompany(clientInfo.get(24));
         clientList.get(i).setComments                (clientInfo.get(25));
+        clientList.get(i).setDateClientEdited        (getCurrentDateString());
 
         saveRequired = true;
         return true;
@@ -712,7 +723,12 @@ public class SampleTracker {
         String[] toupleList = (data.split(","));
         for(int i = 0; i < toupleList.length; i++) {
             String[] tempList = (toupleList[i].split(":"));
-            attributes.put(tempList[0].strip(), tempList[1].strip());
+            if (tempList.length == 2) {
+                attributes.put(tempList[0].strip(), tempList[1].strip());
+            } else {
+                attributes.put(tempList[0].strip(), "");
+            }
+            
         }
         return attributes;
     }

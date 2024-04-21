@@ -123,44 +123,49 @@ public class Client {
     public void setComments                (String comments)                {this.comments =                 comments;}
     public void setFirstCertificate        (String firstCertificate)        {this.firstCertificate =         firstCertificate;}
     public void setSecondCertificate       (String secondCertificate)       {this.secondCertificate =        secondCertificate;}
-    public void setDateClientAdded         (String dateClientAdded)         {this.dateClientAdded =          dateClientAdded;}
-    public void setDateClientEdited        (String dateClientEdited)        {this.dateClientEdited =         dateClientEdited;}
+    public void setDateClientAdded         (String dateClientAdded)         {this.dateClientAdded =          dateClientAdded.toUpperCase().replaceAll(",", "");}
+    public void setDateClientEdited        (String dateClientEdited)        {this.dateClientEdited =         dateClientEdited.toUpperCase().replaceAll(",", "");}
 
     public void setOperation(Operation operation){
         this.operation = operation;
     }
 
-    public Integer   getIndex()                   {return this.index;}
-    public String    getShipName()                {return this.shipName;}
-    public String    getShipPhone()               {return this.shipPhone;}
-    public String    getShipCompany()             {return this.shipCompany;}
-    public String    getShipAddress1()            {return this.shipAddress1;}
-    public String    getShipAddress2()            {return this.shipAddress2;}
-    public String    getShipCity()                {return this.shipCity;}
-    public String    getShipRegion()              {return this.shipRegion;}
-    public String    getShipPostCode()            {return this.shipPostCode;}
-    public String    getShipCountry()             {return this.shipCountry;}
-    public String    getShipEmail()               {return this.shipEmail;}
-    public String    getBillName()                {return this.billName;}
-    public String    getBillPhone()               {return this.billPhone;}
-    public String    getBillCompany()             {return this.billCompany;}
-    public String    getBillAddress1()            {return this.billAddress1;}
-    public String    getBillAddress2()            {return this.billAddress2;}
-    public String    getBillCity()                {return this.billCity;}
-    public String    getBillRegion()              {return this.billRegion;}
-    public String    getBillPostCode()            {return this.billPostCode;}
-    public String    getBillCountry()             {return this.billCountry;}
-    public String    getBillEmail()               {return this.billEmail;}
-    public LocalDate getDateShipped()             {return formatDate(this.dateShipped);}
-    public String    getFirstLicenseNum()         {return this.firstLicenseNum;}
-    public String    getFirstCertificateCompany() {return this.firstCertificateCompany;}
-    public String    getSecondLicenseNum()        {return this.secondLicenseNum;}
-    public String    getSecondCertificateCompany(){return this.secondCertificateCompany;}
-    public String    getComments()                {return this.comments;}
-    public String    getFirstCertificate()        {return this.firstCertificate;}
-    public String    getSecondCertificate()       {return this.secondCertificate;}
-    public LocalDate getDateClientAdded()         {return formatDate(this.dateClientAdded);}
-    public LocalDate getDateClientEdited()        {return formatDate(this.dateClientEdited);}
+    public Integer getIndex()                   {return this.index;}
+    public String  getShipName()                {return this.shipName;}
+    public String  getShipPhone()               {return this.shipPhone;}
+    public String  getShipCompany()             {return this.shipCompany;}
+    public String  getShipAddress1()            {return this.shipAddress1;}
+    public String  getShipAddress2()            {return this.shipAddress2;}
+    public String  getShipCity()                {return this.shipCity;}
+    public String  getShipRegion()              {return this.shipRegion;}
+    public String  getShipPostCode()            {return this.shipPostCode;}
+    public String  getShipCountry()             {return this.shipCountry;}
+    public String  getShipEmail()               {return this.shipEmail;}
+    public String  getBillName()                {return this.billName;}
+    public String  getBillPhone()               {return this.billPhone;}
+    public String  getBillCompany()             {return this.billCompany;}
+    public String  getBillAddress1()            {return this.billAddress1;}
+    public String  getBillAddress2()            {return this.billAddress2;}
+    public String  getBillCity()                {return this.billCity;}
+    public String  getBillRegion()              {return this.billRegion;}
+    public String  getBillPostCode()            {return this.billPostCode;}
+    public String  getBillCountry()             {return this.billCountry;}
+    public String  getBillEmail()               {return this.billEmail;}
+    public String  getDateShipped()             {return this.dateShipped;}
+    public String  getFirstLicenseNum()         {return this.firstLicenseNum;}
+    public String  getFirstCertificateCompany() {return this.firstCertificateCompany;}
+    public String  getSecondLicenseNum()        {return this.secondLicenseNum;}
+    public String  getSecondCertificateCompany(){return this.secondCertificateCompany;}
+    public String  getComments()                {return this.comments;}
+    public String  getFirstCertificate()        {return this.firstCertificate;}
+    public String  getSecondCertificate()       {return this.secondCertificate;}
+    public String  getDateClientAdded()         {return this.dateClientAdded;}
+    public String  getDateClientEdited()        {return this.dateClientEdited;}
+
+    // These need for our own use. the string versions needed for table.show() function
+    public LocalDate getDateShippedDate()         {return formatDate(this.dateShipped);}
+    public LocalDate getDateClientAddedDate()     {return formatDate(this.dateClientAdded);}
+    public LocalDate getDateClientEditedDate()    {return formatDate(this.dateClientEdited);}
 
     public Operation getOperation(){return this.operation; }
 
