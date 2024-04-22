@@ -775,17 +775,17 @@ public class SampleTracker {
             String[] extension = file.toString().split("\\.");
 
             try {
-                Files.move(file.toPath(), Paths.get(fileLocation + "\\" + millis + "." + extension[extension.length -1]));
+                Files.move(file.toPath(), Paths.get(fileLocation + "\\" + millis + "." + extension[(extension.length - 1)]));
             } catch (Exception e) {
                 System.out.println("Could not move file: " + e.getMessage());
             }
             
             switch(whichCertificate) {
                 case 1:
-                    clientList.get(i).setFirstCertificate(millis + "." + extension[extension.length-1]);
+                    clientList.get(i).setFirstCertificate(millis + "." + extension[extension.length - 1]);
                     break;
                 case 2:
-                    clientList.get(i).setSecondCertificate(millis + "." + extension[extension.length-1]);
+                    clientList.get(i).setSecondCertificate(millis + "." + extension[extension.length - 1]);
                     break;
                 default:
                     return false;

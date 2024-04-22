@@ -1126,21 +1126,19 @@ public class TrackerGUI extends Application {
     }
 
     private File getCertificateImageFile(Stage primaryStage) {
-        Client clientToChange = sT.getClient(tempClient.getIndex().toString());
-            itemEditing = clientToChange.getIndex();
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif", "*.jpeg",
-                            ".tif"),
-                    new FileChooser.ExtensionFilter("All Files", "*.*"));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif", "*.jpeg",
+                        ".tif"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
 
-            fileChooser.setInitialDirectory(new File(desktopLocation));
-            File selectedFile =  fileChooser.showOpenDialog(primaryStage);
-            if (selectedFile != null) {
-                Path path = Paths.get(selectedFile.toString());
-                pH.setDefaultPath(path.getParent().toString());
-            }
-            return selectedFile;
+        fileChooser.setInitialDirectory(new File(desktopLocation));
+        File selectedFile =  fileChooser.showOpenDialog(primaryStage);
+        if (selectedFile != null) {
+            Path path = Paths.get(selectedFile.toString());
+            pH.setDefaultPath(path.getParent().toString());
+        }
+        return selectedFile;
     }
 
     private void configureContextMenu(Stage primaryStage){
@@ -1188,20 +1186,28 @@ public class TrackerGUI extends Application {
 
         MenuItem addCertificate1Button = new MenuItem("Add Certificate 1");
         addCertificate1Button.setOnAction(Event ->{
+            Client clientToChange = sT.getClient(tempClient.getIndex().toString());
+            itemEditing = clientToChange.getIndex();
             sT.addCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 1);
         });
         MenuItem addCertificate2Button = new MenuItem("Add Certificate 2");
         addCertificate2Button.setOnAction(Event ->{
+            Client clientToChange = sT.getClient(tempClient.getIndex().toString());
+            itemEditing = clientToChange.getIndex();
             sT.addCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 2);
         });
 
         MenuItem replaceCertificate1Button = new MenuItem("Replace Certificate 1");
         replaceCertificate1Button.setOnAction(Event ->{
+            Client clientToChange = sT.getClient(tempClient.getIndex().toString());
+            itemEditing = clientToChange.getIndex();
             sT.replaceCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 1);
 
         });
         MenuItem replaceCertificate2Button = new MenuItem("Replace Certificate 2");
         replaceCertificate2Button.setOnAction(Event ->{
+            Client clientToChange = sT.getClient(tempClient.getIndex().toString());
+            itemEditing = clientToChange.getIndex();
             sT.replaceCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 2);
 
         });
