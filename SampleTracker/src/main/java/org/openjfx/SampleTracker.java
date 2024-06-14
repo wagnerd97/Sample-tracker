@@ -73,10 +73,19 @@ public class SampleTracker {
     private int dIndex = -1;
     private boolean saveRequired = false;
 
+    private Integer current_csv_version = 2;
+
 
     private void importClients(String filename) throws IOException {
+        clientList.clear();
         Scanner file = new Scanner(Paths.get(filename));
-        if(file.hasNextLine()){ // ignore the first line of file. it's the title line
+        String old_csv_version;
+        if(file.hasNextLine()){ // First line of file is version information
+            String str = file.nextLine();
+            String[] versionInfo = str.split(",");
+            old_csv_version = versionInfo[1];
+        }
+        if(file.hasNextLine()){ // ignore the Second line of file. it's the title line
             file.nextLine();
         }
         Integer counter = 1;
@@ -213,25 +222,28 @@ public class SampleTracker {
 
     private void exportClients(String filename) throws IOException {
         StringBuilder builder = new StringBuilder();
+        // add version line
+        builder.append("Version").append(",");
+        builder.append(current_csv_version.toString()).append("\n");
         //add header line
         Client tempClient = new Client();
-        builder.append(tempClient.getshipNameDispString()).append(",");
-        builder.append(tempClient.getshipPhoneDispString()).append(",");
-        builder.append(tempClient.getshipCompanyDispString()).append(",");
-        builder.append(tempClient.getshipAddress1DispString()).append(",");
-        builder.append(tempClient.getshipAddress2DispString()).append(",");
-        builder.append(tempClient.getshipCityDispString()).append(",");
-        builder.append(tempClient.getshipRegionDispString()).append(",");
-        builder.append(tempClient.getshipPostCodeDispString()).append(",");
-        builder.append(tempClient.getshipCountryDispString()).append(",");
-        builder.append(tempClient.getshipEmailDispString()).append(",");
-        builder.append(tempClient.getbillNameDispString()).append(",");
-        builder.append(tempClient.getbillPhoneDispString()).append(",");
-        builder.append(tempClient.getbillCompanyDispString()).append(",");
-        builder.append(tempClient.getbillAddress1DispString()).append(",");
-        builder.append(tempClient.getbillAddress2DispString()).append(",");
-        builder.append(tempClient.getbillCityDispString()).append(",");
-        builder.append(tempClient.getbillRegionDispString()).append(",");
+        builder.append(tempClient.getShipNameDispString()).append(",");
+        builder.append(tempClient.getShipPhoneDispString()).append(",");
+        builder.append(tempClient.getShipCompanyDispString()).append(",");
+        builder.append(tempClient.getShipAddress1DispString()).append(",");
+        builder.append(tempClient.getShipAddress2DispString()).append(",");
+        builder.append(tempClient.getShipCityDispString()).append(",");
+        builder.append(tempClient.getShipRegionDispString()).append(",");
+        builder.append(tempClient.getShipPostCodeDispString()).append(",");
+        builder.append(tempClient.getShipCountryDispString()).append(",");
+        builder.append(tempClient.getShipEmailDispString()).append(",");
+        builder.append(tempClient.getBillNameDispString()).append(",");
+        builder.append(tempClient.getBillPhoneDispString()).append(",");
+        builder.append(tempClient.getBillCompanyDispString()).append(",");
+        builder.append(tempClient.getBillAddress1DispString()).append(",");
+        builder.append(tempClient.getBillAddress2DispString()).append(",");
+        builder.append(tempClient.getBillCityDispString()).append(",");
+        builder.append(tempClient.getBillRegionDispString()).append(",");
         builder.append(tempClient.getbillPostCodeDispString()).append(",");
         builder.append(tempClient.getbillCountryDispString()).append(",");
         builder.append(tempClient.getbillEmailDispString()).append(",");
@@ -258,6 +270,7 @@ public class SampleTracker {
         String filename = this.fileLocation + "\\" + this.fileName;
 
         try {
+
             importClients(filename);
         } catch (IOException e) {
             return false;
