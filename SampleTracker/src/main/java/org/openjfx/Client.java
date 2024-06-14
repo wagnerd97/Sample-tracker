@@ -7,6 +7,8 @@ import java.time.format.DateTimeParseException;
 public class Client {
 
     private Integer index;
+    private String  clientID;
+    private String  orderID;
     private String  shipName;
     private String  shipPhone;
     private String  shipCompany;
@@ -39,6 +41,8 @@ public class Client {
     private String  dateClientEdited;
 
     private final String indexString =                    "#";
+    private final String clientIDString =                 "Client ID";
+    private final String orderIDString =                  "Order ID";
     private final String shipNameString =                 "*Ship To";
     private final String shipPhoneString =                "*Ship Phone";
     private final String shipCompanyString =              "Ship Company";
@@ -95,6 +99,8 @@ public class Client {
 
 
     public void setIndex                   (Integer index)                  {this.index =                    index;}
+    public void setClientID                (String clientID)                {this.clientID =                 clientID;}
+    public void setOrderID                 (String orderID)                 {this.orderID =                  orderID;}
     public void setShipName                (String shipName)                {this.shipName =                 shipName;}
     public void setShipPhone               (String shipPhone)               {this.shipPhone =                shipPhone;}
     public void setShipCompany             (String shipCompany)             {this.shipCompany =              shipCompany;}
@@ -131,6 +137,8 @@ public class Client {
     }
 
     public Integer getIndex()                   {return this.index;}
+    public String  getClientID()                {return this.clientID;}
+    public String  getOrderID()                 {return this.orderID;}
     public String  getShipName()                {return this.shipName;}
     public String  getShipPhone()               {return this.shipPhone;}
     public String  getShipCompany()             {return this.shipCompany;}
@@ -169,24 +177,26 @@ public class Client {
 
     public Operation getOperation(){return this.operation; }
 
-    public String getindexDispString()                   {return this.indexString;};
-    public String getshipNameDispString()                {return this.shipNameString;};
-    public String getshipPhoneDispString()               {return this.shipPhoneString;};
-    public String getshipCompanyDispString()             {return this.shipCompanyString;};
-    public String getshipAddress1DispString()            {return this.shipAddress1String;};
-    public String getshipAddress2DispString()            {return this.shipAddress2String;};
-    public String getshipCityDispString()                {return this.shipCityString;};
-    public String getshipRegionDispString()              {return this.shipRegionString;};
-    public String getshipPostCodeDispString()            {return this.shipPostCodeString;};
-    public String getshipCountryDispString()             {return this.shipCountryString;};
-    public String getshipEmailDispString()               {return this.shipEmailString;};
-    public String getbillNameDispString()                {return this.billNameString;};
-    public String getbillPhoneDispString()               {return this.billPhoneString;};
-    public String getbillCompanyDispString()             {return this.billCompanyString;};
-    public String getbillAddress1DispString()            {return this.billAddress1String;};
-    public String getbillAddress2DispString()            {return this.billAddress2String;};
-    public String getbillCityDispString()                {return this.billCityString;};
-    public String getbillRegionDispString()              {return this.billRegionString;};
+    public String getIndexDispString()                   {return this.indexString;};
+    public String getclientIDDispString()                {return this.indexString;};
+    public String getorderIDDispString()                 {return this.indexString;};
+    public String getShipNameDispString()                {return this.shipNameString;};
+    public String getShipPhoneDispString()               {return this.shipPhoneString;};
+    public String getShipCompanyDispString()             {return this.shipCompanyString;};
+    public String getShipAddress1DispString()            {return this.shipAddress1String;};
+    public String getShipAddress2DispString()            {return this.shipAddress2String;};
+    public String getShipCityDispString()                {return this.shipCityString;};
+    public String getShipRegionDispString()              {return this.shipRegionString;};
+    public String getShipPostCodeDispString()            {return this.shipPostCodeString;};
+    public String getShipCountryDispString()             {return this.shipCountryString;};
+    public String getShipEmailDispString()               {return this.shipEmailString;};
+    public String getBillNameDispString()                {return this.billNameString;};
+    public String getBillPhoneDispString()               {return this.billPhoneString;};
+    public String getBillCompanyDispString()             {return this.billCompanyString;};
+    public String getBillAddress1DispString()            {return this.billAddress1String;};
+    public String getBillAddress2DispString()            {return this.billAddress2String;};
+    public String getBillCityDispString()                {return this.billCityString;};
+    public String getBillRegionDispString()              {return this.billRegionString;};
     public String getbillPostCodeDispString()            {return this.billPostCodeString;};
     public String getbillCountryDispString()             {return this.billCountryString;};
     public String getbillEmailDispString()               {return this.billEmailString;};
