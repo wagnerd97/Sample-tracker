@@ -40,7 +40,7 @@ import java.nio.file.Path;
 
 public class TrackerGUI extends Application {
 
-    private String desktopLocation = System.getProperty("user.home") + "/Desktop";
+    private String desktopLocation = System.getProperty("user.home");
 
     private static SampleTracker sT;
     private static PropertiesHandler pH;
@@ -1132,11 +1132,15 @@ public class TrackerGUI extends Application {
                         ".tif"),
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
 
-        fileChooser.setInitialDirectory(new File(desktopLocation));
+        String imagesPath = pH.getTrackerImagesPath();
+        if (imagesPath == null) {
+            imagesPath = desktopLocation;
+        }
+        fileChooser.setInitialDirectory(new File(imagesPath));
         File selectedFile =  fileChooser.showOpenDialog(primaryStage);
         if (selectedFile != null) {
             Path path = Paths.get(selectedFile.toString());
-            pH.setDefaultPath(path.getParent().toString());
+            pH.setTrackerImagesPath(path.getParent().toString());
         }
         return selectedFile;
     }
@@ -1178,11 +1182,6 @@ public class TrackerGUI extends Application {
 
             changesStage.show();
         });
-
-        String dataPath = pH.getDefaultPath();
-        if (dataPath == null) {
-            dataPath = desktopLocation;
-        }
 
         MenuItem addCertificate1Button = new MenuItem("Add Certificate 1");
         addCertificate1Button.setOnAction(Event ->{

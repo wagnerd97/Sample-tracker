@@ -13,8 +13,6 @@ public class PropertiesHandler {
     private String trackerConfigPath;
 
     public PropertiesHandler() {
-        // String rootPath = System.getProperty("user.dir");
-        // System.out.println("Home directory: " + System.getProperty("user.home"));
         String rootPath = System.getProperty("user.home") + "\\AppData\\Local\\Tracker";
         // Should make this safer so it's only creating the Tracker folder and not possibly other folders
         try {
