@@ -37,9 +37,19 @@ from there you need to set up the configurations to run it.
 > - on the context menu that opens: SampleTracker:jar -> Rebuild
 > #### This will fail if we don't previously run maven install
 
-> ### Manually install
+> ### Manually Install
 > We can manually run our Maven commands if we need to. On the right of the 
 > screen there should be a tiny Maven logo that opens an imbedded window.
 > If it isn't present, enable it from View -> tool window.
 > Under our project name -> Licecycle we can run our package and install
 > commands as needed.
+
+> ### Build The Installer
+> The installer will be built as an MSI. it requires minimal interaction to use.
+> In the project folder navigate to the SampleTracker folder.
+> Open the MakeInstaller file and edit the --app-version field to reflect the
+> desired version.
+> Save the changes, and then run the installer. It will create an msi file in
+> the same folder called:
+> #### Tracker-x.x.x.msi.
+> Run the installer and follow the prompts on screen
