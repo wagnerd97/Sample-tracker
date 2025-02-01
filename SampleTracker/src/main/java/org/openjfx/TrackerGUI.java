@@ -966,9 +966,18 @@ public class TrackerGUI extends Application {
             table.refresh();
         });
 
+        // Add search button
+        Button searchButton = new Button("Search");
+        searchButton.setOnAction(Event->{
+            changesStage.close();
+            copyFields2ToFields();
+            performSearch();
+
+        });
+
         HBox buttons2 = new HBox(30);
         buttons2.setAlignment(Pos.CENTER);
-        buttons2.getChildren().addAll(cancelButton, changesButton);
+        buttons2.getChildren().addAll(cancelButton, changesButton, searchButton);
         Region spacer2 = new Region();
         spacer2.setPrefHeight(10);
 
@@ -1321,6 +1330,35 @@ public class TrackerGUI extends Application {
         deletePopBox.getChildren().addAll(label,buttons);
         label.setAlignment(Pos.BASELINE_CENTER);
         buttons.setAlignment(Pos.BASELINE_CENTER);
+    }
+
+    private void copyFields2ToFields(){
+        shipNameField                 = shipNameField2;
+        shipPhoneField                = shipPhoneField2;
+        shipCompanyField              = shipCompanyField2;
+        shipAddress1Field             = shipAddress1Field2;
+        shipAddress2Field             = shipAddress2Field2;
+        shipCityField                 = shipCityField2;
+        shipRegionField               = shipRegionField2;
+        shipPostCodeField             = shipPostCodeField2;
+        shipCountryField              = shipCountryField2;
+        shipEmailField                = shipEmailField2;
+        billNameField                 = billNameField2;
+        billPhoneField                = billPhoneField2;
+        billCompanyField              = billCompanyField2;
+        billAddress1Field             = billAddress1Field2;
+        billAddress2Field             = billAddress2Field2;
+        billCityField                 = billCityField2;
+        billRegionField               = billRegionField2;
+        billPostCodeField             = billPostCodeField2;
+        billCountryField              = billCountryField2;
+        billEmailField                = billEmailField2;
+        dateShippedPicker             = dateShippedPicker2;
+        firstLicenseNumField          = firstLicenseNumField2;
+        firstCertificateCompanyField  = firstCertificateCompanyField2;
+        secondLicenseNumField         = secondLicenseNumField2;
+        secondCertificateCompanyField = secondCertificateCompanyField2;
+        commentsField                 = commentsField2;
     }
 
 
