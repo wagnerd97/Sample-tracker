@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -811,6 +813,27 @@ public class SampleTracker {
         }
         return false;
     }
+    public boolean addCertificateURL(Integer itemNum, String URL, Integer whichCertificate) {
+        int i = itemNum-1;
+        if(URL != ""){
+            switch(whichCertificate) {
+                case 1:
+                    clientList.get(i).setFirstCertificate(URL);
+                    break;
+                case 2:
+                    clientList.get(i).setSecondCertificate(URL);
+                    break;
+                default:
+                    return false;
+            }
+                
+            save();
+
+            return true;
+
+        }
+        return false;
+    }
     public boolean replaceCertificateImage(Integer itemNum, File file, Integer whichCertificate){
         removeCertificateImage(itemNum, whichCertificate);
         addCertificateImage(itemNum, file, whichCertificate);
@@ -835,12 +858,30 @@ public class SampleTracker {
             return false;
         }
 
+        try {
+            URI imageURI = new URI(tempStringCertificate);
+            switch (whichCertificate) {
+                case 1:
+                    clientList.get(i).setFirstCertificate("");
+                    break;
+                case 2:
+                    clientList.get(i).setSecondCertificate("");
+                    break;
+            }
+            if (imageURI.toString() == "") {
+                System.out.println("URL is unintentionally empty");
+            }
+            return false;
+        } catch (Exception e) {
+            System.out.println("Not a URL");
+        }
+
         File f = new File(fileLocation + "\\" + tempStringCertificate);
 
         if(f.delete()){
             switch (whichCertificate) {
                 case 1:
-                clientList.get(i).setFirstCertificate("");
+                    clientList.get(i).setFirstCertificate("");
                     break;
                 case 2:
                     clientList.get(i).setSecondCertificate("");
@@ -868,6 +909,18 @@ public class SampleTracker {
         }
         if(tempStringCertificate.equals("")){
             return false;
+        }
+
+        try {
+            URI imageURI = new URI(tempStringCertificate);
+            if (imageURI.toString() == "") {
+                System.out.println("URL is unintentionally empty");
+                return false;
+            }
+            Desktop.getDesktop().browse(imageURI);
+            return false;
+        } catch (Exception e) {
+            System.out.println("Not a URL");
         }
 
         File f = new File(fileLocation + "\\" + tempStringCertificate);

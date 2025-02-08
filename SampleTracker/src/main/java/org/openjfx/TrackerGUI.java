@@ -55,6 +55,9 @@ public class TrackerGUI extends Application {
     private Stage plainTextStage;
     private VBox plainTextBox;
 
+    private Stage URLTextStage;
+    private VBox URLTextBox;
+
     private Stage configColumnsStage;
     private VBox configColumnsBox;
 
@@ -63,6 +66,8 @@ public class TrackerGUI extends Application {
     private TextArea textArea;
 
     private boolean allowReorg = true;
+
+    private Integer certificateNumber = 1;
 
     // List index is column position Map: (columnName, addToTableView)
     // private List<String[]> columnConfigData;
@@ -199,6 +204,7 @@ public class TrackerGUI extends Application {
         configureTable();
         configurePlainTextWindow(primaryStage);
         configureEntryWindow(primaryStage);
+        configureURLTextWindow(primaryStage);
         configureChangesWindow(primaryStage);
         configureSavePopup(primaryStage);
         configureContextMenu(primaryStage);
@@ -210,6 +216,7 @@ public class TrackerGUI extends Application {
             entryStage.getIcons().add(IconImage);
             changesStage.getIcons().add(IconImage);
             plainTextStage.getIcons().add(IconImage);
+            URLTextStage.getIcons().add(IconImage);
             savePopup.getIcons().add(IconImage);
             deletePopup.getIcons().add(IconImage);
             removeCertificatePopup.getIcons().add(IconImage);
@@ -219,7 +226,16 @@ public class TrackerGUI extends Application {
 
         Button searchButton = new Button("Search/Add New");
         searchButton.setOnAction(Event ->{
-            plainTextStage.show();
+            // plainTextStage.show();
+            clearPrimaryEntryFields();
+            entryStage.show();
+
+        });
+
+        Button importNewClientsButton = new Button("Import Clients");
+        importNewClientsButton.setOnAction(Event ->{
+            importNewClients(primaryStage);
+
         });
 
         Button lastButton = new Button("Last");
@@ -248,7 +264,7 @@ public class TrackerGUI extends Application {
 
 
         HBox buttons = new HBox(30);
-        buttons.getChildren().addAll(searchButton,lastButton, resetButton,saveButton, setDataPathButton);
+        buttons.getChildren().addAll(searchButton,importNewClientsButton,lastButton, resetButton,saveButton, setDataPathButton);
         buttons.setPadding(new Insets(10, 10, 100, 100));
 
 
@@ -262,6 +278,19 @@ public class TrackerGUI extends Application {
 
         primaryStage.show();
 
+    }
+
+    private void importNewClients(Stage primaryStage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("*.csv"));
+
+        String filePath = desktopLocation;
+        fileChooser.setInitialDirectory(new File(filePath));
+        File selectedFile =  fileChooser.showOpenDialog(primaryStage);
+        if (selectedFile != null) {
+            // Function to import the clients
+        }
     }
 
     private void setDataPath(Stage primaryStage) {
@@ -789,11 +818,48 @@ public class TrackerGUI extends Application {
         plainTextBox.getChildren().add(new Text("Paste client info"));
         plainTextBox.getChildren().addAll(textArea, buttons);
 
-
-
-
-
     }
+
+    private void configureURLTextWindow(Stage primaryStage) throws Exception {
+        URLTextStage = new Stage();
+        URLTextStage.initModality(Modality.APPLICATION_MODAL);
+        URLTextStage.initOwner(primaryStage);
+        URLTextStage.setResizable(false);
+
+        URLTextBox = new VBox(10);
+        URLTextBox.setAlignment(Pos.CENTER);
+        Scene URLTextScene = new Scene(URLTextBox,400, 200);
+        URLTextStage.setScene(URLTextScene);
+
+        Button continueButton = new Button("Save URL");
+        continueButton.setOnAction(Event ->{
+            URLTextStage.close();
+            String textData = textArea.getText();
+            if (!textData.isEmpty()) {
+                Client clientToChange = sT.getClient(tempClient.getIndex().toString());
+                itemEditing = clientToChange.getIndex();
+                sT.addCertificateURL(itemEditing, textData, certificateNumber);
+            }
+            textArea.setText("");
+            URLTextStage.close();
+        });
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction(Event->{
+            textArea.setText("");
+            URLTextStage.close();
+        });
+
+        HBox buttons = new HBox(30);
+        buttons.getChildren().addAll(cancelButton, continueButton);
+        buttons.setAlignment(Pos.CENTER);
+
+        textArea = new TextArea();
+        textArea.setPrefRowCount(1);
+
+        URLTextBox.getChildren().add(new Text("Paste link to image"));
+        URLTextBox.getChildren().addAll(textArea, buttons);
+    }
+
     private void fillEntryStageWithMap(Map<String, String> newClientData) {
         for(Map.Entry<String, String> entry : newClientData.entrySet()) {
             String entryKey = entry.getKey();
@@ -1138,7 +1204,7 @@ public class TrackerGUI extends Application {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif", "*.jpeg",
-                        ".tif"),
+                        "*.tif"),
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
 
         String imagesPath = pH.getTrackerImagesPath();
@@ -1192,33 +1258,75 @@ public class TrackerGUI extends Application {
             changesStage.show();
         });
 
-        MenuItem addCertificate1Button = new MenuItem("Add Certificate 1");
-        addCertificate1Button.setOnAction(Event ->{
+        Menu addCertificate1 = new Menu("Add Certificate 1");
+        Menu addCertificate2 = new Menu("Add Certificate 2");
+
+        MenuItem addCertificate1LocalImage = new MenuItem("Local Image");
+        addCertificate1LocalImage.setOnAction(Event ->{
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
             sT.addCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 1);
         });
-        MenuItem addCertificate2Button = new MenuItem("Add Certificate 2");
-        addCertificate2Button.setOnAction(Event ->{
+
+        MenuItem addCertificate1URL = new MenuItem("URL");
+        addCertificate1URL.setOnAction(Event ->{
+            certificateNumber = 1;
+            URLTextStage.show();
+        });
+
+        addCertificate1.getItems().addAll(addCertificate1LocalImage, addCertificate1URL);
+
+        MenuItem addCertificate2LocalImage = new MenuItem("Local Image");
+        addCertificate2LocalImage.setOnAction(Event ->{
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
             sT.addCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 2);
         });
 
-        MenuItem replaceCertificate1Button = new MenuItem("Replace Certificate 1");
-        replaceCertificate1Button.setOnAction(Event ->{
+        MenuItem addCertificate2URL = new MenuItem("URL");
+        addCertificate2URL.setOnAction(Event ->{
+            certificateNumber = 2;
+            URLTextStage.show();
+        });
+
+        addCertificate2.getItems().addAll(addCertificate2LocalImage, addCertificate2URL);
+
+        Menu replaceCertificate1 = new Menu("Replace Certificate 1");
+        Menu replaceCertificate2 = new Menu("Replace Certificate 2");
+
+        MenuItem replaceCertificate1LocalImage = new MenuItem("Local Image");
+        replaceCertificate1LocalImage.setOnAction(Event ->{
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
             sT.replaceCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 1);
 
         });
-        MenuItem replaceCertificate2Button = new MenuItem("Replace Certificate 2");
-        replaceCertificate2Button.setOnAction(Event ->{
+
+        MenuItem replaceCertificate1URL = new MenuItem("URL");
+        replaceCertificate1URL.setOnAction(Event ->{
+            certificateNumber = 1;
+            sT.removeCertificateImage(itemEditing, certificateNumber);
+            URLTextStage.show();
+        });
+
+        replaceCertificate1.getItems().addAll(replaceCertificate1LocalImage, replaceCertificate1URL);
+
+        MenuItem replaceCertificate2LocalImage = new MenuItem("Local Image");
+        replaceCertificate2LocalImage.setOnAction(Event ->{
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
             sT.replaceCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 2);
 
         });
+
+        MenuItem replaceCertificate2URL = new MenuItem("URL");
+        replaceCertificate2URL.setOnAction(Event ->{
+            certificateNumber = 2;
+            sT.removeCertificateImage(itemEditing, certificateNumber);
+            URLTextStage.show();
+        });
+
+        replaceCertificate2.getItems().addAll(replaceCertificate2LocalImage, replaceCertificate2URL);
 
         MenuItem removeCertificate1Button = new MenuItem("Remove Certificate 1");
         removeCertificate1Button.setOnAction(Event ->{
@@ -1252,12 +1360,12 @@ public class TrackerGUI extends Application {
         });
 
         contextMenu.getItems().add(editItem);
-        contextMenu.getItems().add(addCertificate1Button);
-        contextMenu.getItems().add(addCertificate2Button);
+        contextMenu.getItems().add(addCertificate1);
+        contextMenu.getItems().add(addCertificate2);
         contextMenu.getItems().add(viewCertificate1Button);
         contextMenu.getItems().add(viewCertificate2Button);
-        contextMenu.getItems().add(replaceCertificate1Button);
-        contextMenu.getItems().add(replaceCertificate2Button);
+        contextMenu.getItems().add(replaceCertificate1);
+        contextMenu.getItems().add(replaceCertificate2);
         contextMenu.getItems().add(removeCertificate1Button);
         contextMenu.getItems().add(removeCertificate2Button);
         contextMenu.getItems().add(deleteItem);
