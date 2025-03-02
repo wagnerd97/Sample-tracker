@@ -234,7 +234,7 @@ public class TrackerGUI extends Application {
 
         Button importNewClientsButton = new Button("Import Clients");
         importNewClientsButton.setOnAction(Event ->{
-            importNewClients(primaryStage);
+            importNewClientsFromFile(primaryStage);
 
         });
 
@@ -280,7 +280,7 @@ public class TrackerGUI extends Application {
 
     }
 
-    private void importNewClients(Stage primaryStage) {
+    private void importNewClientsFromFile(Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("*.csv"));
@@ -290,6 +290,7 @@ public class TrackerGUI extends Application {
         File selectedFile =  fileChooser.showOpenDialog(primaryStage);
         if (selectedFile != null) {
             // Function to import the clients
+            Integer clients_added = sT.importNewClients(selectedFile);
         }
     }
 

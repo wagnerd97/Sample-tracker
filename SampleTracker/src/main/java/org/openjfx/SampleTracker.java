@@ -139,6 +139,124 @@ public class SampleTracker {
         file.close();
     }
 
+    public Integer importNewClients(File file) {
+        Integer clients_added = 0;
+        
+        List<String> lines;
+        try {
+            lines = Files.readAllLines(file.toPath());
+        } catch (IOException e) {
+            return 0;
+        }
+        if (lines.size() < 2) {
+            return clients_added;
+        }
+        Integer line_counter = 0;
+        String[] header_row = lines.get(line_counter).split(",");
+        line_counter++;
+        if (header_row.length <= 1) {
+            return clients_added;
+        }
+        Map<String, Integer> attribute_map = new HashMap<String, Integer>();
+        for (int i = 0; i < header_row.length; i++) {
+            switch (header_row[i]) {
+                case "First Name":
+                    attribute_map.put("shipFirstName", i);
+                    break;
+                case "Last Name":
+                    attribute_map.put("shipLastName", i);
+                    break;
+                case "Phone":
+                    attribute_map.put("shipPhone", i);
+                    break;
+                case "Where the Kit Was Purchased (Distributor Name)":
+                    attribute_map.put("shipCompany", i);
+                    break;
+                case "Address 1":
+                    attribute_map.put("shipAddress1", i);
+                    break;
+                case "Address 2":
+                    attribute_map.put("shipAddress2", i);
+                    break;
+                case "City or Town":
+                    attribute_map.put("shipCity", i);
+                    break;
+                case "Province or State":
+                    attribute_map.put("shipRegion", i);
+                    break;
+                case "Postal Code":
+                    attribute_map.put("shipPostCode", i);
+                    break;
+                case "Country":
+                    attribute_map.put("shipCountry", i);
+                    break;
+                case "Email":
+                    attribute_map.put("shipEmail", i);
+                    break;
+                case "Billed-To First Name":
+                    attribute_map.put("billFirstName", i);
+                    break;
+                case "Billed-To Last Name":
+                    attribute_map.put("billLastName", i);
+                    break;
+                case "Billed-To Address 1":
+                    attribute_map.put("billAddress1", i);
+                    break;
+                case "Billed-To Address 2":
+                    attribute_map.put("billAddress2", i);
+                    break;
+                case "Billed-To City/Town":
+                    attribute_map.put("billCity", i);
+                    break;
+                case "Billed-To Province or State":
+                    attribute_map.put("billRegion", i);
+                    break;
+                case "Billed-To Postal Code":
+                    attribute_map.put("billPostCode", i);
+                    break;
+                case "<b>Your Accreditation</b> File Upload":
+                    attribute_map.put("firstCertificate", i);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        for (line_counter = 1; line_counter < lines.size(); line_counter++) {
+            String[] client_row = lines.get(line_counter).split(",");
+
+            Client tempClient = new Client();
+
+            tempClient.setIndex(clientList.size()+1);
+
+            tempClient.setShipName                (client_row[attribute_map.get("shipFirstName")] + " " + client_row[attribute_map.get("shipLastName")]);
+            tempClient.setShipPhone               (client_row[attribute_map.get("shipPhone")]);
+            tempClient.setShipCompany             (client_row[attribute_map.get("shipCompany")]);
+            tempClient.setShipAddress1            (client_row[attribute_map.get("shipAddress1")]);
+            tempClient.setShipAddress2            (client_row[attribute_map.get("shipAddress2")]);
+            tempClient.setShipCity                (client_row[attribute_map.get("shipCity")]);
+            tempClient.setShipRegion              (client_row[attribute_map.get("shipRegion")]);
+            tempClient.setShipPostCode            (client_row[attribute_map.get("shipPostCode")]);
+            tempClient.setShipCountry             (client_row[attribute_map.get("shipCountry")]);
+            tempClient.setShipEmail               (client_row[attribute_map.get("shipEmail")]);
+            tempClient.setBillName                (client_row[attribute_map.get("billFirstName")] + " " + client_row[attribute_map.get("billLastName")]);
+            tempClient.setBillAddress1            (client_row[attribute_map.get("billAddress1")]);
+            tempClient.setBillAddress2            (client_row[attribute_map.get("billAddress2")]);
+            tempClient.setBillCity                (client_row[attribute_map.get("billCity")]);
+            tempClient.setBillRegion              (client_row[attribute_map.get("billRegion")]);
+            tempClient.setBillPostCode            (client_row[attribute_map.get("billPostCode")]);
+            tempClient.setFirstCertificate        (client_row[attribute_map.get("firstCertificate")]);
+
+            tempClient.setDateClientAdded         (getCurrentDateString());
+            tempClient.setDateClientEdited        (getCurrentDateString());
+
+            clientList.add(tempClient);
+            clients_added++;
+        }
+
+        return clients_added;
+    }
+
     public boolean getColumnsShownSet() {
         return columnsShownSet;
     }
