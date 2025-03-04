@@ -81,6 +81,42 @@ public class Client {
     //undo and redo ability will likely be volatile. each open will require clearing of deleted images. keep a record of
     //images stored in the folder that need to be permanently removed on startup.
 
+    public Client() {
+        index = 0;
+        clientID = "";
+        orderID = "";
+        shipName = "";
+        shipPhone = "";
+        shipCompany = "";
+        shipAddress1 = "";
+        shipAddress2 = "";
+        shipCity = "";
+        shipRegion = "";
+        shipPostCode = "";
+        shipCountry = "";
+        shipEmail = "";
+        billName = "";
+        billPhone = "";
+        billCompany = "";
+        billAddress1 = "";
+        billAddress2 = "";
+        billCity = "";
+        billRegion = "";
+        billPostCode = "";
+        billCountry = "";
+        billEmail = "";
+        dateShipped = "";
+        firstLicenseNum = "";
+        firstCertificateCompany = "";
+        secondLicenseNum = "";
+        secondCertificateCompany = "";
+        comments = "";
+        firstCertificate = "";
+        secondCertificate = "";
+        dateClientAdded = "";
+        dateClientEdited = "";
+    }
+
     private LocalDate formatDate(String dateString) {
         if(dateString.equals("")){
             return null;
@@ -178,8 +214,8 @@ public class Client {
     public Operation getOperation(){return this.operation; }
 
     public String getIndexDispString()                   {return this.indexString;};
-    public String getclientIDDispString()                {return this.indexString;};
-    public String getorderIDDispString()                 {return this.indexString;};
+    public String getclientIDDispString()                {return this.clientIDString;};
+    public String getorderIDDispString()                 {return this.orderIDString;};
     public String getShipNameDispString()                {return this.shipNameString;};
     public String getShipPhoneDispString()               {return this.shipPhoneString;};
     public String getShipCompanyDispString()             {return this.shipCompanyString;};
@@ -214,6 +250,8 @@ public class Client {
     public String getAttributeNameAsString(String displayName) {
         switch (displayName) {
             case indexString:                    return "index";
+            case clientIDString:                 return "clientID";
+            case orderIDString:                  return "orderID";
             case shipNameString:                 return "shipName";
             case shipPhoneString:                return "shipPhone";
             case shipCompanyString:              return "shipCompany";
@@ -251,6 +289,8 @@ public class Client {
     public String getAttributeNameDispString(String attributeName) {
         switch (attributeName) {
             case "index":                    return indexString;
+            case "clientID":                 return clientIDString;
+            case "orderID":                  return orderIDString;
             case "shipName":                 return shipNameString;
             case "shipPhone":                return shipPhoneString;
             case "shipCompany":              return shipCompanyString;
@@ -289,6 +329,8 @@ public class Client {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         
+        builder.append(this.clientID).append(",");
+        // builder.append(this.orderID).append(",");
         builder.append(this.shipName).append(",");
         builder.append(this.shipPhone).append(",");
         builder.append(this.shipCompany).append(",");

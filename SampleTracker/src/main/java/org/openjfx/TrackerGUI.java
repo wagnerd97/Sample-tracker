@@ -75,6 +75,7 @@ public class TrackerGUI extends Application {
 
     private Integer certificateToRemove = 1; // Gets set right before confirm remove popup
 
+    private TextField  clientIdField =                 new TextField();
     private TextField  shipNameField =                 new TextField();
     private TextField  shipPhoneField =                new TextField();
     private TextField  shipCompanyField =              new TextField();
@@ -102,6 +103,7 @@ public class TrackerGUI extends Application {
     private TextField  secondCertificateCompanyField = new TextField();
     private TextField  commentsField =                 new TextField();
 
+    private TextField  clientIdField2 =                 new TextField();
     private TextField  shipNameField2 =                 new TextField();
     private TextField  shipPhoneField2 =                new TextField();
     private TextField  shipCompanyField2 =              new TextField();
@@ -282,15 +284,19 @@ public class TrackerGUI extends Application {
 
     private void importNewClientsFromFile(Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("*.csv"));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Text Files", "*.csv"));
 
         String filePath = desktopLocation;
         fileChooser.setInitialDirectory(new File(filePath));
         File selectedFile =  fileChooser.showOpenDialog(primaryStage);
         if (selectedFile != null) {
             // Function to import the clients
-            Integer clients_added = sT.importNewClients(selectedFile);
+            Integer num_clients_added = sT.importNewClients(selectedFile);
+            if (num_clients_added >= 1) {
+                table.setItems(FXCollections.observableArrayList(sT.getClientList()));
+                sT.setSaveRequired();
+            }
         }
     }
 
@@ -428,6 +434,7 @@ public class TrackerGUI extends Application {
         if (configData == null) {
             configData = new ArrayList<String[]>();
             table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("index"),                    "index",                     0.031,   configData, true));
+            table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("clientID"),                 "clientID",                  0.031,   configData, true));
             table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipName"),                 "shipName",                  defaultColWidth-0.0042, configData, true));
             table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipPhone"),                "shipPhone",                 defaultColWidth,        configData, true));
             table.getColumns().add(tableColumnCreate(tempClient.getAttributeNameDispString("shipCompany"),              "shipCompany",               defaultColWidth,        configData, true));
@@ -548,6 +555,7 @@ public class TrackerGUI extends Application {
         List<String[]> configData = pH.getColumnConfigData();
 
         configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getIndexDispString(),                    true));
+        configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getclientIDDispString(),                 true));
         configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getShipNameDispString(),                 true));
         configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getShipPhoneDispString(),                true));
         configColumnsBox.getChildren().add(configColumnsWindowLineCreate(tempClient.getShipCompanyDispString(),              true));
@@ -704,6 +712,7 @@ public class TrackerGUI extends Application {
         shippedDate.setMaxWidth(entrySceneWidth - 40);
         shippedDate.getChildren().addAll(spacer1, shippedDateLabel, spacer, dateShippedPicker);
 
+        entryBox.getChildren().add(entryWindowLineCreate(tempClient.getclientIDDispString(),                 "123456",                250, clientIdField));
         entryBox.getChildren().add(entryWindowLineCreate(tempClient.getShipNameDispString(),                 "Eyelash Express",       250, shipNameField));
         entryBox.getChildren().add(entryWindowLineCreate(tempClient.getShipPhoneDispString(),                "555-555-5555",          250, shipPhoneField));
         entryBox.getChildren().add(entryWindowLineCreate(tempClient.getShipCompanyDispString(),              "Lash Inc.",             250, shipCompanyField));
@@ -977,7 +986,7 @@ public class TrackerGUI extends Application {
         shippedDate.setMaxWidth(entrySceneWidth - 40);
         shippedDate.getChildren().addAll(spacer1, shippedDateLabel, spacer, dateShippedPicker2);
 
-
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getclientIDDispString(),                 "123456",                250, clientIdField));
         changesBox.getChildren().add(entryWindowLineCreate(tempClient.getShipNameDispString(),                 "Eyelash Express",       250, shipNameField2));
         changesBox.getChildren().add(entryWindowLineCreate(tempClient.getShipPhoneDispString(),                "555-555-5555",          250, shipPhoneField2));
         changesBox.getChildren().add(entryWindowLineCreate(tempClient.getShipCompanyDispString(),              "Lash Inc.",             250, shipCompanyField2));
@@ -1057,6 +1066,7 @@ public class TrackerGUI extends Application {
     private void performSearch(){
         List<Client> filteredClients = sT.getClientList();
         Map<String, String> tempClientMap= new HashMap<>();
+        tempClientMap.put("clientID",                 clientIdField.getText());
         tempClientMap.put("shipName",                 shipNameField.getText());
         tempClientMap.put("shipPhone",                shipPhoneField.getText());
         tempClientMap.put("shipCompany",              shipCompanyField.getText());
@@ -1092,6 +1102,7 @@ public class TrackerGUI extends Application {
     }
 
     public void clearPrimaryEntryFields() {
+        clientIdField.clear();
         shipNameField.clear();
         shipPhoneField.clear();
         shipCompanyField.clear();
@@ -1122,6 +1133,7 @@ public class TrackerGUI extends Application {
     }
 
     public void clearSecondaryEntryFields(){
+        clientIdField2.clear();
         shipNameField2.clear();
         shipPhoneField2.clear();
         shipCompanyField2.clear();
@@ -1229,6 +1241,7 @@ public class TrackerGUI extends Application {
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
 
+            clientIdField2.setText(                clientToChange.getClientID());
             shipNameField2.setText(                clientToChange.getShipName());
             shipPhoneField2.setText(               clientToChange.getShipPhone());
             shipCompanyField2.setText(             clientToChange.getShipCompany());

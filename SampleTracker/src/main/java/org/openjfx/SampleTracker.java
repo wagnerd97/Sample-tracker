@@ -35,6 +35,7 @@ public class SampleTracker {
     private boolean columnsShownSet = false;
 
     private boolean  indexShow                    = false;
+    private boolean  clientIDShow                 = false;
     private boolean  shipNameShow                 = false;
     private boolean  shipPhoneShow                = false;
     private boolean  shipCompanyShow              = false;
@@ -75,17 +76,17 @@ public class SampleTracker {
     private int dIndex = -1;
     private boolean saveRequired = false;
 
-    private Integer current_csv_version = 2;
+    private Integer current_csv_version = 3;
 
 
     private void importClients(String filename) throws IOException {
         clientList.clear();
         Scanner file = new Scanner(Paths.get(filename));
-        String old_csv_version;
+        String csv_version = "";
         if(file.hasNextLine()){ // First line of file is version information
             String str = file.nextLine();
             String[] versionInfo = str.split(",");
-            old_csv_version = versionInfo[1];
+            csv_version = versionInfo[1];
         }
         if(file.hasNextLine()){ // ignore the Second line of file. it's the title line
             file.nextLine();
@@ -94,44 +95,49 @@ public class SampleTracker {
         while(file.hasNextLine()){
             String str = file.nextLine();
             String[] clientInfo = str.split(",");
-            String[] finalInfo = new String[30];
+            String[] finalInfo = new String[31];
             Arrays.fill(finalInfo, "");
             for(int i = 0;i<clientInfo.length;i++){
                 finalInfo[i] = clientInfo[i];
             }
             Client tempClient = new Client();
             tempClient.setIndex(counter);
+            int index = 0;
 
-            tempClient.setShipName                (finalInfo[0]);
-            tempClient.setShipPhone               (finalInfo[1]);
-            tempClient.setShipCompany             (finalInfo[2]);
-            tempClient.setShipAddress1            (finalInfo[3]);
-            tempClient.setShipAddress2            (finalInfo[4]);
-            tempClient.setShipCity                (finalInfo[5]);
-            tempClient.setShipRegion              (finalInfo[6]);
-            tempClient.setShipPostCode            (finalInfo[7]);
-            tempClient.setShipCountry             (finalInfo[8]);
-            tempClient.setShipEmail               (finalInfo[9]);
-            tempClient.setBillName                (finalInfo[10]);
-            tempClient.setBillPhone               (finalInfo[11]);
-            tempClient.setBillCompany             (finalInfo[12]);
-            tempClient.setBillAddress1            (finalInfo[13]);
-            tempClient.setBillAddress2            (finalInfo[14]);
-            tempClient.setBillCity                (finalInfo[15]);
-            tempClient.setBillRegion              (finalInfo[16]);
-            tempClient.setBillPostCode            (finalInfo[17]);
-            tempClient.setBillCountry             (finalInfo[18]);
-            tempClient.setBillEmail               (finalInfo[19]);
-            tempClient.setDateShipped             (finalInfo[20]);
-            tempClient.setFirstLicenseNum         (finalInfo[21]);
-            tempClient.setFirstCertificateCompany (finalInfo[22]);
-            tempClient.setSecondLicenseNum        (finalInfo[23]);
-            tempClient.setSecondCertificateCompany(finalInfo[24]);
-            tempClient.setComments                (finalInfo[25]);
-            tempClient.setFirstCertificate        (finalInfo[26]);
-            tempClient.setSecondCertificate       (finalInfo[27]);
-            tempClient.setDateClientAdded         (finalInfo[28]);
-            tempClient.setDateClientEdited        (finalInfo[29]);
+            if (csv_version.equals("3")) {
+                tempClient.setClientID            (finalInfo[index++]);
+            }
+
+            tempClient.setShipName                (finalInfo[index++]);
+            tempClient.setShipPhone               (finalInfo[index++]);
+            tempClient.setShipCompany             (finalInfo[index++]);
+            tempClient.setShipAddress1            (finalInfo[index++]);
+            tempClient.setShipAddress2            (finalInfo[index++]);
+            tempClient.setShipCity                (finalInfo[index++]);
+            tempClient.setShipRegion              (finalInfo[index++]);
+            tempClient.setShipPostCode            (finalInfo[index++]);
+            tempClient.setShipCountry             (finalInfo[index++]);
+            tempClient.setShipEmail               (finalInfo[index++]);
+            tempClient.setBillName                (finalInfo[index++]);
+            tempClient.setBillPhone               (finalInfo[index++]);
+            tempClient.setBillCompany             (finalInfo[index++]);
+            tempClient.setBillAddress1            (finalInfo[index++]);
+            tempClient.setBillAddress2            (finalInfo[index++]);
+            tempClient.setBillCity                (finalInfo[index++]);
+            tempClient.setBillRegion              (finalInfo[index++]);
+            tempClient.setBillPostCode            (finalInfo[index++]);
+            tempClient.setBillCountry             (finalInfo[index++]);
+            tempClient.setBillEmail               (finalInfo[index++]);
+            tempClient.setDateShipped             (finalInfo[index++]);
+            tempClient.setFirstLicenseNum         (finalInfo[index++]);
+            tempClient.setFirstCertificateCompany (finalInfo[index++]);
+            tempClient.setSecondLicenseNum        (finalInfo[index++]);
+            tempClient.setSecondCertificateCompany(finalInfo[index++]);
+            tempClient.setComments                (finalInfo[index++]);
+            tempClient.setFirstCertificate        (finalInfo[index++]);
+            tempClient.setSecondCertificate       (finalInfo[index++]);
+            tempClient.setDateClientAdded         (finalInfo[index++]);
+            tempClient.setDateClientEdited        (finalInfo[index++]);
 
             clientList.add(tempClient);
             counter++;
@@ -160,6 +166,9 @@ public class SampleTracker {
         Map<String, Integer> attribute_map = new HashMap<String, Integer>();
         for (int i = 0; i < header_row.length; i++) {
             switch (header_row[i]) {
+                case "User ID":
+                    attribute_map.put("clientid", i);
+                    break;
                 case "First Name":
                     attribute_map.put("shipFirstName", i);
                     break;
@@ -229,6 +238,7 @@ public class SampleTracker {
 
             tempClient.setIndex(clientList.size()+1);
 
+            tempClient.setClientID                (client_row[attribute_map.get("clientid")]);
             tempClient.setShipName                (client_row[attribute_map.get("shipFirstName")] + " " + client_row[attribute_map.get("shipLastName")]);
             tempClient.setShipPhone               (client_row[attribute_map.get("shipPhone")]);
             tempClient.setShipCompany             (client_row[attribute_map.get("shipCompany")]);
@@ -250,6 +260,8 @@ public class SampleTracker {
             tempClient.setDateClientAdded         (getCurrentDateString());
             tempClient.setDateClientEdited        (getCurrentDateString());
 
+            // check for duplicate client
+
             clientList.add(tempClient);
             clients_added++;
         }
@@ -268,6 +280,7 @@ public class SampleTracker {
     public boolean getAttributeShown(String attributeName) {
         switch (attributeName) {
             case "index":                    return indexShow;
+            case "clientID":                 return clientIDShow;
             case "shipName":                 return shipNameShow;
             case "shipPhone":                return shipPhoneShow;
             case "shipCompany":              return shipCompanyShow;
@@ -305,6 +318,7 @@ public class SampleTracker {
     public boolean setAttributeShown(String attributeName, boolean newState) {
         switch (attributeName) {
             case "index":                    indexShow = newState; break;
+            case "clientID":                 clientIDShow = newState; break;
             case "shipName":                 shipNameShow = newState; break;
             case "shipPhone":                shipPhoneShow = newState; break;
             case "shipCompany":              shipCompanyShow = newState; break;
@@ -347,6 +361,7 @@ public class SampleTracker {
         builder.append(current_csv_version.toString()).append("\n");
         //add header line
         Client tempClient = new Client();
+        builder.append(tempClient.getclientIDDispString()).append(",");
         builder.append(tempClient.getShipNameDispString()).append(",");
         builder.append(tempClient.getShipPhoneDispString()).append(",");
         builder.append(tempClient.getShipCompanyDispString()).append(",");
@@ -431,33 +446,35 @@ public class SampleTracker {
         Client tempClient = new Client();
 
         tempClient.setIndex(clientList.size()+1);
+        int index = 0;
 
-        tempClient.setShipName                (clientInfo.get(0));
-        tempClient.setShipPhone               (clientInfo.get(1));
-        tempClient.setShipCompany             (clientInfo.get(2));
-        tempClient.setShipAddress1            (clientInfo.get(3));
-        tempClient.setShipAddress2            (clientInfo.get(4));
-        tempClient.setShipCity                (clientInfo.get(5));
-        tempClient.setShipRegion              (clientInfo.get(6));
-        tempClient.setShipPostCode            (clientInfo.get(7));
-        tempClient.setShipCountry             (clientInfo.get(8));
-        tempClient.setShipEmail               (clientInfo.get(9));
-        tempClient.setBillName                (clientInfo.get(10));
-        tempClient.setBillPhone               (clientInfo.get(11));
-        tempClient.setBillCompany             (clientInfo.get(12));
-        tempClient.setBillAddress1            (clientInfo.get(13));
-        tempClient.setBillAddress2            (clientInfo.get(14));
-        tempClient.setBillCity                (clientInfo.get(15));
-        tempClient.setBillRegion              (clientInfo.get(16));
-        tempClient.setBillPostCode            (clientInfo.get(17));
-        tempClient.setBillCountry             (clientInfo.get(18));
-        tempClient.setBillEmail               (clientInfo.get(19));
-        tempClient.setDateShipped             (clientInfo.get(20));
-        tempClient.setFirstLicenseNum         (clientInfo.get(21));
-        tempClient.setFirstCertificateCompany (clientInfo.get(22));
-        tempClient.setSecondLicenseNum        (clientInfo.get(23));
-        tempClient.setSecondCertificateCompany(clientInfo.get(24));
-        tempClient.setComments                (clientInfo.get(25));
+        tempClient.setClientID                (clientInfo.get(index++));
+        tempClient.setShipName                (clientInfo.get(index++));
+        tempClient.setShipPhone               (clientInfo.get(index++));
+        tempClient.setShipCompany             (clientInfo.get(index++));
+        tempClient.setShipAddress1            (clientInfo.get(index++));
+        tempClient.setShipAddress2            (clientInfo.get(index++));
+        tempClient.setShipCity                (clientInfo.get(index++));
+        tempClient.setShipRegion              (clientInfo.get(index++));
+        tempClient.setShipPostCode            (clientInfo.get(index++));
+        tempClient.setShipCountry             (clientInfo.get(index++));
+        tempClient.setShipEmail               (clientInfo.get(index++));
+        tempClient.setBillName                (clientInfo.get(index++));
+        tempClient.setBillPhone               (clientInfo.get(index++));
+        tempClient.setBillCompany             (clientInfo.get(index++));
+        tempClient.setBillAddress1            (clientInfo.get(index++));
+        tempClient.setBillAddress2            (clientInfo.get(index++));
+        tempClient.setBillCity                (clientInfo.get(index++));
+        tempClient.setBillRegion              (clientInfo.get(index++));
+        tempClient.setBillPostCode            (clientInfo.get(index++));
+        tempClient.setBillCountry             (clientInfo.get(index++));
+        tempClient.setBillEmail               (clientInfo.get(index++));
+        tempClient.setDateShipped             (clientInfo.get(index++));
+        tempClient.setFirstLicenseNum         (clientInfo.get(index++));
+        tempClient.setFirstCertificateCompany (clientInfo.get(index++));
+        tempClient.setSecondLicenseNum        (clientInfo.get(index++));
+        tempClient.setSecondCertificateCompany(clientInfo.get(index++));
+        tempClient.setComments                (clientInfo.get(index++));
         tempClient.setFirstCertificate        ("");
         tempClient.setSecondCertificate       ("");
         // Add a function that can help us set these dates
@@ -495,38 +512,40 @@ public class SampleTracker {
     }
 
     public Boolean makeChanges(List<String> clientInfo, Integer itemNum){
-        if (clientInfo.size() != 26){
+        if (clientInfo.size() != 27){
             return false;
         }
 
         Integer i = itemNum-1;
+        int index = 0;
 
-        clientList.get(i).setShipName                (clientInfo.get(0));
-        clientList.get(i).setShipPhone               (clientInfo.get(1));
-        clientList.get(i).setShipCompany             (clientInfo.get(2));
-        clientList.get(i).setShipAddress1            (clientInfo.get(3));
-        clientList.get(i).setShipAddress2            (clientInfo.get(4));
-        clientList.get(i).setShipCity                (clientInfo.get(5));
-        clientList.get(i).setShipRegion              (clientInfo.get(6));
-        clientList.get(i).setShipPostCode            (clientInfo.get(7));
-        clientList.get(i).setShipCountry             (clientInfo.get(8));
-        clientList.get(i).setShipEmail               (clientInfo.get(9));
-        clientList.get(i).setBillName                (clientInfo.get(10));
-        clientList.get(i).setBillPhone               (clientInfo.get(11));
-        clientList.get(i).setBillCompany             (clientInfo.get(12));
-        clientList.get(i).setBillAddress1            (clientInfo.get(13));
-        clientList.get(i).setBillAddress2            (clientInfo.get(14));
-        clientList.get(i).setBillCity                (clientInfo.get(15));
-        clientList.get(i).setBillRegion              (clientInfo.get(16));
-        clientList.get(i).setBillPostCode            (clientInfo.get(17));
-        clientList.get(i).setBillCountry             (clientInfo.get(18));
-        clientList.get(i).setBillEmail               (clientInfo.get(19));
-        clientList.get(i).setDateShipped             (clientInfo.get(20));
-        clientList.get(i).setFirstLicenseNum         (clientInfo.get(21));
-        clientList.get(i).setFirstCertificateCompany (clientInfo.get(22));
-        clientList.get(i).setSecondLicenseNum        (clientInfo.get(23));
-        clientList.get(i).setSecondCertificateCompany(clientInfo.get(24));
-        clientList.get(i).setComments                (clientInfo.get(25));
+        clientList.get(i).setClientID                (clientInfo.get(index++));
+        clientList.get(i).setShipName                (clientInfo.get(index++));
+        clientList.get(i).setShipPhone               (clientInfo.get(index++));
+        clientList.get(i).setShipCompany             (clientInfo.get(index++));
+        clientList.get(i).setShipAddress1            (clientInfo.get(index++));
+        clientList.get(i).setShipAddress2            (clientInfo.get(index++));
+        clientList.get(i).setShipCity                (clientInfo.get(index++));
+        clientList.get(i).setShipRegion              (clientInfo.get(index++));
+        clientList.get(i).setShipPostCode            (clientInfo.get(index++));
+        clientList.get(i).setShipCountry             (clientInfo.get(index++));
+        clientList.get(i).setShipEmail               (clientInfo.get(index++));
+        clientList.get(i).setBillName                (clientInfo.get(index++));
+        clientList.get(i).setBillPhone               (clientInfo.get(index++));
+        clientList.get(i).setBillCompany             (clientInfo.get(index++));
+        clientList.get(i).setBillAddress1            (clientInfo.get(index++));
+        clientList.get(i).setBillAddress2            (clientInfo.get(index++));
+        clientList.get(i).setBillCity                (clientInfo.get(index++));
+        clientList.get(i).setBillRegion              (clientInfo.get(index++));
+        clientList.get(i).setBillPostCode            (clientInfo.get(index++));
+        clientList.get(i).setBillCountry             (clientInfo.get(index++));
+        clientList.get(i).setBillEmail               (clientInfo.get(index++));
+        clientList.get(i).setDateShipped             (clientInfo.get(index++));
+        clientList.get(i).setFirstLicenseNum         (clientInfo.get(index++));
+        clientList.get(i).setFirstCertificateCompany (clientInfo.get(index++));
+        clientList.get(i).setSecondLicenseNum        (clientInfo.get(index++));
+        clientList.get(i).setSecondCertificateCompany(clientInfo.get(index++));
+        clientList.get(i).setComments                (clientInfo.get(index++));
         clientList.get(i).setDateClientEdited        (getCurrentDateString());
 
         saveRequired = true;
@@ -537,6 +556,12 @@ public class SampleTracker {
     public List<Client> filterClients(Map<String, String> clientInfo, List<Client> clientList){
         List<Client> filtered = new ArrayList<>();
         for (Client client : clientList) {
+            if(clientInfo.get("clientID") != null && !clientInfo.get("clientID").isEmpty()){
+                if (client.getClientID().toLowerCase().contains(clientInfo.get("clientID").toLowerCase())) {
+                    filtered.add(client);
+                    continue;
+                }
+            }
             if(clientInfo.get("shipName") != null && !clientInfo.get("shipName").isEmpty()){
                 if (client.getShipName().toLowerCase().contains(clientInfo.get("shipName").toLowerCase())) {
                     filtered.add(client);
