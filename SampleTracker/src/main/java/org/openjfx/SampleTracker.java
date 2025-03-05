@@ -158,7 +158,7 @@ public class SampleTracker {
             return clients_added;
         }
         Integer line_counter = 0;
-        String[] header_row = lines.get(line_counter).split(",");
+        String[] header_row = lines.get(line_counter).replace("\"", "").split(",");
         line_counter++;
         if (header_row.length <= 1) {
             return clients_added;
@@ -232,30 +232,46 @@ public class SampleTracker {
         }
 
         for (line_counter = 1; line_counter < lines.size(); line_counter++) {
-            String[] client_row = lines.get(line_counter).split(",");
+            // String[] client_row = lines.get(line_counter).replace("\"", "").split(",");
+
+            List<String> list = new ArrayList<>();
+            String line = lines.get(line_counter);
+            String attribute = "";
+            boolean escape = false;
+            for (int i = 0; i < line.length(); i++) {
+                if (line.charAt(i) == '"') {
+                    escape = !escape;
+                } else if (line.charAt(i) == ',' && !escape) {
+                    list.add(attribute);
+                    attribute = "";
+                } else if (line.charAt(i) != ',') {
+                    attribute += line.charAt(i);
+                }
+            }
+            String[] client_row = list.toArray(new String[0]);
 
             Client tempClient = new Client();
 
             tempClient.setIndex(clientList.size()+1);
 
-            tempClient.setClientID                (client_row[attribute_map.get("clientid")]);
-            tempClient.setShipName                (client_row[attribute_map.get("shipFirstName")] + " " + client_row[attribute_map.get("shipLastName")]);
-            tempClient.setShipPhone               (client_row[attribute_map.get("shipPhone")]);
-            tempClient.setShipCompany             (client_row[attribute_map.get("shipCompany")]);
-            tempClient.setShipAddress1            (client_row[attribute_map.get("shipAddress1")]);
-            tempClient.setShipAddress2            (client_row[attribute_map.get("shipAddress2")]);
-            tempClient.setShipCity                (client_row[attribute_map.get("shipCity")]);
-            tempClient.setShipRegion              (client_row[attribute_map.get("shipRegion")]);
-            tempClient.setShipPostCode            (client_row[attribute_map.get("shipPostCode")]);
-            tempClient.setShipCountry             (client_row[attribute_map.get("shipCountry")]);
-            tempClient.setShipEmail               (client_row[attribute_map.get("shipEmail")]);
-            tempClient.setBillName                (client_row[attribute_map.get("billFirstName")] + " " + client_row[attribute_map.get("billLastName")]);
-            tempClient.setBillAddress1            (client_row[attribute_map.get("billAddress1")]);
-            tempClient.setBillAddress2            (client_row[attribute_map.get("billAddress2")]);
-            tempClient.setBillCity                (client_row[attribute_map.get("billCity")]);
-            tempClient.setBillRegion              (client_row[attribute_map.get("billRegion")]);
-            tempClient.setBillPostCode            (client_row[attribute_map.get("billPostCode")]);
-            tempClient.setFirstCertificate        (client_row[attribute_map.get("firstCertificate")]);
+            if (attribute_map.get("clientid") != null) {tempClient.setClientID (client_row[attribute_map.get("clientid")]);}
+            if (attribute_map.get("shipFirstName") != null && attribute_map.get("shipLastName") != null) {tempClient.setShipName                (client_row[attribute_map.get("shipFirstName")] + " " + client_row[attribute_map.get("shipLastName")]);}
+            if (attribute_map.get("shipPhone") != null) {tempClient.setShipPhone               (client_row[attribute_map.get("shipPhone")]);}
+            if (attribute_map.get("shipCompany") != null) {tempClient.setShipCompany             (client_row[attribute_map.get("shipCompany")]);}
+            if (attribute_map.get("shipAddress1") != null) {tempClient.setShipAddress1            (client_row[attribute_map.get("shipAddress1")]);}
+            if (attribute_map.get("shipAddress2") != null) {tempClient.setShipAddress2            (client_row[attribute_map.get("shipAddress2")]);}
+            if (attribute_map.get("shipCity") != null) {tempClient.setShipCity                (client_row[attribute_map.get("shipCity")]);}
+            if (attribute_map.get("shipRegion") != null) {tempClient.setShipRegion              (client_row[attribute_map.get("shipRegion")]);}
+            if (attribute_map.get("shipPostCode") != null) {tempClient.setShipPostCode            (client_row[attribute_map.get("shipPostCode")]);}
+            if (attribute_map.get("shipCountry") != null) {tempClient.setShipCountry             (client_row[attribute_map.get("shipCountry")]);}
+            if (attribute_map.get("shipEmail") != null) {tempClient.setShipEmail               (client_row[attribute_map.get("shipEmail")]);}
+            if (attribute_map.get("billFirstName") != null && attribute_map.get("billLastName") != null) {tempClient.setBillName                (client_row[attribute_map.get("billFirstName")] + " " + client_row[attribute_map.get("billLastName")]);}
+            if (attribute_map.get("billAddress1") != null) {tempClient.setBillAddress1            (client_row[attribute_map.get("billAddress1")]);}
+            if (attribute_map.get("billAddress2") != null) {tempClient.setBillAddress2            (client_row[attribute_map.get("billAddress2")]);}
+            if (attribute_map.get("billCity") != null) {tempClient.setBillCity                (client_row[attribute_map.get("billCity")]);}
+            if (attribute_map.get("billRegion") != null) {tempClient.setBillRegion              (client_row[attribute_map.get("billRegion")]);}
+            if (attribute_map.get("billPostCode") != null) {tempClient.setBillPostCode            (client_row[attribute_map.get("billPostCode")]);}
+            if (attribute_map.get("firstCertificate") != null) {tempClient.setFirstCertificate        (client_row[attribute_map.get("firstCertificate")]);}
 
             tempClient.setDateClientAdded         (getCurrentDateString());
             tempClient.setDateClientEdited        (getCurrentDateString());

@@ -874,6 +874,9 @@ public class TrackerGUI extends Application {
         for(Map.Entry<String, String> entry : newClientData.entrySet()) {
             String entryKey = entry.getKey();
             switch (entryKey) {
+                case "clientID":
+                    clientIdField.setText(entry.getValue());
+                    break;
                 case "shipName":
                     shipNameField.setText(entry.getValue());
                     break;
@@ -986,7 +989,7 @@ public class TrackerGUI extends Application {
         shippedDate.setMaxWidth(entrySceneWidth - 40);
         shippedDate.getChildren().addAll(spacer1, shippedDateLabel, spacer, dateShippedPicker2);
 
-        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getclientIDDispString(),                 "123456",                250, clientIdField));
+        changesBox.getChildren().add(entryWindowLineCreate(tempClient.getclientIDDispString(),                 "123456",                250, clientIdField2));
         changesBox.getChildren().add(entryWindowLineCreate(tempClient.getShipNameDispString(),                 "Eyelash Express",       250, shipNameField2));
         changesBox.getChildren().add(entryWindowLineCreate(tempClient.getShipPhoneDispString(),                "555-555-5555",          250, shipPhoneField2));
         changesBox.getChildren().add(entryWindowLineCreate(tempClient.getShipCompanyDispString(),              "Lash Inc.",             250, shipCompanyField2));
@@ -1455,6 +1458,7 @@ public class TrackerGUI extends Application {
     }
 
     private void copyFields2ToFields(){
+        clientIdField                 = clientIdField2;
         shipNameField                 = shipNameField2;
         shipPhoneField                = shipPhoneField2;
         shipCompanyField              = shipCompanyField2;
