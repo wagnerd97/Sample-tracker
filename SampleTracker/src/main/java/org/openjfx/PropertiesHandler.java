@@ -12,13 +12,14 @@ public class PropertiesHandler {
     private Properties trackerProperties = new Properties();
     private String trackerConfigPath;
 
-    public PropertiesHandler() {
+    public PropertiesHandler() throws Exception {
         String rootPath = System.getProperty("user.home") + "\\AppData\\Local\\Tracker";
         // Should make this safer so it's only creating the Tracker folder and not possibly other folders
         try {
             Files.createDirectories(Paths.get(rootPath));
         } catch (Exception e) {
             System.out.println("Could not create directory: " + e.getMessage());
+            throw new Exception(e);
         }
 
 
@@ -29,11 +30,16 @@ public class PropertiesHandler {
         } catch(Exception e){
             System.out.println(e.getMessage());
             System.out.println("File Path: " + trackerConfigPath);
-            createPropertiesFile(trackerConfigPath);
+            try {
+                createPropertiesFile(trackerConfigPath);
+            } catch(IOException f) {
+                throw new Exception(f);
+            }
+            
         }
 
     }
-    private boolean createPropertiesFile(String filePath) {
+    private boolean createPropertiesFile(String filePath) throws IOException{
         try {
             File propertiesFile = new File(filePath);
             if (propertiesFile.createNewFile()) {
@@ -44,7 +50,8 @@ public class PropertiesHandler {
         } catch (IOException e) {
             System.out.println("An error occurred creating file: " + filePath);
             e.printStackTrace();
-            System.exit(1);
+            // System.exit(1);
+            throw new IOException(e);
         }
         return true;
     }

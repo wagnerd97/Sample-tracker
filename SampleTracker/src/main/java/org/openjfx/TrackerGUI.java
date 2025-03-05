@@ -65,6 +65,9 @@ public class TrackerGUI extends Application {
 
     private TextArea textArea;
 
+    private static String errorString = new String();
+    private Label errorLabel;
+
     private boolean allowReorg = true;
 
     private Integer certificateNumber = 1;
@@ -137,6 +140,7 @@ public class TrackerGUI extends Application {
     private Integer entrySceneHeight = 700;
     private double defaultColWidth = ((1.0-0.04)/16.0);
 
+    private Stage errorPopup;
     private Stage savePopup;
     private Stage deletePopup;
     private Stage removeCertificatePopup;
@@ -146,9 +150,14 @@ public class TrackerGUI extends Application {
 
 
     public static void main(String[] args){
+
         sT = new SampleTracker();
-        // sT.populate("");
-        pH = new PropertiesHandler();
+        
+        try {
+            pH = new PropertiesHandler();
+        } catch (Exception e) {
+            errorString = e.getMessage();
+        }
 
         launch(args);
     }
@@ -161,6 +170,7 @@ public class TrackerGUI extends Application {
             primaryStage.getIcons().add(IconImage);
         } catch (Exception e) {
             System.out.println("loading icon exception: " + e.getMessage());
+            errorString = e.getMessage();
         }
 
         populateTrackerData();
@@ -208,6 +218,7 @@ public class TrackerGUI extends Application {
         configureEntryWindow(primaryStage);
         configureURLTextWindow(primaryStage);
         configureChangesWindow(primaryStage);
+        configureErrorPopup(primaryStage);
         configureSavePopup(primaryStage);
         configureContextMenu(primaryStage);
         configureDelete(primaryStage);
@@ -280,6 +291,13 @@ public class TrackerGUI extends Application {
 
         primaryStage.show();
 
+        // System.out.println("Program has started");
+        if (!errorString.equals("")) {
+            errorLabel.setText(errorString);
+            errorString = "";
+            errorPopup.show();
+        }
+
     }
 
     private void importNewClientsFromFile(Stage primaryStage) {
@@ -296,6 +314,11 @@ public class TrackerGUI extends Application {
             if (num_clients_added >= 1) {
                 table.setItems(FXCollections.observableArrayList(sT.getClientList()));
                 sT.setSaveRequired();
+                errorLabel.setText("Imported: " + num_clients_added + " new Clients");
+                errorPopup.show();
+            } else {
+                errorLabel.setText("Could not Load clients from file");
+                errorPopup.show();
             }
         }
     }
@@ -307,19 +330,31 @@ public class TrackerGUI extends Application {
         }
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(new File(dataPath));
+        try {
+            directoryChooser.setInitialDirectory(new File(dataPath));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            errorLabel.setText(errorString);
+            errorPopup.show();
+        }
+        
         File selectedDirectory = directoryChooser.showDialog(primaryStage);
 
         if (selectedDirectory == null) {
             // no directory selected
         } else {
             if (!pH.setTrackerDataPath(selectedDirectory.getAbsolutePath())) {
-             System.out.println("Could not save directory path");
+                System.out.println("Could not save directory path");
+                errorLabel.setText("Error: 87205812. Could not set data path");
+                errorPopup.show();
             }
         }
 
         sT.setFileLocation(pH.getTrackerDataPath());
-        sT.populate();
+        if (!sT.populate()) {
+            errorLabel.setText("No Client data found");
+            errorPopup.show();
+        }
         table.setItems(FXCollections.observableArrayList(sT.getClientList()));
         table.scrollTo(0);
 
@@ -330,7 +365,10 @@ public class TrackerGUI extends Application {
         trackerDataPath = pH.getTrackerDataPath();
         if (trackerDataPath != null) {
             sT.setFileLocation(trackerDataPath);
-            sT.populate();
+            if (!sT.populate()) {
+                errorLabel.setText("No Client data found");
+                errorPopup.show();
+            }
         }
     }
 
@@ -848,7 +886,12 @@ public class TrackerGUI extends Application {
             if (!textData.isEmpty()) {
                 Client clientToChange = sT.getClient(tempClient.getIndex().toString());
                 itemEditing = clientToChange.getIndex();
-                sT.addCertificateURL(itemEditing, textData, certificateNumber);
+                try {
+                    sT.addCertificateURL(itemEditing, textData, certificateNumber);
+                } catch (Exception e) {
+                    errorLabel.setText(e.getMessage());
+                    errorPopup.show();
+                }
             }
             textArea.setText("");
             URLTextStage.close();
@@ -1166,6 +1209,34 @@ public class TrackerGUI extends Application {
         commentsField2.clear();
     }
 
+    private void configureErrorPopup(Stage primaryStage) {
+        errorPopup = new Stage();
+        errorPopup.initModality(Modality.APPLICATION_MODAL);
+        errorPopup.initOwner(primaryStage);
+        errorPopup.setResizable(false);
+
+        VBox errorPopBox = new VBox(20);
+        errorLabel = new Label("");
+        errorPopBox.setAlignment(Pos.CENTER);
+        Scene loadingPopScene = new Scene(errorPopBox,700, 100);
+        errorPopup.setScene(loadingPopScene);
+
+        HBox buttons = new HBox(20);
+
+        Button okButton = new Button("Ok");
+        okButton.setOnAction(Event ->{
+            errorLabel.setText("");
+            errorPopup.close();
+        });
+
+        buttons.getChildren().add(okButton);
+
+        errorPopBox.getChildren().addAll(errorLabel,buttons);
+        errorLabel.setAlignment(Pos.BASELINE_CENTER);
+        buttons.setAlignment(Pos.BASELINE_CENTER);
+
+    }
+
     private void configureSavePopup(Stage primaryStage){
         savePopup = new Stage();
         savePopup.initModality(Modality.APPLICATION_MODAL);
@@ -1231,7 +1302,11 @@ public class TrackerGUI extends Application {
         File selectedFile =  fileChooser.showOpenDialog(primaryStage);
         if (selectedFile != null) {
             Path path = Paths.get(selectedFile.toString());
-            pH.setTrackerImagesPath(path.getParent().toString());
+            if (!pH.setTrackerImagesPath(path.getParent().toString())) {
+                System.out.println("Could not save images path");
+                errorLabel.setText("Error: 98725762. Could not set images path");
+                errorPopup.show();
+            }
         }
         return selectedFile;
     }
@@ -1282,7 +1357,12 @@ public class TrackerGUI extends Application {
         addCertificate1LocalImage.setOnAction(Event ->{
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
-            sT.addCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 1);
+            try {
+                sT.addCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 1);
+            } catch (Exception e) {
+                errorLabel.setText(e.getMessage());
+                errorPopup.show();
+            }
         });
 
         MenuItem addCertificate1URL = new MenuItem("URL");
@@ -1297,7 +1377,12 @@ public class TrackerGUI extends Application {
         addCertificate2LocalImage.setOnAction(Event ->{
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
-            sT.addCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 2);
+            try {
+                sT.addCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 2);
+            } catch (Exception e) {
+                errorLabel.setText(e.getMessage());
+                errorPopup.show();
+            }
         });
 
         MenuItem addCertificate2URL = new MenuItem("URL");
@@ -1315,15 +1400,25 @@ public class TrackerGUI extends Application {
         replaceCertificate1LocalImage.setOnAction(Event ->{
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
-            sT.replaceCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 1);
+            try {
+                sT.replaceCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 1);
+            } catch (Exception e) {
+                errorLabel.setText(e.getMessage());
+                errorPopup.show();
+            }
 
         });
 
         MenuItem replaceCertificate1URL = new MenuItem("URL");
         replaceCertificate1URL.setOnAction(Event ->{
             certificateNumber = 1;
-            sT.removeCertificateImage(itemEditing, certificateNumber);
-            URLTextStage.show();
+            try {
+                sT.removeCertificateImage(itemEditing, certificateNumber);
+                URLTextStage.show();
+            } catch (Exception e) {
+                errorLabel.setText(e.getMessage());
+                errorPopup.show();
+            }
         });
 
         replaceCertificate1.getItems().addAll(replaceCertificate1LocalImage, replaceCertificate1URL);
@@ -1332,15 +1427,25 @@ public class TrackerGUI extends Application {
         replaceCertificate2LocalImage.setOnAction(Event ->{
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
-            sT.replaceCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 2);
+            try {
+                sT.replaceCertificateImage(itemEditing, getCertificateImageFile(primaryStage), 2);
+            } catch (Exception e) {
+                errorLabel.setText(e.getMessage());
+                errorPopup.show();
+            }
 
         });
 
         MenuItem replaceCertificate2URL = new MenuItem("URL");
         replaceCertificate2URL.setOnAction(Event ->{
             certificateNumber = 2;
-            sT.removeCertificateImage(itemEditing, certificateNumber);
-            URLTextStage.show();
+            try {
+                sT.removeCertificateImage(itemEditing, certificateNumber);
+                URLTextStage.show();
+            } catch (Exception e) {
+                errorLabel.setText(e.getMessage());
+                errorPopup.show();
+            }
         });
 
         replaceCertificate2.getItems().addAll(replaceCertificate2LocalImage, replaceCertificate2URL);
@@ -1360,13 +1465,23 @@ public class TrackerGUI extends Application {
         viewCertificate1Button.setOnAction(Event ->{
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
-            sT.viewCertificateImage(itemEditing, 1);
+            try {
+                sT.viewCertificateImage(itemEditing, 1);
+            } catch (Exception e) {
+                errorLabel.setText(e.getMessage());
+                errorPopup.show();
+            }
         });
         MenuItem viewCertificate2Button = new MenuItem("View Certificate 2");
         viewCertificate2Button.setOnAction(Event ->{
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
-            sT.viewCertificateImage(itemEditing, 2);
+            try {
+                sT.viewCertificateImage(itemEditing, 2);
+            } catch (Exception e) {
+                errorLabel.setText(e.getMessage());
+                errorPopup.show();
+            }
         });
 
 
@@ -1405,7 +1520,12 @@ public class TrackerGUI extends Application {
 
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(Event ->{
-            sT.deleteClient(tempClient.getIndex().toString());
+            try {
+                sT.deleteClient(tempClient.getIndex().toString());
+            } catch (Exception e) {
+                errorLabel.setText(e.getMessage());
+                errorPopup.show();
+            }
             deletePopup.close();
             table.setItems(FXCollections.observableArrayList(sT.getClientList()));
         });
@@ -1441,7 +1561,12 @@ public class TrackerGUI extends Application {
         deleteButton.setOnAction(Event ->{
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
             itemEditing = clientToChange.getIndex();
-            sT.removeCertificateImage(itemEditing, certificateToRemove);
+            try {
+                sT.removeCertificateImage(itemEditing, certificateToRemove);
+            } catch (Exception e) {
+                errorLabel.setText(e.getMessage());
+                errorPopup.show();
+            }
             removeCertificatePopup.close();
         });
 

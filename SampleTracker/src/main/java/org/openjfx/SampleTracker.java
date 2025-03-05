@@ -226,6 +226,9 @@ public class SampleTracker {
                 case "<b>Your Accreditation</b> File Upload":
                     attribute_map.put("firstCertificate", i);
                     break;
+                case "<b>Your Purchase of Adhesive Kit Receipt</b> File Upload":
+                    attribute_map.put("secondCertificate", i);
+                    break;
                 default:
                     break;
             }
@@ -272,6 +275,7 @@ public class SampleTracker {
             if (attribute_map.get("billRegion") != null) {tempClient.setBillRegion              (client_row[attribute_map.get("billRegion")]);}
             if (attribute_map.get("billPostCode") != null) {tempClient.setBillPostCode            (client_row[attribute_map.get("billPostCode")]);}
             if (attribute_map.get("firstCertificate") != null) {tempClient.setFirstCertificate        (client_row[attribute_map.get("firstCertificate")]);}
+            if (attribute_map.get("secondCertificate") != null) {tempClient.setSecondCertificate        (client_row[attribute_map.get("secondCertificate")]);}
 
             tempClient.setDateClientAdded         (getCurrentDateString());
             tempClient.setDateClientEdited        (getCurrentDateString());
@@ -421,7 +425,6 @@ public class SampleTracker {
         String filename = this.fileLocation + "\\" + this.fileName;
 
         try {
-
             importClients(filename);
         } catch (IOException e) {
             return false;
@@ -501,15 +504,19 @@ public class SampleTracker {
         return clientList.add(tempClient);
     }
 
-    public void deleteClient(String itemNum){
+    public void deleteClient(String itemNum) throws Exception{
         int zeroIndex = Integer.parseInt(itemNum);
         zeroIndex--;
         if(zeroIndex < 0 || zeroIndex >= clientList.size()){
             return;
         }
         boolean imageProcessed = false;
-        if(removeCertificateImage(zeroIndex + 1, 1) && removeCertificateImage(zeroIndex + 1, 2)){
-            imageProcessed = true;
+        try {
+            if(removeCertificateImage(zeroIndex + 1, 1) && removeCertificateImage(zeroIndex + 1, 2)){
+                imageProcessed = true;
+            }
+        } catch (Exception e) {
+            throw e;
         }
         for(int i =zeroIndex+1; i<clientList.size();i++){
             clientList.get(i).setIndex(i);
@@ -942,7 +949,7 @@ public class SampleTracker {
         saveRequired = true;
     }
 
-    public boolean addCertificateImage(Integer itemNum, File file, Integer whichCertificate) {
+    public boolean addCertificateImage(Integer itemNum, File file, Integer whichCertificate) throws Exception{
         int i = itemNum-1;
         if(file != null){
             long millis = System.currentTimeMillis();
@@ -952,6 +959,7 @@ public class SampleTracker {
                 Files.move(file.toPath(), Paths.get(fileLocation + "\\" + millis + "." + extension[(extension.length - 1)]));
             } catch (Exception e) {
                 System.out.println("Could not move file: " + e.getMessage());
+                throw new Exception(e);
             }
             
             switch(whichCertificate) {
@@ -965,14 +973,16 @@ public class SampleTracker {
                     return false;
             }
                 
-            save();
+            if (!save()) {
+                throw new Exception("Unable to save certificate data");
+            }
 
             return true;
 
         }
         return false;
     }
-    public boolean addCertificateURL(Integer itemNum, String URL, Integer whichCertificate) {
+    public boolean addCertificateURL(Integer itemNum, String URL, Integer whichCertificate) throws Exception{
         int i = itemNum-1;
         if(URL != ""){
             switch(whichCertificate) {
@@ -986,21 +996,27 @@ public class SampleTracker {
                     return false;
             }
                 
-            save();
+            if (!save()) {
+                throw new Exception("Unable to add certificate data");
+            }
 
             return true;
 
         }
         return false;
     }
-    public boolean replaceCertificateImage(Integer itemNum, File file, Integer whichCertificate){
-        removeCertificateImage(itemNum, whichCertificate);
-        addCertificateImage(itemNum, file, whichCertificate);
+    public boolean replaceCertificateImage(Integer itemNum, File file, Integer whichCertificate) throws Exception{
+        try {
+            removeCertificateImage(itemNum, whichCertificate);
+            addCertificateImage(itemNum, file, whichCertificate);
+        } catch (Exception e) {
+            throw e;
+        }
         return true;
     }
 
 
-    public boolean removeCertificateImage(Integer itemNum, Integer whichCertificate){
+    public boolean removeCertificateImage(Integer itemNum, Integer whichCertificate) throws Exception{
         int i = itemNum-1;
         String tempStringCertificate = new String("");
         switch (whichCertificate) {
@@ -1027,7 +1043,7 @@ public class SampleTracker {
                     clientList.get(i).setSecondCertificate("");
                     break;
             }
-            if (imageURI.toString() == "") {
+            if (imageURI.toString().isEmpty()) {
                 System.out.println("URL is unintentionally empty");
             }
             return false;
@@ -1046,14 +1062,16 @@ public class SampleTracker {
                     clientList.get(i).setSecondCertificate("");
                     break;
             }
-            save();
+            if (!save()) {
+                throw new Exception("Unable to delete data");
+            }
             return true;
         }
 
         return false;
     }
 
-    public boolean viewCertificateImage(Integer itemNum, Integer whichCertificate){
+    public boolean viewCertificateImage(Integer itemNum, Integer whichCertificate) throws Exception{
         int i = itemNum-1;
         String tempStringCertificate = new String("");
         switch (whichCertificate) {
@@ -1086,7 +1104,7 @@ public class SampleTracker {
         try {
             Desktop.getDesktop().open(f);
         }catch(IOException e){
-
+            throw e;
         }
 
         return false;
