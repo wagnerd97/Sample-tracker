@@ -31,6 +31,7 @@ import javafx.util.StringConverter;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -170,10 +171,15 @@ public class TrackerGUI extends Application {
             primaryStage.getIcons().add(IconImage);
         } catch (Exception e) {
             System.out.println("loading icon exception: " + e.getMessage());
-            errorString = e.getMessage();
+            // errorString = e.getMessage();
         }
 
-        populateTrackerData();
+        try {
+            populateTrackerData();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            errorString = e.getMessage();
+        }
         // columnConfigData = pH.getColumnConfigData();
         // setColumnsShown(); // Try to load visible column data from properties
 
@@ -291,6 +297,10 @@ public class TrackerGUI extends Application {
 
         primaryStage.show();
 
+        if (pH == null) {
+            errorString = "Error: 2987684. Could not initialize property handler";
+        }
+
         // System.out.println("Program has started");
         if (!errorString.equals("")) {
             errorLabel.setText(errorString);
@@ -310,16 +320,13 @@ public class TrackerGUI extends Application {
         File selectedFile =  fileChooser.showOpenDialog(primaryStage);
         if (selectedFile != null) {
             // Function to import the clients
-            Integer num_clients_added = sT.importNewClients(selectedFile);
-            if (num_clients_added >= 1) {
+            List<Integer> clients_added_list = sT.importNewClients(selectedFile);
+            if (clients_added_list.get(0) >= 1) {
                 table.setItems(FXCollections.observableArrayList(sT.getClientList()));
                 sT.setSaveRequired();
-                errorLabel.setText("Imported: " + num_clients_added + " new Clients");
-                errorPopup.show();
-            } else {
-                errorLabel.setText("Could not Load clients from file");
-                errorPopup.show();
             }
+                errorLabel.setText("Imported " + clients_added_list.get(0) + " new Clients. Rejected " + clients_added_list.get(1) + " clients");
+                errorPopup.show();
         }
     }
 
@@ -328,15 +335,15 @@ public class TrackerGUI extends Application {
         if (dataPath == null) {
             dataPath = desktopLocation;
         }
-
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        try {
-            directoryChooser.setInitialDirectory(new File(dataPath));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            errorLabel.setText(errorString);
-            errorPopup.show();
+        
+        File file = new File(dataPath);
+        if (!file.exists()) {
+            dataPath = desktopLocation;
         }
+        
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+
+        directoryChooser.setInitialDirectory(new File(dataPath));
         
         File selectedDirectory = directoryChooser.showDialog(primaryStage);
 
@@ -351,8 +358,13 @@ public class TrackerGUI extends Application {
         }
 
         sT.setFileLocation(pH.getTrackerDataPath());
-        if (!sT.populate()) {
-            errorLabel.setText("No Client data found");
+        try {
+            if (!sT.populate()) {
+                errorLabel.setText("No Client data found");
+                errorPopup.show();
+            }
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
             errorPopup.show();
         }
         table.setItems(FXCollections.observableArrayList(sT.getClientList()));
@@ -360,14 +372,19 @@ public class TrackerGUI extends Application {
 
     }
 
-    private void populateTrackerData() {
-        String trackerDataPath;
-        trackerDataPath = pH.getTrackerDataPath();
-        if (trackerDataPath != null) {
+    private void populateTrackerData() throws Exception{
+        String trackerDataPath = new String();
+        if (pH != null) {
+            trackerDataPath = pH.getTrackerDataPath();
+        }
+        if (!trackerDataPath.equals("")) {
             sT.setFileLocation(trackerDataPath);
-            if (!sT.populate()) {
-                errorLabel.setText("No Client data found");
-                errorPopup.show();
+            try {
+                if (!sT.populate()) {
+                    throw new Exception("No data found");
+                }
+            } catch (IOException e) {
+                errorString = e.getMessage();
             }
         }
     }

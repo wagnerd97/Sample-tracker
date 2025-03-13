@@ -79,9 +79,14 @@ public class SampleTracker {
     private Integer current_csv_version = 3;
 
 
-    private void importClients(String filename) throws IOException {
+    private void importClients(String filename) throws Exception {
         clientList.clear();
-        Scanner file = new Scanner(Paths.get(filename));
+        Scanner file;
+        try {
+            file = new Scanner(Paths.get(filename));
+        } catch (Exception e) {
+            throw e;
+        }
         String csv_version = "";
         if(file.hasNextLine()){ // First line of file is version information
             String str = file.nextLine();
@@ -145,28 +150,31 @@ public class SampleTracker {
         file.close();
     }
 
-    public Integer importNewClients(File file) {
+    public List<Integer> importNewClients(File file) {
         Integer clients_added = 0;
+        Integer clients_rejected = 1;
+        List<Integer> returns_list = new ArrayList<Integer>();
+        returns_list.add(0); returns_list.add(0);
         
         List<String> lines;
         try {
             lines = Files.readAllLines(file.toPath());
         } catch (IOException e) {
-            return 0;
+            return returns_list;
         }
         if (lines.size() < 2) {
-            return clients_added;
+            return returns_list;
         }
         Integer line_counter = 0;
         String[] header_row = lines.get(line_counter).replace("\"", "").split(",");
         line_counter++;
         if (header_row.length <= 1) {
-            return clients_added;
+            return returns_list;
         }
         Map<String, Integer> attribute_map = new HashMap<String, Integer>();
         for (int i = 0; i < header_row.length; i++) {
             switch (header_row[i]) {
-                case "User ID":
+                case "ID":
                     attribute_map.put("clientid", i);
                     break;
                 case "First Name":
@@ -280,13 +288,25 @@ public class SampleTracker {
             tempClient.setDateClientAdded         (getCurrentDateString());
             tempClient.setDateClientEdited        (getCurrentDateString());
 
-            // check for duplicate client
+            boolean add_client = true;
+            for (int i = 0; i < clientList.size(); i++) {
+                if (!tempClient.getClientID().isEmpty() && !clientList.get(i).getClientID().isEmpty()) {
+                    if (tempClient.getClientID().equals(clientList.get(i).getClientID())) {
+                        add_client = false;
+                    }
+                }
+            }
+            if (add_client) {
+                clientList.add(tempClient);
+                returns_list.set(clients_added, returns_list.get(clients_added) + 1);
+            } else {
+                returns_list.set(clients_rejected, returns_list.get(clients_rejected) + 1);
+            }
 
-            clientList.add(tempClient);
-            clients_added++;
+            
         }
 
-        return clients_added;
+        return returns_list;
     }
 
     public boolean getColumnsShownSet() {
@@ -415,18 +435,26 @@ public class SampleTracker {
         for (Client client : clientList) {
             builder.append(client.toString());
         }
-        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-        writer.write(builder.toString());
-        writer.close();
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+            writer.write(builder.toString());
+            writer.close();
+        } catch (IOException e) {
+            throw e;
+        }
     }
 
 
-    public boolean populate(){
+    public boolean populate()throws IOException{
         String filename = this.fileLocation + "\\" + this.fileName;
+        File file = new File(this.fileLocation);
+        if (!file.exists()) {
+            throw new IOException("File path: " + this.fileLocation + " does not exist");
+        }
 
         try {
             importClients(filename);
-        } catch (IOException e) {
+        } catch (Exception e) {
             return false;
         }
         return true;
@@ -438,6 +466,10 @@ public class SampleTracker {
 
     public boolean save(){
         String filename = this.fileLocation + "\\" + this.fileName;
+        File file = new File(this.fileLocation);
+        if (!file.exists()) {
+            return false;
+        }
 
         try {
             exportClients(filename);
@@ -580,7 +612,7 @@ public class SampleTracker {
         List<Client> filtered = new ArrayList<>();
         for (Client client : clientList) {
             if(clientInfo.get("clientID") != null && !clientInfo.get("clientID").isEmpty()){
-                if (client.getClientID().toLowerCase().contains(clientInfo.get("clientID").toLowerCase())) {
+                if (client.getClientID().equals(clientInfo.get("clientID"))) {
                     filtered.add(client);
                     continue;
                 }
@@ -1094,6 +1126,9 @@ public class SampleTracker {
                 System.out.println("URL is unintentionally empty");
                 return false;
             }
+            // Authenticator.setDefault (new Authenticator() {
+            //     protected PasswordAuthentication getPassword
+            // })
             Desktop.getDesktop().browse(imageURI);
             return false;
         } catch (Exception e) {
