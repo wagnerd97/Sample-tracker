@@ -608,175 +608,177 @@ public class SampleTracker {
     }
 
 
-    public List<Client> filterClients(Map<String, String> clientInfo, List<Client> clientList){
+    public List<Client> filterClients(Client clientInfo, List<Client> clientList){
         List<Client> filtered = new ArrayList<>();
         for (Client client : clientList) {
-            if(clientInfo.get("clientID") != null && !clientInfo.get("clientID").isEmpty()){
-                if (client.getClientID().equals(clientInfo.get("clientID"))) {
+            if(!clientInfo.getClientID().isEmpty()){
+                if (!client.getClientID().isEmpty()) {
+                    if (client.getClientID().equals(clientInfo.getClientID())) {
                     filtered.add(client);
                     continue;
+                    }
                 }
             }
-            if(clientInfo.get("shipName") != null && !clientInfo.get("shipName").isEmpty()){
-                if (client.getShipName().toLowerCase().contains(clientInfo.get("shipName").toLowerCase())) {
-                    filtered.add(client);
-                    continue;
-                }else if(client.getBillName().toLowerCase().contains(clientInfo.get("shipName").toLowerCase())){
-                    filtered.add(client);
-                    continue;
+            if(!clientInfo.getShipName().isEmpty()){
+                if (!client.getShipName().isEmpty()) {
+                    if (client.getShipName().toLowerCase().contains(clientInfo.getShipName().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getBillName().isEmpty()) {
+                    if (client.getBillName().toLowerCase().contains(clientInfo.getShipName().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
-            if(clientInfo.get("soldName") != null && !clientInfo.get("soldName").isEmpty()) {
-                if (client.getShipName().toLowerCase().contains(clientInfo.get("soldName").toLowerCase())) {
-                    filtered.add(client);
-                    continue;
-                }else if(client.getBillName().toLowerCase().contains(clientInfo.get("soldName").toLowerCase())){
-                    filtered.add(client);
-                    continue;
+            if(!clientInfo.getBillName().isEmpty()){
+                if (!client.getShipName().isEmpty()) {
+                    if (client.getShipName().toLowerCase().contains(clientInfo.getBillName().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getBillName().isEmpty()) {
+                    if (client.getBillName().toLowerCase().contains(clientInfo.getBillName().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
-            if(clientInfo.get("shipAddress1") != null && !clientInfo.get("shipAddress1").isEmpty()){
-                if(client.getShipAddress1().toLowerCase().contains(clientInfo.get("shipAddress1").toLowerCase())){
-                    filtered.add(client);
-                    continue;
-                } else if(client.getBillAddress1().toLowerCase().contains(clientInfo.get("shipAddress1").toLowerCase())){
-                    filtered.add(client);
-                    continue;
+            if(!clientInfo.getShipAddress1().isEmpty()){
+                if (!client.getShipAddress1().isEmpty()) {
+                    if (client.getShipAddress1().toLowerCase().contains(clientInfo.getShipAddress1().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getBillAddress1().isEmpty()) {
+                    if (client.getBillAddress1().toLowerCase().contains(clientInfo.getShipAddress1().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
-            if(clientInfo.get("billAddress1") != null && !clientInfo.get("billAddress1").isEmpty()){
-                if(client.getShipAddress1().toLowerCase().contains(clientInfo.get("shipAddress1").toLowerCase())){
-                    filtered.add(client);
-                    continue;
-                } else if(client.getBillAddress1().toLowerCase().contains(clientInfo.get("shipAddress1").toLowerCase())){
-                    filtered.add(client);
-                    continue;
+            if(!clientInfo.getBillAddress1().isEmpty()){
+                if (!client.getBillAddress1().isEmpty()) {
+                    if (client.getBillAddress1().toLowerCase().contains(clientInfo.getBillAddress1().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getShipAddress1().isEmpty()) {
+                    if (client.getShipAddress1().toLowerCase().contains(clientInfo.getBillAddress1().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
-            if(clientInfo.get("shipAddress2") != null && !clientInfo.get("shipAddress2").isEmpty()){
-                if(client.getShipAddress2().toLowerCase().contains(clientInfo.get("shipAddress2").toLowerCase())){
-                    filtered.add(client);
-                    continue;
-                } else if(client.getBillAddress2().toLowerCase().contains(clientInfo.get("shipAddress2").toLowerCase())){
-                    filtered.add(client);
-                    continue;
+            if(!clientInfo.getShipPhone().isEmpty()){
+                if (!client.getShipPhone().isEmpty()) {
+                    if (client.getShipPhone().toLowerCase().contains(clientInfo.getShipPhone().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getBillPhone().isEmpty()) {
+                    if (client.getBillPhone().toLowerCase().contains(clientInfo.getShipPhone().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
-            if(clientInfo.get("billAddress2") != null && !clientInfo.get("billAddress2").isEmpty()){
-                if(client.getShipAddress2().toLowerCase().contains(clientInfo.get("billAddress2").toLowerCase())){
-                    filtered.add(client);
-                    continue;
-                } else if(client.getBillAddress2().toLowerCase().contains(clientInfo.get("billAddress2").toLowerCase())){
-                    filtered.add(client);
-                    continue;
+            if(!clientInfo.getBillPhone().isEmpty()){
+                if (!client.getBillPhone().isEmpty()) {
+                    if (client.getBillPhone().toLowerCase().contains(clientInfo.getBillPhone().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getShipPhone().isEmpty()) {
+                    if (client.getShipPhone().toLowerCase().contains(clientInfo.getBillPhone().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
-            if(clientInfo.get("shipPhone") != null && !clientInfo.get("shipPhone").isEmpty()){
-                if(client.getShipPhone().toLowerCase().replaceAll("-", "").
-                        contains(clientInfo.get("shipPhone").toLowerCase().replaceAll("-",""))){
-                    filtered.add(client);
-                    continue;
-                }
-                if(client.getBillPhone().toLowerCase().replaceAll("-", "").
-                        contains(clientInfo.get("shipPhone").toLowerCase().replaceAll("-",""))){
-                    filtered.add(client);
-                    continue;
-                }
-            }
-            if(clientInfo.get("billPhone") != null && !clientInfo.get("billPhone").isEmpty()){
-                if(client.getShipPhone().toLowerCase().replaceAll("-","").
-                        contains(clientInfo.get("billPhone").toLowerCase().replaceAll("-",""))){
-                    filtered.add(client);
-                    continue;
-                }
-                if(client.getBillPhone().toLowerCase().replaceAll("-","").
-                        contains(clientInfo.get("billPhone").toLowerCase().replaceAll("-",""))){
-                    filtered.add(client);
-                    continue;
+            if(!clientInfo.getShipEmail().isEmpty()){
+                if (!client.getShipEmail().isEmpty()) {
+                    if (client.getShipEmail().toLowerCase().contains(clientInfo.getShipEmail().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getBillEmail().isEmpty()) {
+                    if (client.getBillEmail().toLowerCase().contains(clientInfo.getShipEmail().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
-            if(clientInfo.get("shipEmail") != null && !clientInfo.get("shipEmail").isEmpty()){
-                if(client.getShipEmail().toLowerCase().contains(clientInfo.get("shipEmail").toLowerCase())){
-                    filtered.add(client);
-                    continue;
-                } else if(client.getBillEmail().toLowerCase().contains(clientInfo.get("shipEmail").toLowerCase())){
-                    filtered.add(client);
-                    continue;
+            if(!clientInfo.getBillEmail().isEmpty()){
+                if (!client.getBillEmail().isEmpty()) {
+                    if (client.getBillEmail().toLowerCase().contains(clientInfo.getBillEmail().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getShipEmail().isEmpty()) {
+                    if (client.getShipEmail().toLowerCase().contains(clientInfo.getBillEmail().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
-            if(clientInfo.get("billEmail") != null && !clientInfo.get("billEmail").isEmpty()){
-                if(client.getShipEmail().toLowerCase().contains(clientInfo.get("billEmail").toLowerCase())){
-                    filtered.add(client);
-                    continue;
-                } else if(client.getBillEmail().toLowerCase().contains(clientInfo.get("billEmail").toLowerCase())){
-                    filtered.add(client);
-                    continue;
+            if(!clientInfo.getFirstLicenseNum().isEmpty()){
+                if (!client.getFirstLicenseNum().isEmpty()) {
+                    if (client.getFirstLicenseNum().toLowerCase().contains(clientInfo.getFirstLicenseNum().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getSecondLicenseNum().isEmpty()) {
+                    if (client.getSecondLicenseNum().toLowerCase().contains(clientInfo.getFirstLicenseNum().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
-            if(clientInfo.get("firstLicenseNum") != null && !clientInfo.get("firstLicenseNum").isEmpty()) {
-                if (client.getFirstLicenseNum().toLowerCase().contains(clientInfo.get("firstLicenseNum").toLowerCase())) {
-                    filtered.add(client);
-                    continue;
-                } else if (client.getSecondLicenseNum().toLowerCase().contains(clientInfo.get("firstLicenseNum").toLowerCase())) {
-                    filtered.add(client);
-                    continue;
+            if(!clientInfo.getSecondLicenseNum().isEmpty()){
+                if (!client.getSecondLicenseNum().isEmpty()) {
+                    if (client.getSecondLicenseNum().toLowerCase().contains(clientInfo.getSecondLicenseNum().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getFirstLicenseNum().isEmpty()) {
+                    if (client.getFirstLicenseNum().toLowerCase().contains(clientInfo.getSecondLicenseNum().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
-            if(clientInfo.get("secondLicenseNum") != null && !clientInfo.get("secondLicenseNum").isEmpty()) {
-                if (client.getFirstLicenseNum().toLowerCase().contains(clientInfo.get("secondLicenseNum").toLowerCase())) {
-                    filtered.add(client);
-                    continue;
-                } else if (client.getSecondLicenseNum().toLowerCase().contains(clientInfo.get("secondLicenseNum").toLowerCase())) {
-                    filtered.add(client);
-                    continue;
+            if(!clientInfo.getFirstCertificateCompany().isEmpty()){
+                if (!client.getFirstCertificateCompany().isEmpty()) {
+                    if (client.getFirstCertificateCompany().toLowerCase().contains(clientInfo.getFirstCertificateCompany().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getSecondCertificateCompany().isEmpty()) {
+                    if (client.getSecondCertificateCompany().toLowerCase().contains(clientInfo.getFirstCertificateCompany().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
-            if(clientInfo.get("firstCertificateCompany") != null && !clientInfo.get("firstCertificateCompany").isEmpty()){
-                if (client.getFirstCertificateCompany().toLowerCase().contains(clientInfo.get("firstCertificateCompany").toLowerCase())){
-                    filtered.add(client);
-                    continue;
-                } else if (client.getSecondCertificateCompany().toLowerCase().contains(clientInfo.get("firstCertificateCompany").toLowerCase())){
-                    filtered.add(client);
-                    continue;
-                }
-            }
-            if(clientInfo.get("secondCertificateCompany") != null && !clientInfo.get("secondCertificateCompany").isEmpty()){
-                if (client.getFirstCertificateCompany().toLowerCase().contains(clientInfo.get("secondCertificateCompany").toLowerCase())){
-                    filtered.add(client);
-                    continue;
-                } else if (client.getSecondCertificateCompany().toLowerCase().contains(clientInfo.get("secondCertificateCompany").toLowerCase())){
-                    filtered.add(client);
-                    continue;
-                }
-            }
-            if(clientInfo.get("comments") != null && !clientInfo.get("comments").isEmpty()){
-                if(commentsSearch(client.getComments().toLowerCase(), clientInfo.get("comments").toLowerCase())){
-                    filtered.add(client);
+            if(!clientInfo.getSecondCertificateCompany().isEmpty()){
+                if (!client.getSecondCertificateCompany().isEmpty()) {
+                    if (client.getSecondCertificateCompany().toLowerCase().contains(clientInfo.getSecondCertificateCompany().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
+                }else if (!client.getFirstCertificateCompany().isEmpty()) {
+                    if (client.getFirstCertificateCompany().toLowerCase().contains(clientInfo.getSecondCertificateCompany().toLowerCase())) {
+                        filtered.add(client);
+                        continue;
+                    }
                 }
             }
         }
 
         return filtered;
     }
-
-    private boolean commentsSearch(String permClient, String tempClient){
-        String[] permWords = permClient.split(" ");
-        String[] tempWords = tempClient.split(" ");
-        for(int i =0; i<tempWords.length; i++){
-            for(int j=0; j<permWords.length; j++){
-                if(tempWords[i].contains(permWords[j]) || permWords[j].contains(tempWords[i])){
-                    if(permWords[j].length()>2 && tempWords[i].length()>2) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-
-
 
     public List<String> parsePlain(String content){
         List<String> dataForClient;

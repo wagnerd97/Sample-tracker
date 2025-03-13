@@ -1128,39 +1128,41 @@ public class TrackerGUI extends Application {
 
     private void performSearch(){
         List<Client> filteredClients = sT.getClientList();
-        Map<String, String> tempClientMap= new HashMap<>();
-        tempClientMap.put("clientID",                 clientIdField.getText());
-        tempClientMap.put("shipName",                 shipNameField.getText());
-        tempClientMap.put("shipPhone",                shipPhoneField.getText());
-        tempClientMap.put("shipCompany",              shipCompanyField.getText());
-        tempClientMap.put("shipAddress1",             shipAddress1Field.getText());
-        tempClientMap.put("shipAddress2",             shipAddress2Field.getText());
-        tempClientMap.put("shipCity",                 shipCityField.getText());
-        tempClientMap.put("shipRegion",               shipRegionField.getText());
-        tempClientMap.put("shipPostCode",             shipPostCodeField.getText());
-        tempClientMap.put("shipCountry",              shipCountryField.getText());
-        tempClientMap.put("shipEmail",                shipEmailField.getText());
-        tempClientMap.put("billName",                 billNameField.getText());
-        tempClientMap.put("billPhone",                billPhoneField.getText());
-        tempClientMap.put("billCompany",              billCompanyField.getText());
-        tempClientMap.put("billAddress1",             billAddress1Field.getText());
-        tempClientMap.put("billAddress2",             billAddress2Field.getText());
-        tempClientMap.put("billCity",                 billCityField.getText());
-        tempClientMap.put("billRegion",               billRegionField.getText());
-        tempClientMap.put("billPostCode",             billPostCodeField.getText());
-        tempClientMap.put("billCountry",              billCountryField.getText());
-        tempClientMap.put("billEmail",                billEmailField.getText());
-        tempClientMap.put("firstLicenseNum",          firstLicenseNumField.getText());
-        tempClientMap.put("firstCertificateCompany",  firstCertificateCompanyField.getText());
-        tempClientMap.put("secondLicenseNum",         secondLicenseNumField.getText());
-        tempClientMap.put("secondCertificateCompany", secondCertificateCompanyField.getText());
-        tempClientMap.put("comments",                 commentsField.getText());
+        // Map<String, String> tempClientMap= new HashMap<>();
+        Client temp_client = new Client();
+        temp_client.setClientID(                clientIdField.getText());
+        temp_client.setShipName(                shipNameField.getText());
+        temp_client.setShipPhone(               shipPhoneField.getText());
+        temp_client.setShipCompany(             shipCompanyField.getText());
+        temp_client.setShipAddress1(            shipAddress1Field.getText());
+        temp_client.setShipAddress2(            shipAddress2Field.getText());
+        temp_client.setShipCity(                shipCityField.getText());
+        temp_client.setShipRegion(              shipRegionField.getText());
+        temp_client.setShipPostCode(            shipPostCodeField.getText());
+        temp_client.setShipCountry(             shipCountryField.getText());
+        temp_client.setShipEmail(               shipEmailField.getText());
+        temp_client.setBillName(                billNameField.getText());
+        temp_client.setBillPhone(               billPhoneField.getText());
+        temp_client.setBillCompany(             billCompanyField.getText());
+        temp_client.setBillAddress1(            billAddress1Field.getText());
+        temp_client.setBillAddress2(            billAddress2Field.getText());
+        temp_client.setBillCity(                billCityField.getText());
+        temp_client.setBillRegion(              billRegionField.getText());
+        temp_client.setBillPostCode(            billPostCodeField.getText());
+        temp_client.setBillCountry(             billCountryField.getText());
+        temp_client.setBillEmail(               billEmailField.getText());
+        temp_client.setFirstLicenseNum(         firstLicenseNumField.getText());
+        temp_client.setFirstCertificateCompany( firstCertificateCompanyField.getText());
+        temp_client.setSecondLicenseNum(        secondLicenseNumField.getText());
+        temp_client.setSecondCertificateCompany(secondCertificateCompanyField.getText());
+        temp_client.setComments(                commentsField.getText());
 
-        filteredClients = sT.filterClients(tempClientMap, filteredClients);
+        filteredClients = sT.filterClients(temp_client, filteredClients);
         table.setItems(FXCollections.observableArrayList(filteredClients));
         table.scrollTo(0);
         if(filteredClients.size()<1){
-            //create and show popup
+            errorLabel.setText("Search did not return any results");
+            errorPopup.show();
         }
     }
 

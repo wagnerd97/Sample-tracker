@@ -41,7 +41,7 @@ public class Client {
     private String  dateClientEdited;
 
     private final String indexString =                    "#";
-    private final String clientIDString =                 "Client ID";
+    private final String clientIDString =                 "*Client ID";
     private final String orderIDString =                  "Order ID";
     private final String shipNameString =                 "*Ship To";
     private final String shipPhoneString =                "*Ship Phone";
@@ -68,7 +68,7 @@ public class Client {
     private final String firstCertificateCompanyString =  "*First License Company";
     private final String secondLicenseNumString =         "*Second License #";
     private final String secondCertificateCompanyString = "*Second License Company";
-    private final String commentsString =                 "*Comments";
+    private final String commentsString =                 "Comments";
     private final String firstCertificateString =         "First Certificate";
     private final String secondCertificateString =        "Second Certificate";
     private final String dateClientAddedString =          "Date Added";
