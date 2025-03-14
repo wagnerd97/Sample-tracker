@@ -210,6 +210,9 @@ public class SampleTracker {
                 case "Email":
                     attribute_map.put("shipEmail", i);
                     break;
+                case "Payment Email":
+                    attribute_map.put("billEmail", i);
+                    break;
                 case "Billed-To First Name":
                     attribute_map.put("billFirstName", i);
                     break;
@@ -265,25 +268,26 @@ public class SampleTracker {
 
             tempClient.setIndex(clientList.size()+1);
 
-            if (attribute_map.get("clientid") != null) {tempClient.setClientID (client_row[attribute_map.get("clientid")]);}
-            if (attribute_map.get("shipFirstName") != null && attribute_map.get("shipLastName") != null) {tempClient.setShipName(client_row[attribute_map.get("shipFirstName")] + " " + client_row[attribute_map.get("shipLastName")]);}
-            if (attribute_map.get("shipPhone") != null) {tempClient.setShipPhone               (client_row[attribute_map.get("shipPhone")]);}
-            if (attribute_map.get("shipCompany") != null) {tempClient.setShipCompany             (client_row[attribute_map.get("shipCompany")]);}
-            if (attribute_map.get("shipAddress1") != null) {tempClient.setShipAddress1            (client_row[attribute_map.get("shipAddress1")]);}
-            if (attribute_map.get("shipAddress2") != null) {tempClient.setShipAddress2            (client_row[attribute_map.get("shipAddress2")]);}
-            if (attribute_map.get("shipCity") != null) {tempClient.setShipCity                (client_row[attribute_map.get("shipCity")]);}
-            if (attribute_map.get("shipRegion") != null) {tempClient.setShipRegion              (client_row[attribute_map.get("shipRegion")]);}
-            if (attribute_map.get("shipPostCode") != null) {tempClient.setShipPostCode            (client_row[attribute_map.get("shipPostCode")]);}
-            if (attribute_map.get("shipCountry") != null) {tempClient.setShipCountry             (client_row[attribute_map.get("shipCountry")]);}
-            if (attribute_map.get("shipEmail") != null) {tempClient.setShipEmail               (client_row[attribute_map.get("shipEmail")]);}
-            if (attribute_map.get("billFirstName") != null && attribute_map.get("billLastName") != null) {tempClient.setBillName(client_row[attribute_map.get("billFirstName")] + " " + client_row[attribute_map.get("billLastName")]);}
-            if (attribute_map.get("billAddress1") != null) {tempClient.setBillAddress1            (client_row[attribute_map.get("billAddress1")]);}
-            if (attribute_map.get("billAddress2") != null) {tempClient.setBillAddress2            (client_row[attribute_map.get("billAddress2")]);}
-            if (attribute_map.get("billCity") != null) {tempClient.setBillCity                (client_row[attribute_map.get("billCity")]);}
-            if (attribute_map.get("billRegion") != null) {tempClient.setBillRegion              (client_row[attribute_map.get("billRegion")]);}
-            if (attribute_map.get("billPostCode") != null) {tempClient.setBillPostCode            (client_row[attribute_map.get("billPostCode")]);}
-            if (attribute_map.get("firstCertificate") != null) {tempClient.setFirstCertificate        (client_row[attribute_map.get("firstCertificate")]);}
-            if (attribute_map.get("secondCertificate") != null) {tempClient.setSecondCertificate        (client_row[attribute_map.get("secondCertificate")]);}
+            if (attribute_map.get("clientid")          != null) {tempClient.setClientID (client_row[attribute_map.get("clientid")]);}
+            if (attribute_map.get("shipFirstName")     != null && attribute_map.get("shipLastName") != null) {tempClient.setShipName(client_row[attribute_map.get("shipFirstName")] + " " + client_row[attribute_map.get("shipLastName")]);}
+            if (attribute_map.get("shipPhone")         != null) {tempClient.setShipPhone               (client_row[attribute_map.get("shipPhone")]);}
+            if (attribute_map.get("shipCompany")       != null) {tempClient.setShipCompany             (client_row[attribute_map.get("shipCompany")]);}
+            if (attribute_map.get("shipAddress1")      != null) {tempClient.setShipAddress1            (client_row[attribute_map.get("shipAddress1")]);}
+            if (attribute_map.get("shipAddress2")      != null) {tempClient.setShipAddress2            (client_row[attribute_map.get("shipAddress2")]);}
+            if (attribute_map.get("shipCity")          != null) {tempClient.setShipCity                (client_row[attribute_map.get("shipCity")]);}
+            if (attribute_map.get("shipRegion")        != null) {tempClient.setShipRegion              (client_row[attribute_map.get("shipRegion")]);}
+            if (attribute_map.get("shipPostCode")      != null) {tempClient.setShipPostCode            (client_row[attribute_map.get("shipPostCode")]);}
+            if (attribute_map.get("shipCountry")       != null) {tempClient.setShipCountry             (client_row[attribute_map.get("shipCountry")]);}
+            if (attribute_map.get("shipEmail")         != null) {tempClient.setShipEmail               (client_row[attribute_map.get("shipEmail")]);}
+            if (attribute_map.get("billEmail")         != null) {tempClient.setBillEmail               (client_row[attribute_map.get("billEmail")]);}
+            if (attribute_map.get("billFirstName")     != null && attribute_map.get("billLastName") != null) {tempClient.setBillName(client_row[attribute_map.get("billFirstName")] + " " + client_row[attribute_map.get("billLastName")]);}
+            if (attribute_map.get("billAddress1")      != null) {tempClient.setBillAddress1            (client_row[attribute_map.get("billAddress1")]);}
+            if (attribute_map.get("billAddress2")      != null) {tempClient.setBillAddress2            (client_row[attribute_map.get("billAddress2")]);}
+            if (attribute_map.get("billCity")          != null) {tempClient.setBillCity                (client_row[attribute_map.get("billCity")]);}
+            if (attribute_map.get("billRegion")        != null) {tempClient.setBillRegion              (client_row[attribute_map.get("billRegion")]);}
+            if (attribute_map.get("billPostCode")      != null) {tempClient.setBillPostCode            (client_row[attribute_map.get("billPostCode")]);}
+            if (attribute_map.get("firstCertificate")  != null) {tempClient.setFirstCertificate        (client_row[attribute_map.get("firstCertificate")]);}
+            if (attribute_map.get("secondCertificate") != null) {tempClient.setSecondCertificate       (client_row[attribute_map.get("secondCertificate")]);}
 
             tempClient.setDateClientAdded         (getCurrentDateString());
             tempClient.setDateClientEdited        (getCurrentDateString());
