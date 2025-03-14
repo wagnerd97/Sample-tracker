@@ -612,11 +612,11 @@ public class SampleTracker {
         List<Client> filtered = new ArrayList<>();
         for (Client client : clientsSearchFrom) {
 
-            if(clientInfo.getIndex() != 0) {
-                if (clientInfo.getIndex() == client.getIndex()) {
-                    continue;
-                }
-            }
+            // if(clientInfo.getIndex() != 0) {
+            //     if (clientInfo.getIndex() == client.getIndex()) {
+            //         continue;
+            //     }
+            // }
 
             if(!clientInfo.getClientID().isEmpty()){
                 if (!client.getClientID().isEmpty()) {

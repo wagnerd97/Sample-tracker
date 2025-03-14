@@ -347,7 +347,11 @@ public class TrackerGUI extends Application {
                 List<Client> newClientSubList = clientList.subList(clientList.size() - newClientsAdded, clientList.size());
 
                 for (Client newClient : newClientSubList) {
-                    filteredClientSet.addAll(sT.filterClients(newClient, clientList));
+                    List<Client> tempClientList = sT.filterClients(newClient, clientList);
+                    if (tempClientList.size() > 1) {
+                        filteredClientSet.addAll(tempClientList);
+                    }
+                    
                 }
                 filteredClientList.addAll(filteredClientSet);
                 table.setItems(FXCollections.observableArrayList(filteredClientList));
@@ -859,7 +863,7 @@ public class TrackerGUI extends Application {
         Button searchButton = new Button("Search");
         searchButton.setOnAction(Event->{
             entryStage.close();
-            performSearch();
+            searchCurrentClient();
 
         });
 
@@ -1143,7 +1147,7 @@ public class TrackerGUI extends Application {
         searchButton.setOnAction(Event->{
             changesStage.close();
             copyFields2ToFields();
-            performSearch();
+            searchCurrentClient();
 
         });
 
@@ -1159,9 +1163,7 @@ public class TrackerGUI extends Application {
 
 
 
-    private void performSearch(){
-        List<Client> filteredClients = sT.getClientList();
-        // Map<String, String> tempClientMap= new HashMap<>();
+    private void searchCurrentClient(){
         Client temp_client = new Client();
         temp_client.setClientID(                clientIdField.getText());
         temp_client.setShipName(                shipNameField.getText());
@@ -1190,6 +1192,11 @@ public class TrackerGUI extends Application {
         temp_client.setSecondCertificateCompany(secondCertificateCompanyField.getText());
         temp_client.setComments(                commentsField.getText());
 
+        performSearch(temp_client);
+    }
+
+    private void performSearch(Client temp_client) {
+        List<Client> filteredClients = sT.getClientList();
         filteredClients = sT.filterClients(temp_client, filteredClients);
         table.setItems(FXCollections.observableArrayList(filteredClients));
         table.scrollTo(0);
@@ -1372,6 +1379,12 @@ public class TrackerGUI extends Application {
     private void configureContextMenu(Stage primaryStage){
         contextMenu = new ContextMenu();
 
+        MenuItem searchItem = new MenuItem("Search");
+        searchItem.setOnAction(Event -> {
+            Client clientToSearch = sT.getClient(tempClient.getIndex().toString());
+            performSearch(clientToSearch);
+        });
+
         MenuItem editItem = new MenuItem("Edit");
         editItem.setOnAction(Event -> {
             Client clientToChange = sT.getClient(tempClient.getIndex().toString());
@@ -1549,6 +1562,7 @@ public class TrackerGUI extends Application {
             deletePopup.show();
         });
 
+        contextMenu.getItems().add(searchItem);
         contextMenu.getItems().add(editItem);
         contextMenu.getItems().add(addCertificate1);
         contextMenu.getItems().add(addCertificate2);
