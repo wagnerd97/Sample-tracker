@@ -73,6 +73,8 @@ public class TrackerGUI extends Application {
 
     private Integer certificateNumber = 1;
 
+    private Integer newClientsAdded = 0;
+
     // List index is column position Map: (columnName, addToTableView)
     // private List<String[]> columnConfigData;
 
@@ -280,10 +282,15 @@ public class TrackerGUI extends Application {
             setDataPath(primaryStage);
         });
 
+        Button bulkSearchButton = new Button("Repeat Bulk Search");
+        bulkSearchButton.setOnAction(Event ->{
+            bulkSearchNewClients(primaryStage);
+        });
+
 
 
         HBox buttons = new HBox(30);
-        buttons.getChildren().addAll(searchButton,importNewClientsButton,lastButton, resetButton,saveButton, setDataPathButton);
+        buttons.getChildren().addAll(searchButton,importNewClientsButton,lastButton, resetButton,saveButton, setDataPathButton, bulkSearchButton);
         buttons.setPadding(new Insets(10, 10, 100, 100));
 
 
@@ -321,12 +328,38 @@ public class TrackerGUI extends Application {
         if (selectedFile != null) {
             // Function to import the clients
             List<Integer> clients_added_list = sT.importNewClients(selectedFile);
-            if (clients_added_list.get(0) >= 1) {
+            newClientsAdded = clients_added_list.get(0);
+            if (newClientsAdded > 0) {
                 table.setItems(FXCollections.observableArrayList(sT.getClientList()));
                 sT.setSaveRequired();
-            }
-                errorLabel.setText("Imported " + clients_added_list.get(0) + " new Clients. Rejected " + clients_added_list.get(1) + " clients");
+            }    
+                errorLabel.setText("Status 9857. Imported " + newClientsAdded + " new Clients. Rejected " + clients_added_list.get(1) + " clients");
                 errorPopup.show();
+        }
+    }
+
+    private void bulkSearchNewClients(Stage primaryStage) {
+        if (newClientsAdded > 0) {
+            List<Client> clientList = sT.getClientList();
+            Set<Client> filteredClientSet = new LinkedHashSet<>();
+            List<Client> filteredClientList = new ArrayList<>();
+            if (clientList.size() > newClientsAdded) {
+                List<Client> newClientSubList = clientList.subList(clientList.size() - newClientsAdded, clientList.size());
+
+                for (Client newClient : newClientSubList) {
+                    filteredClientSet.addAll(sT.filterClients(newClient, clientList));
+                }
+                filteredClientList.addAll(filteredClientSet);
+                table.setItems(FXCollections.observableArrayList(filteredClientList));
+                table.scrollTo(0);
+                if (filteredClientList.size() < 1) {
+                    errorLabel.setText("Bulk search did not return any results");
+                    errorPopup.show();
+                }
+            }
+        } else {
+            errorLabel.setText("No record of newly imported clients to search");
+            errorPopup.show();
         }
     }
 
@@ -1244,8 +1277,14 @@ public class TrackerGUI extends Application {
 
         Button okButton = new Button("Ok");
         okButton.setOnAction(Event ->{
-            errorLabel.setText("");
-            errorPopup.close();
+            if (errorLabel.getText().contains("Status 9857")) {
+                errorLabel.setText("");
+                errorPopup.close();
+                bulkSearchNewClients(primaryStage);
+            } else {
+                errorLabel.setText("");
+                errorPopup.close();
+            }
         });
 
         buttons.getChildren().add(okButton);

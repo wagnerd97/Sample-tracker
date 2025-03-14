@@ -266,7 +266,7 @@ public class SampleTracker {
             tempClient.setIndex(clientList.size()+1);
 
             if (attribute_map.get("clientid") != null) {tempClient.setClientID (client_row[attribute_map.get("clientid")]);}
-            if (attribute_map.get("shipFirstName") != null && attribute_map.get("shipLastName") != null) {tempClient.setShipName                (client_row[attribute_map.get("shipFirstName")] + " " + client_row[attribute_map.get("shipLastName")]);}
+            if (attribute_map.get("shipFirstName") != null && attribute_map.get("shipLastName") != null) {tempClient.setShipName(client_row[attribute_map.get("shipFirstName")] + " " + client_row[attribute_map.get("shipLastName")]);}
             if (attribute_map.get("shipPhone") != null) {tempClient.setShipPhone               (client_row[attribute_map.get("shipPhone")]);}
             if (attribute_map.get("shipCompany") != null) {tempClient.setShipCompany             (client_row[attribute_map.get("shipCompany")]);}
             if (attribute_map.get("shipAddress1") != null) {tempClient.setShipAddress1            (client_row[attribute_map.get("shipAddress1")]);}
@@ -276,7 +276,7 @@ public class SampleTracker {
             if (attribute_map.get("shipPostCode") != null) {tempClient.setShipPostCode            (client_row[attribute_map.get("shipPostCode")]);}
             if (attribute_map.get("shipCountry") != null) {tempClient.setShipCountry             (client_row[attribute_map.get("shipCountry")]);}
             if (attribute_map.get("shipEmail") != null) {tempClient.setShipEmail               (client_row[attribute_map.get("shipEmail")]);}
-            if (attribute_map.get("billFirstName") != null && attribute_map.get("billLastName") != null) {tempClient.setBillName                (client_row[attribute_map.get("billFirstName")] + " " + client_row[attribute_map.get("billLastName")]);}
+            if (attribute_map.get("billFirstName") != null && attribute_map.get("billLastName") != null) {tempClient.setBillName(client_row[attribute_map.get("billFirstName")] + " " + client_row[attribute_map.get("billLastName")]);}
             if (attribute_map.get("billAddress1") != null) {tempClient.setBillAddress1            (client_row[attribute_map.get("billAddress1")]);}
             if (attribute_map.get("billAddress2") != null) {tempClient.setBillAddress2            (client_row[attribute_map.get("billAddress2")]);}
             if (attribute_map.get("billCity") != null) {tempClient.setBillCity                (client_row[attribute_map.get("billCity")]);}
@@ -608,9 +608,16 @@ public class SampleTracker {
     }
 
 
-    public List<Client> filterClients(Client clientInfo, List<Client> clientList){
+    public List<Client> filterClients(Client clientInfo, List<Client> clientsSearchFrom){
         List<Client> filtered = new ArrayList<>();
-        for (Client client : clientList) {
+        for (Client client : clientsSearchFrom) {
+
+            if(clientInfo.getIndex() != 0) {
+                if (clientInfo.getIndex() == client.getIndex()) {
+                    continue;
+                }
+            }
+
             if(!clientInfo.getClientID().isEmpty()){
                 if (!client.getClientID().isEmpty()) {
                     if (client.getClientID().equals(clientInfo.getClientID())) {
