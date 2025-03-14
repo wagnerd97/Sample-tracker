@@ -333,7 +333,7 @@ public class TrackerGUI extends Application {
                 table.setItems(FXCollections.observableArrayList(sT.getClientList()));
                 sT.setSaveRequired();
             }    
-                errorLabel.setText("Status 9857. Imported " + newClientsAdded + " new Clients. Rejected " + clients_added_list.get(1) + " clients");
+                errorLabel.setText("Imported " + newClientsAdded + " new Clients. Rejected " + clients_added_list.get(1) + " clients");
                 errorPopup.show();
         }
     }
@@ -1284,7 +1284,7 @@ public class TrackerGUI extends Application {
 
         Button okButton = new Button("Ok");
         okButton.setOnAction(Event ->{
-            if (errorLabel.getText().contains("Status 9857")) {
+            if (errorLabel.getText().contains("Imported ")) {
                 errorLabel.setText("");
                 errorPopup.close();
                 bulkSearchNewClients(primaryStage);
